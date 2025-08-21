@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import { useCookie } from '#app'
+import axiosInstance from './axios';
+import { useApiStore } from './api';
+import generateKeyPair from '~/utils/keys';
 
-async function getPrivateKeyFromDB() {
+const apiStore = useApiStore();
+
+const getPrivateKeyFromDB = async () => {
     return new Promise((resolve, reject) => {
         const request = indexedDB.open("SilentiumDB", 1);
 
@@ -20,6 +25,31 @@ async function getPrivateKeyFromDB() {
 
             getRequest.onsuccess = () => resolve(getRequest.result);
             getRequest.onerror = () => reject(getRequest.error);
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
+const setPrivateKeyInDB = async (privateKey) => {
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("SilentiumDB", 1);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains("keys")) {
+                db.createObjectStore("keys");
+            }
+        };
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction("keys", "readwrite");
+            const store = tx.objectStore("keys");
+            const putRequest = store.put(privateKey, "privateKey");
+
+            putRequest.onsuccess = () => resolve();
+            putRequest.onerror = () => reject(putRequest.error);
         };
 
         request.onerror = () => reject(request.error);
@@ -72,6 +102,11 @@ export const useUserStore = defineStore('user', {
             useCookie('token').value = token
         },
 
+        async updatePrivateKey(privateKey) {
+            this.privateKey = privateKey
+            await setPrivateKeyInDB(privateKey);
+        },
+
         clearUser() {
             this.user = null
             this.token = null
@@ -79,5 +114,42 @@ export const useUserStore = defineStore('user', {
             useCookie('user').value = null
             useCookie('token').value = null
         },
+
+        async register(email, username, tag, password, passwordConfirmation) {
+            const { publicKey, privateKey } = await generateKeyPair();
+
+            const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/register`, {
+                email,
+                username,
+                tag,
+                password,
+                passwordConfirmation,
+                publicKey,
+            });
+
+            if (response.status === 201) {
+                const { token, user } = response.data;
+                this.updateToken(token);
+                this.updateUser(user);
+                await this.updatePrivateKey(privateKey);
+            } else {
+                throw new Error(response.data.message);
+            }
+        },
+
+        async login(email, password) {
+            const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/login`, {
+                email,
+                password
+            });
+
+            if (response.status === 200) {
+                const { token, user } = response.data;
+                this.updateToken(token);
+                this.updateUser(user);
+            } else {
+                throw new Error(response.data.message);
+            }
+        }
     }
 });
