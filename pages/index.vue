@@ -1,11 +1,11 @@
 <template>
-    <div class="chat-window flex flex-col h-full">
-        <div class="messages flex-1 overflow-y-auto p-2">
+    <div class="flex flex-col h-full static">
+        <div class="flex-1 overflow-y-auto p-2">
             <div v-for="(msg, index) in messages" :key="index">
                 {{ msg }}
             </div>
         </div>
-        <MessageInput @send="handleSend" />
+        <MessageInput @send="handleSend" class="absolute bottom-0 left-0 right-0" />
     </div>
 </template>
 
