@@ -18,9 +18,10 @@
             <input v-model="password" type="password" placeholder="Password" required />
             <input v-model="passwordConfirmation" type="password" placeholder="Password Confirmation" required />
 
+            <p v-if="error" class="text-red-500">{{ error }}</p>
+
             <button type="submit" @onClick="handleRegister">Register</button>
         </form>
-        <p v-if="error">{{ error }}</p>
     </div>
 </template>
 
@@ -48,15 +49,16 @@ const formatTag = () => {
 const handleRegister = async () => {
     const userStore = useUserStore();
     try {
-        await userStore.register({
-            email: email.value,
-            username: username.value,
-            tag: tag.value,
-            password: password.value,
-            passwordConfirmation: passwordConfirmation.value
-        });
+        await userStore.register(
+            email.value,
+            username.value,
+            tag.value,
+            password.value,
+            passwordConfirmation.value
+        );
     } catch (err) {
-        error.value = err.message;
+        console.log('test')
+        error.value = err.message; // affichera le message renvoyé par ton backend
     }
 }
 </script>

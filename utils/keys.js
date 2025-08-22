@@ -17,6 +17,10 @@ const generateKeyPair = async () => {
     return { publicKey, privateKey };
 }
 
+const bufferToBase64 = (buffer) => {
+    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
+
 const getPrivateKeyFromDB = async () => {
     if (typeof window === 'undefined') return null;
 
@@ -71,4 +75,4 @@ const setPrivateKeyInDB = async (privateKey) => {
     });
 }
 
-export { generateKeyPair, getPrivateKeyFromDB, setPrivateKeyInDB };
+export { generateKeyPair, bufferToBase64, getPrivateKeyFromDB, setPrivateKeyInDB };

@@ -65,25 +65,34 @@ export const useUserStore = defineStore('user', {
 
         async register(email, username, tag, password, passwordConfirmation) {
             const apiStore = useApiStore();
-            const { publicKey, privateKey } = await generateKeyPair();
+            const { publicKey, privateKey } = await generateKeyPair(); // buffer
 
+            const publicKeyBase64 = bufferToBase64(publicKey);
+            const privateKeyBase64 = bufferToBase64(privateKey);
             const axiosInstance = createAxiosInstance();
-            const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/register`, {
-                email,
-                username,
-                tag,
-                password,
-                passwordConfirmation,
-                publicKey,
-            });
+            try {
+                const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/register`, {
+                    email,
+                    username,
+                    tag,
+                    password,
+                    passwordConfirmation,
+                    publicKey: publicKeyBase64,
+                });
 
-            if (response.status === 201) {
-                const { token, user } = response.data;
-                this.updateToken(token);
-                this.updateUser(user);
-                await this.updatePrivateKey(privateKey);
-            } else {
-                throw new Error(response.data.message);
+                if (response.status === 201) {
+                    const { token, user } = response.data;
+                    this.updateToken(token);
+                    this.updateUser(user);
+                    await this.updatePrivateKey(privateKeyBase64);
+                }
+            } catch (err) {
+                // si l'API a renvoyé une erreur 400, 401, etc.
+                if (err.response && err.response.data && err.response.data.message) {
+                    throw new Error(err.response.data.message);
+                } else {
+                    throw new Error("Une erreur est survenue.");
+                }
             }
         },
 
