@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useApiStore } from './api'
 import { io } from 'socket.io-client';
+import { encryptMessage } from '~/utils/messages';
 
 export const useWebSocketStore = defineStore('websocket', {
     state: () => ({
@@ -52,10 +53,13 @@ export const useWebSocketStore = defineStore('websocket', {
             this.socket.emit("register", { userId, userToken });
         },
 
-        wsSendMessage(to, encryptedMessage, nonce) {
+        async wsSendMessage(to, message) {
             if (!this.socket) return;
-            this.socket.emit("sendMessage", { to, encryptedMessage, nonce });
-            this.messages.push({ to, encryptedMessage, nonce });
+
+            const encryptedMessageBase64 = await encryptMessage(to, message);
+
+            this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64 });
+            this.messages.push({ to, encryptedMessage: message });
         }
     }
 })

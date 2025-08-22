@@ -19,6 +19,6 @@ const webSocketStore = useWebSocketStore()
 
 const handleSend = (msg) => {
     messages.value.push(msg)
-    webSocketStore.wsSendMessage("00000000000000000001", msg, "nonce") // TODO: remplacer par le destinataire réel
+    webSocketStore.wsSendMessage("00000000000000000001", msg) // TODO: remplacer par le destinataire réel
 }
 </script>

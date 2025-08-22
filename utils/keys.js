@@ -21,6 +21,16 @@ const bufferToBase64 = (buffer) => {
     return btoa(String.fromCharCode(...new Uint8Array(buffer)));
 }
 
+const Base64ToBuffer = (base64) => {
+    const binaryString = atob(base64);
+    const len = binaryString.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
+}
+
 const getPrivateKeyFromDB = async () => {
     if (typeof window === 'undefined') return null;
 
@@ -75,4 +85,4 @@ const setPrivateKeyInDB = async (privateKey) => {
     });
 }
 
-export { generateKeyPair, bufferToBase64, getPrivateKeyFromDB, setPrivateKeyInDB };
+export { generateKeyPair, bufferToBase64, Base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB };
