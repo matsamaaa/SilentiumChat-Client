@@ -19,6 +19,18 @@
 
 <script setup>
 import { useUserStore } from '@/stores/user'
+import { useNavigationStore } from '@/stores/navigation'
+import { useWebSocketStore } from '@/stores/ws'
 
 const userStore = useUserStore()
+const navigationStore = useNavigationStore()
+const webSocketStore = useWebSocketStore()
+
+onMounted(() => {
+    if (!userStore.isLoggedIn) {
+        navigationStore.goToLogin();
+    } else {
+        webSocketStore.connect(userStore.user.uniqueId, userStore.token);
+    }
+})
 </script>

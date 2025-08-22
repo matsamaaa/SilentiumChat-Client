@@ -12,21 +12,13 @@
 <script setup>
 import { ref } from 'vue'
 import MessageInput from '@/components/messages/MessageInput.vue'
-import { useUserStore } from '@/stores/user'
-import { useNavigationStore } from '@/stores/navigation'
+import { useWebSocketStore } from '@/stores/ws'
 
 const messages = ref([])
-
-const userStore = useUserStore()
-const navigationStore = useNavigationStore()
+const webSocketStore = useWebSocketStore()
 
 const handleSend = (msg) => {
     messages.value.push(msg)
+    webSocketStore.wsSendMessage("00000000000000000001", msg, "nonce") // TODO: remplacer par le destinataire réel
 }
-
-onMounted(() => {
-    if (!userStore.isLoggedIn) {
-        navigationStore.goToLogin();
-    }
-})
 </script>

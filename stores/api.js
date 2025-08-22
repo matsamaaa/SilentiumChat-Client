@@ -4,6 +4,7 @@ export const useApiStore = defineStore('api', {
     state: () => ({
         urls: {
             backend: 'http://localhost:30001',
+            ws: 'http://localhost:30001',
         }
     }),
 

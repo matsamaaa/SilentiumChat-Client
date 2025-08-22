@@ -3,6 +3,7 @@ import { useCookie } from '#app'
 import createAxiosInstance from './axios';
 import { useApiStore } from './api';
 import { useNavigationStore } from './navigation';
+import { useWebSocketStore } from './ws';
 import { generateKeyPair, getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys';
 
 export const useUserStore = defineStore('user', {
@@ -67,6 +68,7 @@ export const useUserStore = defineStore('user', {
         async register(email, username, tag, password, passwordConfirmation) {
             const apiStore = useApiStore();
             const navigationStore = useNavigationStore();
+            const webSocketStore = useWebSocketStore();
             const { publicKey, privateKey } = await generateKeyPair(); // buffer
 
             const publicKeyBase64 = bufferToBase64(publicKey);
@@ -87,6 +89,8 @@ export const useUserStore = defineStore('user', {
                     this.updateToken(token);
                     this.updateUser(user);
                     await this.updatePrivateKey(privateKeyBase64);
+
+                    webSocketStore.connect(user.uniqueId, token);
                     navigationStore.goToHome();
                 }
             } catch (err) {
@@ -102,6 +106,8 @@ export const useUserStore = defineStore('user', {
         async login(email, password) {
             const apiStore = useApiStore();
             const navigationStore = useNavigationStore();
+            const webSocketStore = useWebSocketStore();
+
             const axiosInstance = createAxiosInstance();
             const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/login`, {
                 email,
@@ -112,6 +118,8 @@ export const useUserStore = defineStore('user', {
                 const { token, user } = response.data;
                 this.updateToken(token);
                 this.updateUser(user);
+
+                webSocketStore.connect(user.uniqueId, token);
                 navigationStore.goToHome();
             } else {
                 throw new Error(response.data.message);
@@ -119,8 +127,11 @@ export const useUserStore = defineStore('user', {
         },
 
         async logout() {
-            this.clearUser();
+            const webSocketStore = useWebSocketStore();
             const navigationStore = useNavigationStore();
+
+            this.clearUser();
+            webSocketStore.wsDisconnect();
             navigationStore.goToLogin();
         }
     }
