@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import { useApiStore } from './api';
 import { useRouter } from '#imports'
 
 export const useNavigationStore = defineStore('navigation', {

@@ -1,7 +1,7 @@
 <template>
     <div class="min-h-screen flex flex-col bg-gray-900 text-white">
         <!-- Header -->
-        <header class="bg-blue-600 p-4">
+        <header class="bg-blue-600 p-4 h-[7vh] flex items-center">
             <h1 class="text-xl font-bold">SilentiumChat</h1>
         </header>
 

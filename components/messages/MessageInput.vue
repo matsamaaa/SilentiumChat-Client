@@ -6,13 +6,13 @@
             @keyup.enter="sendMessage"
             type="text"
             placeholder="Écrire un message..."
-            class="flex-1 bg-gray-800 text-white placeholder-gray-400 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+            class="flex-1"
         />
 
         <!-- Bouton Envoyer -->
         <button
+            type="submit"
             @click="sendMessage"
-            class="ml-3 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full shadow-md transition"
         >
             Envoyer
         </button>
