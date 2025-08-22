@@ -31,7 +31,7 @@ const Base64ToBuffer = (base64) => {
     return bytes.buffer;
 }
 
-const getPrivateKeyFromDB = async () => {
+const getPrivateKeyFromDB = async (userId) => {
     if (typeof window === 'undefined') return null;
 
     return new Promise((resolve, reject) => {
@@ -48,7 +48,7 @@ const getPrivateKeyFromDB = async () => {
             const db = request.result;
             const tx = db.transaction("keys", "readonly");
             const store = tx.objectStore("keys");
-            const getRequest = store.get("privateKey");
+            const getRequest = store.get(`privateKey_${userId}`);
 
             getRequest.onsuccess = () => resolve(getRequest.result);
             getRequest.onerror = () => reject(getRequest.error);
@@ -58,7 +58,7 @@ const getPrivateKeyFromDB = async () => {
     });
 }
 
-const setPrivateKeyInDB = async (privateKey) => {
+const setPrivateKeyInDB = async (privateKey, userId) => {
     if (typeof window === 'undefined') return null;
     
     return new Promise((resolve, reject) => {
@@ -75,7 +75,7 @@ const setPrivateKeyInDB = async (privateKey) => {
             const db = request.result;
             const tx = db.transaction("keys", "readwrite");
             const store = tx.objectStore("keys");
-            const putRequest = store.put(privateKey, "privateKey");
+            const putRequest = store.put(privateKey, `privateKey_${userId}`);
 
             putRequest.onsuccess = () => resolve();
             putRequest.onerror = () => reject(putRequest.error);

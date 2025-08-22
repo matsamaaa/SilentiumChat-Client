@@ -39,7 +39,10 @@ export const useWebSocketStore = defineStore('websocket', {
 
             this.socket.on("receiveMessage", (msg) => {
                 console.log("new message", msg);
-                this.messages.push(msg);
+                console.log()
+                const message = decryptMessage(msg.encryptedMessage);
+                console.log("decrypted message", message);
+                this.messages.push(message);
             });
         },
 

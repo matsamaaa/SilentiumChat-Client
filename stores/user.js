@@ -23,7 +23,7 @@ export const useUserStore = defineStore('user', {
         async initialize() {
             const token = useCookie('token');
             const user = useCookie('user');
-            const privateKey = await getPrivateKeyFromDB();
+            const privateKey = await getPrivateKeyFromDB(user.value.uniqueId);
 
             if (token) {
                 this.token = token;
@@ -54,7 +54,7 @@ export const useUserStore = defineStore('user', {
 
         async updatePrivateKey(privateKey) {
             this.privateKey = privateKey
-            await setPrivateKeyInDB(privateKey);
+            await setPrivateKeyInDB(privateKey, this.user.uniqueId);
         },
 
         clearUser() {

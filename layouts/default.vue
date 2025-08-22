@@ -21,14 +21,16 @@
 import { useUserStore } from '@/stores/user'
 import { useNavigationStore } from '@/stores/navigation'
 import { useWebSocketStore } from '@/stores/ws'
+import { useRoute } from 'vue-router'
 
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()
 const webSocketStore = useWebSocketStore()
+const route = useRoute()
 
 onMounted(() => {
     if (!userStore.isLoggedIn) {
-        navigationStore.goToLogin();
+        if (route.name !== 'login' && route.name !== 'register') navigationStore.goToLogin();
     } else {
         webSocketStore.connect(userStore.user.uniqueId, userStore.token);
     }

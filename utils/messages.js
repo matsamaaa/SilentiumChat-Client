@@ -32,4 +32,39 @@ const encryptMessage = async (toUserId, messageText) => {
     return encryptedMessageBase64;
 }
 
-export { encryptMessage };
+const decryptMessage = async (message) => {
+    const userStore = useUserStore();
+    const privateKeyString = userStore.privateKey;
+    if(!privateKeyString) {
+        throw new Error("Error with private key");
+    }
+
+    // convert private key base64 to buffer
+    const privateKeyBuffer = Base64ToBuffer(privateKeyString);
+    const privateKey = await crypto.subtle.importKey(
+        "pkcs8",
+        privateKeyBuffer,
+        {
+            name: "RSA-OAEP",
+            hash: "SHA-256"
+        },
+        false,
+        ["decrypt"]
+    );
+
+    // convert message base64 to buffer
+    const messageBuffer = Base64ToBuffer(message);
+    const decryptedMessage = await crypto.subtle.decrypt(
+        {
+            name: "RSA-OAEP"
+        },
+        privateKey,
+        messageBuffer
+    );
+
+    // convert message buffer to base64
+    const decoder = new TextDecoder();
+    return decoder.decode(decryptedMessage);
+}
+
+export { encryptMessage, decryptMessage };
