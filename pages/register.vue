@@ -10,7 +10,7 @@
                 v-model="tag" 
                 type="text" 
                 placeholder="0000" 
-                maxlength="4"
+                maxlength="5"
                 @input="formatTag"
                 required 
             />
@@ -38,10 +38,11 @@ const error = ref(null);
 const formatTag = () => {
     tag.value = tag.value.replace(/\D/g, "");
 
-    // Si l’utilisateur tape moins de 4 chiffres → complète avec des zéros à gauche
-    if (tag.value.length > 0) {
-        tag.value = tag.value.padStart(4, "0").slice(0, 4);
+    if (tag.value.split('').length > 4) {
+        tag.value = tag.value.slice(-4);
     }
+
+    tag.value = tag.value.padStart(4, "0").slice(0, 4);
 }
 
 const handleRegister = async () => {
