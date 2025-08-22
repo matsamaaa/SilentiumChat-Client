@@ -12,10 +12,21 @@
 <script setup>
 import { ref } from 'vue'
 import MessageInput from '@/components/messages/MessageInput.vue'
+import { useUserStore } from '@/stores/user'
+import { useNavigationStore } from '@/stores/navigation'
 
 const messages = ref([])
+
+const userStore = useUserStore()
+const navigationStore = useNavigationStore()
 
 const handleSend = (msg) => {
     messages.value.push(msg)
 }
+
+onMounted(() => {
+    if (!userStore.isLoggedIn) {
+        navigationStore.goToLogin();
+    }
+})
 </script>

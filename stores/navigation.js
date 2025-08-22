@@ -16,6 +16,11 @@ export const useNavigationStore = defineStore('navigation', {
         goToLogin() {
             const router = useRouter();
             router.push({ name: 'login' });
+        },
+
+        goToHome() {
+            const router = useRouter();
+            router.push({ name: 'index' })
         }
     }
 });

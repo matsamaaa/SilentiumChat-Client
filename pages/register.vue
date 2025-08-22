@@ -20,7 +20,7 @@
 
             <p v-if="error" class="text-red-500">{{ error }}</p>
 
-            <button type="submit" @onClick="handleRegister">Register</button>
+            <button type="submit">Register</button>
         </form>
     </div>
 </template>
@@ -57,8 +57,7 @@ const handleRegister = async () => {
             passwordConfirmation.value
         );
     } catch (err) {
-        console.log('test')
-        error.value = err.message; // affichera le message renvoyé par ton backend
+        error.value = err.message;
     }
 }
 </script>

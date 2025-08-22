@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { useCookie } from '#app'
 import createAxiosInstance from './axios';
 import { useApiStore } from './api';
+import { useNavigationStore } from './navigation';
 import { generateKeyPair, getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys';
 
 export const useUserStore = defineStore('user', {
@@ -65,6 +66,7 @@ export const useUserStore = defineStore('user', {
 
         async register(email, username, tag, password, passwordConfirmation) {
             const apiStore = useApiStore();
+            const navigationStore = useNavigationStore();
             const { publicKey, privateKey } = await generateKeyPair(); // buffer
 
             const publicKeyBase64 = bufferToBase64(publicKey);
@@ -85,6 +87,7 @@ export const useUserStore = defineStore('user', {
                     this.updateToken(token);
                     this.updateUser(user);
                     await this.updatePrivateKey(privateKeyBase64);
+                    navigationStore.goToHome();
                 }
             } catch (err) {
                 // si l'API a renvoyé une erreur 400, 401, etc.
@@ -98,6 +101,7 @@ export const useUserStore = defineStore('user', {
 
         async login(email, password) {
             const apiStore = useApiStore();
+            const navigationStore = useNavigationStore();
             const axiosInstance = createAxiosInstance();
             const response = await axiosInstance.post(`${apiStore.urls.backend}/auth/login`, {
                 email,
@@ -108,9 +112,16 @@ export const useUserStore = defineStore('user', {
                 const { token, user } = response.data;
                 this.updateToken(token);
                 this.updateUser(user);
+                navigationStore.goToHome();
             } else {
                 throw new Error(response.data.message);
             }
+        },
+
+        async logout() {
+            this.clearUser();
+            const navigationStore = useNavigationStore();
+            navigationStore.goToLogin();
         }
     }
 });
