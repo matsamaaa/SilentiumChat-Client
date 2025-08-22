@@ -1,11 +1,7 @@
 import { Base64ToBuffer } from "./keys"
-import { useApiStore } from "../stores/api";
 
-const encryptMessage = async (toUserId, messageText) => {
-    const apiStore = useApiStore();
-
+const encryptMessage = async (messageText, publicKeyString) => {
     // Recipient public key
-    const publicKeyString = await apiStore.getUserPublicKey(toUserId);
     const publicKeyBuffer = Base64ToBuffer(publicKeyString);
     const publicKey = await crypto.subtle.importKey(
         "spki",
