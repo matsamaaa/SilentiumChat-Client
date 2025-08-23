@@ -2,11 +2,12 @@ import { defineStore } from 'pinia'
 import { useApiStore } from './api'
 import { io } from 'socket.io-client';
 import { encryptMessage } from '~/utils/messages';
+import { usePrivateDiscussionsStore } from './privateDiscussions';
+import MessageManager from '~/utils/managers/messageManager';
 
 export const useWebSocketStore = defineStore('websocket', {
     state: () => ({
         socket: null,
-        messages: [],
         isConnected: false
     }),
 
@@ -36,24 +37,11 @@ export const useWebSocketStore = defineStore('websocket', {
             });
 
             this.socket.on("receiveMessage", async (msg) => {
-                const webSocketStore = useWebSocketStore();
-                
-                const decryptedMessage = await decryptMessage(msg.encryptedMessage);
-                const newMsg = { ...msg, encryptedMessage: decryptedMessage };
+                const privateDiscussionsStore = usePrivateDiscussionsStore();
 
-                const discussion = webSocketStore.messages.find(d =>
-                    d.users.includes(msg.from) && d.users.includes(msg.to)
-                );
-
-                if (discussion) {
-                    discussion.encryptedMessages.push(newMsg);
-                } else {
-                    webSocketStore.messages.push({
-                        users: [msg.from, msg.to],
-                        encryptedMessages: [newMsg]
-                    });
-                }
+                await privateDiscussionsStore.addMessageToDiscussion(msg);
             });
+
         },
 
         wsDisconnect() {
@@ -71,7 +59,7 @@ export const useWebSocketStore = defineStore('websocket', {
 
             const apiStore = useApiStore();
             const userStore = useUserStore();
-            const webSocketStore = useWebSocketStore();
+            const privateDiscussionsStore = usePrivateDiscussionsStore();
 
             // recipient message
             const publicKeyString = await apiStore.getUserPublicKey(to);
@@ -81,27 +69,17 @@ export const useWebSocketStore = defineStore('websocket', {
             const encryptedMessageBySenderBase64 = await encryptMessage(message, userStore.user.publicKey);
 
             this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64, encryptedMessageBySender: encryptedMessageBySenderBase64 });
-            
-            const messageData = {
-                from: userStore.user.uniqueId,
+
+            // add message to local store
+            const messageData = new MessageManager().createMessage(
+                userStore.user.uniqueId,
                 to,
-                encryptedMessaged: encryptedMessageBase64,
-                encryptedMessageBySender: message,
-                timestamp: new Date(),
-            };
-
-            const discussion = webSocketStore.messages.find(d =>
-                d.users.includes(messageData.from) && d.users.includes(messageData.to)
+                encryptedMessageBase64,
+                encryptedMessageBySenderBase64,
+                publicKeyString,
+                userStore.user.publicKey
             );
-
-            if (discussion) {
-                discussion.encryptedMessages.push(messageData);
-            } else {
-                webSocketStore.messages.push({
-                    users: [messageData.from, messageData.to],
-                    encryptedMessages: [messageData]
-                });
-            }
+            await privateDiscussionsStore.addMessageToDiscussion(messageData);
         }
     }
 })

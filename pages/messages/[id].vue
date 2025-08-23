@@ -1,15 +1,13 @@
 <template>
     <div class="flex flex-col h-full static">
         <h1>{{ recipientUsername }}</h1>
-        <div v-for="discussion in filteredDiscussions" :key="discussion._id">
-        <div v-for="(msg, index) in discussion.encryptedMessages" :key="index">
+        <div v-for="(msg, index) in filteredDiscussions" :key="index">
             <p v-if="msg.from === userStore.user.uniqueId" class="text-right">
-            {{ msg.encryptedMessageBySender }}
+                {{ msg.encryptedMessageBySender }}
             </p>
             <p v-else class="text-left">
-            {{ msg.encryptedMessage }}
+                {{ msg.encryptedMessage }}
             </p>
-        </div>
         </div>
         <MessageInput @send="handleSend" class="absolute bottom-0 left-0 right-0" />
     </div>
@@ -21,7 +19,7 @@ import MessageInput from '@/components/messages/MessageInput.vue'
 import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
-import { decryptMessage } from '@/utils/messages'
+import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 
 const recipientUsername = ref('')
 
@@ -36,43 +34,44 @@ const handleSend = (msg) => {
     webSocketStore.wsSendMessage(id, msg);
 }
 
-const filteredDiscussions = computed(() =>
-    webSocketStore.messages.length === 0
-        ? []
-        : webSocketStore.messages.filter(
-            d => d.users.includes(id) && d.users.includes(userStore.user.uniqueId)
-        )
-);
+const privateDiscussionsStore = usePrivateDiscussionsStore();
+
+const filteredDiscussions = computed(() => {
+    const discussion = privateDiscussionsStore.getDiscussion(
+        userStore.user.uniqueId,
+        route.params.id
+    );
+
+    if (!discussion) {
+        console.log("Filtered discussion: Aucune discussion trouvée (encore vide)");
+        return null;
+    }
+
+    console.log("Filtered discussion:", discussion);
+    return discussion.encryptedMessages ?? null;
+});
 
 onMounted(async () => {
     //get username
     recipientUsername.value = await apiStore.getUsername(id);
 
     // delete old messages
-    webSocketStore.messages = webSocketStore.messages.filter(
-        d => !d.users.includes(id) || !d.users.includes(userStore.user.uniqueId)
-    );
+    const privateDiscussionsStore = usePrivateDiscussionsStore();
+    privateDiscussionsStore.removeDiscussion(id, userStore.user.uniqueId);
 
+    // add all messages to discussion
     const messagesData = await apiStore.getPrivateDiscussion(userStore.user.uniqueId, id);
     if (messagesData) {
         // decrypt all messages
         try {
             messagesData.encryptedMessages = await Promise.all(
                 messagesData.encryptedMessages.map(async (msg) => {
-                    if (msg.from === userStore.user.uniqueId) {
-                        const decryptedBySender = await decryptMessage(msg.encryptedMessageBySender);
-                        return { ...msg, encryptedMessageBySender: decryptedBySender };
-                    }
-                    const decrypted = await decryptMessage(msg.encryptedMessage);
-                    return { ...msg, encryptedMessage: decrypted };
+                    await privateDiscussionsStore.addMessageToDiscussion(msg);
                 })
             );
         } catch (error) {
             console.error("Error decrypting messages:", error);
         }
-
-        // push the discussion to the store
-        webSocketStore.messages.push(messagesData);
     }
 });
 </script>

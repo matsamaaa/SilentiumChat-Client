@@ -85,4 +85,9 @@ const setPrivateKeyInDB = async (privateKey, userId) => {
     });
 }
 
-export { generateKeyPair, bufferToBase64, Base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB };
+const isSameKey = (key1, key2) => {
+    if (!key1 || !key2) return false;
+    return key1 === key2;
+}
+
+export { generateKeyPair, bufferToBase64, Base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB, isSameKey };
