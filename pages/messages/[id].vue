@@ -36,11 +36,13 @@ const handleSend = (msg) => {
     webSocketStore.wsSendMessage(id, msg);
 }
 
-const filteredDiscussions = computed(() => 
-    webSocketStore.messages.filter(
-        d => d.users.includes(id) && d.users.includes(userStore.user.uniqueId)
-    )
-)
+const filteredDiscussions = computed(() =>
+    webSocketStore.messages.length === 0
+        ? []
+        : webSocketStore.messages.filter(
+            d => d.users.includes(id) && d.users.includes(userStore.user.uniqueId)
+        )
+);
 
 onMounted(async () => {
     //get username

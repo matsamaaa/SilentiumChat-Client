@@ -26,14 +26,12 @@ export const useWebSocketStore = defineStore('websocket', {
             });
 
             this.socket.on("connect", () => {
-                console.log("websocket connected: ", this.socket.id);
                 this.isConnected = true;
 
                 this.wsRegister(userId, token);
             });
 
             this.socket.on("disconnect", () => {
-                console.log("websocket disconnected");
                 this.isConnected = false;
             });
 
