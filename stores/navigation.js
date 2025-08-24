@@ -21,6 +21,11 @@ export const useNavigationStore = defineStore('navigation', {
         goToHome() {
             const router = useRouter();
             router.push({ name: 'index' })
+        },
+
+        goToMessaging(user) {
+            const router = useRouter();
+            router.push(`/messages/${user}`);
         }
     }
 });

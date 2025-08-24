@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import createAxiosInstance from './axios';
-import { useUserStore } from './user';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -35,20 +34,26 @@ export const useApiStore = defineStore('api', {
         },
 
         // Privates Discussion
-        async getPrivateDiscussion(from, to) {
+        async getPrivateDiscussion(to) {
             const axiosInstance = createAxiosInstance();
-            const userStore = useUserStore();
 
             try {
-                const response = await axiosInstance.get(`${this.urls.backend}/message/${to}/messages`, {
-                    headers: {
-                        'Authorization': `Bearer ${userStore.token}`,
-                        'x-user-id': from
-                    }
-                });
+                const response = await axiosInstance.get(`${this.urls.backend}/message/${to}/messages`);
                 return response.data;
             } catch (error) {
                 console.error("Error fetching private discussion:", error);
+                throw error;
+            }
+        },
+
+        async getLastMessages() {
+            const axiosInstance = createAxiosInstance();
+
+            try {
+                const response = await axiosInstance.get(`${this.urls.backend}/message/lastmessages`);
+                return response.data;
+            } catch (error) {
+                console.error("Error fetching last messages:", error);
                 throw error;
             }
         }

@@ -12,8 +12,10 @@ const createAxiosInstance = () => {
 
     instance.interceptors.request.use(config => {
         const token = userStore.token;
+        const userId = userStore.user ? userStore.user.uniqueId : null;
         if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
+            config.headers.Authorization = `Bearer ${token}`;
+            config.headers['x-user-id'] = userId;
         }
         return config;
     }, error => {
