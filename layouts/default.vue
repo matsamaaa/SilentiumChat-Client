@@ -2,7 +2,7 @@
     <div class="min-h-screen flex flex-col bg-gray-900 text-white">
         <!-- Header -->
         <header class="bg-blue-600 p-4 h-[7vh] flex items-center justify-between">
-            <h1 class="text-xl font-bold">SilentiumChat</h1>
+            <h1 class="text-xl font-bold" @click="navigationStore.goToHome">SilentiumChat</h1>
 
             <div v-if="userStore.isLoggedIn" class="flex flex-row gap-3">
                 <p>{{ userStore.user.username }}</p>

@@ -56,6 +56,17 @@ export const useApiStore = defineStore('api', {
                 console.error("Error fetching last messages:", error);
                 throw error;
             }
+        },
+
+        async getUserIdByFullName(username, code) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.get(`${this.urls.backend}/user/${username}/${code}/id`);
+                return response.data.userId;
+            } catch (error) {
+                console.error("Error fetching user ID by full name:", error);
+                throw error;
+            }
         }
     }
 })
