@@ -13,12 +13,13 @@
             id="file-upload"
             type="file"
             class="hidden"
+            accept="image/*,video/*"
             @change="handleFileUpload"
         />
 
-        <!-- Prévisualisation si image -->
+        <!-- Prévisualisation si image ou vidéo -->
         <div v-if="preview" class="mt-4">
-        <img :src="preview" alt="Aperçu" class="max-w-xs rounded-lg shadow" />
+            <img :src="preview" alt="Aperçu" class="max-w-xs rounded-lg shadow" />
         </div>
 
         <!-- Nom du fichier -->
@@ -29,25 +30,52 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
 
 const fileName = ref(null);
 const preview = ref(null);
 
 function handleFileUpload(event) {
     const file = event.target.files[0];
-    if (file) {
-        fileName.value = file.name;
+    if (!file) return;
 
-        if (file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.value = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        } else {
-            preview.value = null;
-        }
+    fileName.value = file.name;
+
+    if (file.type.startsWith("image/")) {
+        // image gestion
+        const reader = new FileReader();
+        reader.onload = (e) => {
+        preview.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+    } else if (file.type.startsWith("video/")) {
+        // video gestion
+        const video = document.createElement("video");
+        video.src = URL.createObjectURL(file);
+        video.muted = true;
+        video.preload = "metadata";
+        video.playsInline = true;
+
+        video.addEventListener("loadedmetadata", () => {
+            // choose next frame to not capture black screen
+            video.currentTime = Math.min(0.1, video.duration / 2);
+        });
+
+        video.addEventListener("seeked", () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            preview.value = canvas.toDataURL("image/png");
+
+            URL.revokeObjectURL(video.src); 
+        });
+    } else {
+        preview.value = null;
     }
 }
 </script>
