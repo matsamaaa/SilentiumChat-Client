@@ -67,6 +67,39 @@ export const useApiStore = defineStore('api', {
                 console.error("Error fetching user ID by full name:", error);
                 throw error;
             }
+        },
+
+        async postFile(to, fileData) {
+            const axiosInstance = createAxiosInstance();
+            const formData = new FormData();
+            
+            formData.append("file", fileData.encryptedData);
+            formData.append("to", to);
+            formData.append("iv", fileData.iv);
+            formData.append("authTag", fileData.authTag);
+            formData.append("encryptedKey", fileData.encryptedKey);
+            formData.append("encryptedKeySender", fileData.encryptedKeySender);
+
+            try {
+                const response = await axiosInstance.post(
+                    `${this.urls.backend}/files/upload`, 
+                    formData,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data"
+                        },
+                        onUploadProgress: (progressEvent) => {
+                            const { loaded, total } = progressEvent;
+                            const percent = Math.round((loaded * 100) / total);
+                            console.log(`File upload progress: ${percent}%`);
+                        }
+                    }
+                );
+                return response.data;
+            } catch (error) {
+                console.error("Error posting file:", error);
+                throw error;
+            }
         }
     }
 })

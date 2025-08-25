@@ -3,6 +3,7 @@ import { useApiStore } from './api'
 import { io } from 'socket.io-client';
 import { encryptMessage } from '~/utils/messages';
 import { usePrivateDiscussionsStore } from './privateDiscussions';
+import { encryptFile } from '~/utils/files';
 import MessageManager from '~/utils/managers/messageManager';
 import FileManager from '~/utils/managers/fileManager';
 
@@ -57,7 +58,6 @@ export const useWebSocketStore = defineStore('websocket', {
 
         async wsSendMessage(to, message, file = null) {
             if (!this.socket) return;
-            console.log("Sending message:", message, "with file:", file);
             const apiStore = useApiStore();
             const userStore = useUserStore();
             const privateDiscussionsStore = usePrivateDiscussionsStore();
@@ -68,28 +68,42 @@ export const useWebSocketStore = defineStore('websocket', {
 
             // sender message
             const encryptedMessageBySenderBase64 = await encryptMessage(message, userStore.user.publicKey);
-            let fileData = null;
+            let fileId = null;
 
             if (file) {
                 // keys
                 const aesKey = await generateAESKey();
+                const iv = generateIVKey();
+
                 // aesKey encrypt with RSAkey
                 const encryptedAesKey = await encryptMessage(aesKey, publicKeyString);
                 const encryptedKeySender = await encryptMessage(aesKey, userStore.user.publicKey);
-                const iv = generateIVKey();
 
+                // encrypt file with AES
                 const { encryptedData, authTag } = await encryptFile(file, aesKey, iv);
-                fileData = new FileManager().createFile({
-                    iv: bufferToBase64(iv),
-                    authTag: bufferToBase64(authTag),
 
-                    encryptedData: bufferToBase64(encryptedData),
-                    encryptedKey: encryptedAesKey,
-                    encryptedKeySender: encryptedKeySender
-                });
+                // upload file
+                const fileData = new FileManager().createFile(
+                    iv,
+                    authTag,
+                    new Blob([encryptedData], { type: "application/octet-stream" }),
+                    encryptedAesKey,
+                    encryptedKeySender
+                );
+
+                const response = await apiStore.postFile(
+                    to,
+                    fileData
+                );
+
+                fileId = response.fileId;
             }
-
-            this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64, encryptedMessageBySender: encryptedMessageBySenderBase64, file: fileData });
+            
+            try {
+                this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64, encryptedMessageBySender: encryptedMessageBySenderBase64, file: fileId });
+            } catch (err) {
+                console.error("Error sending message:", err);
+            }
 
             // add message to local store
             const messageData = new MessageManager().createMessage(

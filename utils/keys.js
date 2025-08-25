@@ -107,9 +107,7 @@ const generateAESKey = async (bits = 256) => {
         ["encrypt", "decrypt"]
     );
 
-    // export key to raw format
-    const rawKey = await window.crypto.subtle.exportKey("raw", key);
-    return new Uint8Array(rawKey);
+    return key;
 }
 
 const generateIVKey = () => {
