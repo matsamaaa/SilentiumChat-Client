@@ -30,8 +30,8 @@ const route = useRoute()
 
 const id = route.params.id
 
-const handleSend = (msg) => {
-    webSocketStore.wsSendMessage(id, msg);
+const handleSend = (data) => {
+    webSocketStore.wsSendMessage(id, data.message, data.file);
 }
 
 const privateDiscussionsStore = usePrivateDiscussionsStore();
@@ -43,11 +43,9 @@ const filteredDiscussions = computed(() => {
     );
 
     if (!discussion) {
-        console.log("Filtered discussion: Aucune discussion trouvée (encore vide)");
         return null;
     }
 
-    console.log("Filtered discussion:", discussion);
     return discussion.encryptedMessages ?? null;
 });
 

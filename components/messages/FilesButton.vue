@@ -35,17 +35,20 @@ import { ref } from "vue";
 const fileName = ref(null);
 const preview = ref(null);
 
+const emit = defineEmits(['file-selected']);
+
 function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
 
     fileName.value = file.name;
+    emit('file-selected', file);
 
     if (file.type.startsWith("image/")) {
         // image gestion
         const reader = new FileReader();
         reader.onload = (e) => {
-        preview.value = e.target.result;
+            preview.value = e.target.result;
         };
         reader.readAsDataURL(file);
 

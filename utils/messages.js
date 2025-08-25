@@ -1,8 +1,8 @@
-import { Base64ToBuffer } from "./keys"
+import { base64ToBuffer } from "./keys"
 
 const encryptMessage = async (messageText, publicKeyString) => {
     // Recipient public key
-    const publicKeyBuffer = Base64ToBuffer(publicKeyString);
+    const publicKeyBuffer = base64ToBuffer(publicKeyString);
     const publicKey = await crypto.subtle.importKey(
         "spki",
         publicKeyBuffer,
@@ -36,7 +36,7 @@ const decryptMessage = async (message) => {
     }
 
     // convert private key base64 to buffer
-    const privateKeyBuffer = Base64ToBuffer(privateKeyString);
+    const privateKeyBuffer = base64ToBuffer(privateKeyString);
     const privateKey = await crypto.subtle.importKey(
         "pkcs8",
         privateKeyBuffer,
@@ -49,7 +49,7 @@ const decryptMessage = async (message) => {
     );
 
     // convert message base64 to buffer
-    const messageBuffer = Base64ToBuffer(message);
+    const messageBuffer = base64ToBuffer(message);
     const decryptedMessage = await crypto.subtle.decrypt(
         {
             name: "RSA-OAEP"

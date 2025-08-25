@@ -18,18 +18,25 @@ const generateKeyPair = async () => {
 }
 
 const bufferToBase64 = (buffer) => {
-    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
-}
+    const bytes = new Uint8Array(buffer);
+    let binary = '';
+    const chunkSize = 0x8000; // 32k chunks
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+        const chunk = bytes.subarray(i, i + chunkSize);
+        binary += String.fromCharCode(...chunk);
+    }
+    return btoa(binary);
+};
 
-const Base64ToBuffer = (base64) => {
-    const binaryString = atob(base64);
-    const len = binaryString.length;
+const base64ToBuffer = (base64) => {
+    const binary = atob(base64);
+    const len = binary.length;
     const bytes = new Uint8Array(len);
     for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
+        bytes[i] = binary.charCodeAt(i);
     }
     return bytes.buffer;
-}
+};
 
 const getPrivateKeyFromDB = async (userId) => {
     if (typeof window === 'undefined') return null;
@@ -90,4 +97,23 @@ const isSameKey = (key1, key2) => {
     return key1 === key2;
 }
 
-export { generateKeyPair, bufferToBase64, Base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB, isSameKey };
+const generateAESKey = async (bits = 256) => {
+    const key = await window.crypto.subtle.generateKey(
+        {
+            name: "AES-GCM",
+            length: bits// Convert to bits
+        },
+        true, // key is exportable
+        ["encrypt", "decrypt"]
+    );
+
+    // export key to raw format
+    const rawKey = await window.crypto.subtle.exportKey("raw", key);
+    return new Uint8Array(rawKey);
+}
+
+const generateIVKey = () => {
+    return window.crypto.getRandomValues(new Uint8Array(12));
+}
+
+export { generateKeyPair, bufferToBase64, base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB, isSameKey, generateAESKey, generateIVKey };

@@ -7,7 +7,6 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             const discussion = this.discussions.find(d =>
                 d.users.includes(from) && d.users.includes(to)
             );
-            console.log("Found discussion:", discussion);
             return discussion ? discussion : null;
         },
 
@@ -29,7 +28,7 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
         async addMessageToDiscussion(message) {
             const { from, to } = message;
             const userStore = useUserStore();
-            console.log("Adding message to discussion:", message);
+
             // check what message we decrypt
             let newMessage;
             if (from === userStore.user.uniqueId) {
@@ -44,8 +43,6 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             let discussion = this.getDiscussion(from, to);
             if (!discussion) discussion = this.addDiscussion(from, to);
             discussion.encryptedMessages.push(newMessage);
-
-            console.log("Updated discussion:", discussion);
         }
     }
 });

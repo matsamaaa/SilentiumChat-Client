@@ -60,7 +60,6 @@ onMounted(async () => {
             ...discussion.encryptedMessages[0],
             username: username
         });
-        console.log("Discussion loaded:", privateDiscussionsStore.discussions);
     });
 })
 </script>

@@ -4,6 +4,7 @@ import { io } from 'socket.io-client';
 import { encryptMessage } from '~/utils/messages';
 import { usePrivateDiscussionsStore } from './privateDiscussions';
 import MessageManager from '~/utils/managers/messageManager';
+import FileManager from '~/utils/managers/fileManager';
 
 export const useWebSocketStore = defineStore('websocket', {
     state: () => ({
@@ -54,9 +55,9 @@ export const useWebSocketStore = defineStore('websocket', {
             this.socket.emit("register", { userId, userToken });
         },
 
-        async wsSendMessage(to, message) {
+        async wsSendMessage(to, message, file = null) {
             if (!this.socket) return;
-
+            console.log("Sending message:", message, "with file:", file);
             const apiStore = useApiStore();
             const userStore = useUserStore();
             const privateDiscussionsStore = usePrivateDiscussionsStore();
@@ -67,8 +68,28 @@ export const useWebSocketStore = defineStore('websocket', {
 
             // sender message
             const encryptedMessageBySenderBase64 = await encryptMessage(message, userStore.user.publicKey);
+            let fileData = null;
 
-            this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64, encryptedMessageBySender: encryptedMessageBySenderBase64 });
+            if (file) {
+                // keys
+                const aesKey = await generateAESKey();
+                // aesKey encrypt with RSAkey
+                const encryptedAesKey = await encryptMessage(aesKey, publicKeyString);
+                const encryptedKeySender = await encryptMessage(aesKey, userStore.user.publicKey);
+                const iv = generateIVKey();
+
+                const { encryptedData, authTag } = await encryptFile(file, aesKey, iv);
+                fileData = new FileManager().createFile({
+                    iv: bufferToBase64(iv),
+                    authTag: bufferToBase64(authTag),
+
+                    encryptedData: bufferToBase64(encryptedData),
+                    encryptedKey: encryptedAesKey,
+                    encryptedKeySender: encryptedKeySender
+                });
+            }
+
+            this.socket.emit("sendMessage", { to, encryptedMessage: encryptedMessageBase64, encryptedMessageBySender: encryptedMessageBySenderBase64, file: fileData });
 
             // add message to local store
             const messageData = new MessageManager().createMessage(
