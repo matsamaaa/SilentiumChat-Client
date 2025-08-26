@@ -36,4 +36,4 @@ state: () => ({
 ## Contributing
 
 Ideas, feedback, and contributions are welcome!  
-Please refer to the [Server repository](https://github.com/ton-user/SilentiumChat-Server) for the backend component.
+Please refer to the [Server repository](https://github.com/matsamaaa/SilentiumChat-Server) for the backend component.
