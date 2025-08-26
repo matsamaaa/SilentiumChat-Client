@@ -7,6 +7,8 @@ class MessageManager {
             encryptedMessageBySender: null,
             timestamp: Date.now(),
 
+            files: [],
+
             isRead: false,
             isDeleted: false,
             isPinned: false,

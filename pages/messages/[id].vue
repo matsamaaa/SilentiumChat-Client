@@ -8,6 +8,7 @@
             <p v-else class="text-left">
                 {{ msg.encryptedMessage }}
             </p>
+            <img v-for="value in msg.files" :src="value.url" :alt="value.name">
         </div>
         <MessageInput @send="handleSend" class="absolute bottom-0 left-0 right-0" />
     </div>
@@ -46,6 +47,8 @@ const filteredDiscussions = computed(() => {
         return null;
     }
 
+    console.log('speed TEST')
+
     return discussion.encryptedMessages ?? null;
 });
 
@@ -64,7 +67,7 @@ onMounted(async () => {
         try {
             messagesData.encryptedMessages = await Promise.all(
                 messagesData.encryptedMessages.map(async (msg) => {
-                    await privateDiscussionsStore.addMessageToDiscussion(msg);
+                    return await privateDiscussionsStore.addMessageToDiscussion(msg);
                 })
             );
         } catch (error) {

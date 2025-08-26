@@ -6,6 +6,7 @@ import { usePrivateDiscussionsStore } from './privateDiscussions';
 import { encryptFile } from '~/utils/files';
 import MessageManager from '~/utils/managers/messageManager';
 import FileManager from '~/utils/managers/fileManager';
+import { encryptAesKeyWithRSA, generateAESKey, generateIVKey } from '~/utils/keys/aes';
 
 export const useWebSocketStore = defineStore('websocket', {
     state: () => ({
@@ -76,8 +77,8 @@ export const useWebSocketStore = defineStore('websocket', {
                 const iv = generateIVKey();
 
                 // aesKey encrypt with RSAkey
-                const encryptedAesKey = await encryptMessage(aesKey, publicKeyString);
-                const encryptedKeySender = await encryptMessage(aesKey, userStore.user.publicKey);
+                const encryptedAesKey = await encryptAesKeyWithRSA(aesKey, publicKeyString);
+                const encryptedKeySender = await encryptAesKeyWithRSA(aesKey, userStore.user.publicKey);
 
                 // encrypt file with AES
                 const { encryptedData, authTag } = await encryptFile(file, aesKey, iv);

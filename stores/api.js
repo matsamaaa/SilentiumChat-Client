@@ -72,7 +72,7 @@ export const useApiStore = defineStore('api', {
         async postFile(to, fileData) {
             const axiosInstance = createAxiosInstance();
             const formData = new FormData();
-            
+
             formData.append("file", fileData.encryptedData);
             formData.append("to", to);
             formData.append("iv", fileData.iv);
@@ -98,6 +98,34 @@ export const useApiStore = defineStore('api', {
                 return response.data;
             } catch (error) {
                 console.error("Error posting file:", error);
+                throw error;
+            }
+        },
+
+        async getFile(fileId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.get(`${this.urls.backend}/files/${fileId}`, {
+                    responseType: 'arraybuffer',
+                });
+
+                // Convert ArrayBuffer en Uint8Array
+                const fileBuffer = new Uint8Array(response.data);
+
+                return fileBuffer;
+            } catch (error) {
+                console.error("Error fetching file:", error);
+                throw error;
+            }
+        },
+
+        async getFileMetadata(fileId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.get(`${this.urls.backend}/files/${fileId}/meta`);
+                return response.data;
+            } catch (error) {
+                console.error("Error fetching file metadata:", error);
                 throw error;
             }
         }

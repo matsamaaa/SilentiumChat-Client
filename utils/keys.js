@@ -97,21 +97,8 @@ const isSameKey = (key1, key2) => {
     return key1 === key2;
 }
 
-const generateAESKey = async (bits = 256) => {
-    const key = await window.crypto.subtle.generateKey(
-        {
-            name: "AES-GCM",
-            length: bits// Convert to bits
-        },
-        true, // key is exportable
-        ["encrypt", "decrypt"]
-    );
-
-    return key;
+const stringToUint8Array = (str) => {
+    return new Uint8Array(str.split(',').map(Number));
 }
 
-const generateIVKey = () => {
-    return window.crypto.getRandomValues(new Uint8Array(12));
-}
-
-export { generateKeyPair, bufferToBase64, base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB, isSameKey, generateAESKey, generateIVKey };
+export { generateKeyPair, bufferToBase64, base64ToBuffer, getPrivateKeyFromDB, setPrivateKeyInDB, isSameKey, stringToUint8Array };
