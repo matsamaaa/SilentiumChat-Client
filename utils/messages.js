@@ -1,4 +1,4 @@
-import { base64ToBuffer } from "./keys"
+import { bufferToBase64, base64ToBuffer } from "./conversion"
 
 const encryptMessage = async (messageText, publicKeyString) => {
     // Recipient public key
@@ -62,7 +62,5 @@ const decryptMessage = async (message) => {
     const decoder = new TextDecoder();
     return decoder.decode(decryptedMessage);
 }
-
-
 
 export { encryptMessage, decryptMessage };

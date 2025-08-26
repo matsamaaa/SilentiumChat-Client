@@ -1,4 +1,4 @@
-import { base64ToBuffer } from "../keys";
+import { bufferToBase64, base64ToBuffer } from "../conversion";
 
 const generateAESKey = async (bits = 256) => {
     const key = await window.crypto.subtle.generateKey(

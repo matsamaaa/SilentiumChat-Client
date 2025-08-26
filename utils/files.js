@@ -1,3 +1,6 @@
+import { useApiStore } from "~/stores/api";
+import { decryptAesKeyWithRSA } from "./keys/aes";
+
 const encryptFile = async (file, aesKey, iv) => {
     try {
         const fileArrayBuffer = await file.arrayBuffer();
@@ -37,4 +40,36 @@ const decryptFile = async ({ encryptedData, authTag }, aesKey, iv) => {
     }
 };
 
-export { encryptFile, decryptFile };
+const getDecryptedFileUrl = async (file, own = false) => {
+    const apiStore = useApiStore();
+
+    try {
+        // Récupération du fichier crypté et de ses métadonnées
+        const cryptedFile = await apiStore.getFile(file);
+        const fileMetadata = await apiStore.getFileMetadata(file);
+
+        // Décryptage de la clé AES avec RSA
+        const decryptAesKey = await decryptAesKeyWithRSA(own ?fileMetadata.encryptedKeySender : fileMetadata.encryptedKey);
+
+        // Décryptage du fichier
+        const decryptedFile = await decryptFile(
+            { 
+                encryptedData: cryptedFile, 
+                authTag: stringToUint8Array(fileMetadata.authTag) 
+            }, 
+            decryptAesKey, 
+            stringToUint8Array(fileMetadata.iv)
+        );
+
+        // Création du Blob et de l'URL
+        const blob = new Blob([decryptedFile], { type: fileMetadata.contentType || 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+
+        return { url, name: fileMetadata.name };
+    } catch (err) {
+        console.error("Error getting decrypted file URL:", err);
+        throw err;
+    }
+}
+
+export { encryptFile, decryptFile, getDecryptedFileUrl };

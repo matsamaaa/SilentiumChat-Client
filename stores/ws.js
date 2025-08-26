@@ -107,7 +107,8 @@ export const useWebSocketStore = defineStore('websocket', {
             }
 
             // add message to local store
-            const messageData = new MessageManager().createMessage(
+            const messageData = new MessageManager();
+            messageData.createMessage(
                 userStore.user.uniqueId,
                 to,
                 encryptedMessageBase64,
@@ -115,7 +116,10 @@ export const useWebSocketStore = defineStore('websocket', {
                 publicKeyString,
                 userStore.user.publicKey
             );
-            await privateDiscussionsStore.addMessageToDiscussion(messageData);
+            console.log(file, fileId)
+            if (file) messageData.addFileToMessage(fileId);
+            console.log(messageData);
+            await privateDiscussionsStore.addMessageToDiscussion(messageData.getMessage());
         }
     }
 })

@@ -26,6 +26,14 @@ class MessageManager {
         this.message.publicKeySenderUsed = publicKeySenderUsed;
         return this.message;
     }
+
+    addFileToMessage(message) {
+        this.message.files.push(message);
+    }
+
+    getMessage() {
+        return this.message;
+    }
 }
 
 export default MessageManager;

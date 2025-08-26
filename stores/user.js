@@ -4,7 +4,9 @@ import createAxiosInstance from './axios';
 import { useApiStore } from './api';
 import { useNavigationStore } from './navigation';
 import { useWebSocketStore } from './ws';
-import { generateKeyPair, getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys';
+import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
+import { generateRSAKeyPair } from '~/utils/keys/rsa';
+import { bufferToBase64 } from '~/utils/conversion';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -69,7 +71,7 @@ export const useUserStore = defineStore('user', {
             const apiStore = useApiStore();
             const navigationStore = useNavigationStore();
             const webSocketStore = useWebSocketStore();
-            const { publicKey, privateKey } = await generateKeyPair(); // buffer
+            const { publicKey, privateKey } = await generateRSAKeyPair(); // buffer
 
             const publicKeyBase64 = bufferToBase64(publicKey);
             const privateKeyBase64 = bufferToBase64(privateKey);

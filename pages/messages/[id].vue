@@ -47,8 +47,6 @@ const filteredDiscussions = computed(() => {
         return null;
     }
 
-    console.log('speed TEST')
-
     return discussion.encryptedMessages ?? null;
 });
 
