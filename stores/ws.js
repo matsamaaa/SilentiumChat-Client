@@ -87,15 +87,12 @@ export const useWebSocketStore = defineStore('websocket', {
                 const fileData = new FileManager().createFile(
                     iv,
                     authTag,
-                    new Blob([encryptedData], { type: "application/octet-stream" }),
+                    encryptedData,
                     encryptedAesKey,
                     encryptedKeySender
                 );
 
-                const response = await apiStore.postFile(
-                    to,
-                    fileData
-                );
+                const response = await apiStore.postFile(fileData);
 
                 fileId = response.fileId;
             }

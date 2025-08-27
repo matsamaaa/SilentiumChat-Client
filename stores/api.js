@@ -69,16 +69,17 @@ export const useApiStore = defineStore('api', {
             }
         },
 
-        async postFile(to, fileData) {
+        async postFile(fileData) {
             const axiosInstance = createAxiosInstance();
             const formData = new FormData();
 
-            formData.append("file", fileData.encryptedData);
-            formData.append("to", to);
-            formData.append("iv", fileData.iv);
-            formData.append("authTag", fileData.authTag);
-            formData.append("encryptedKey", fileData.encryptedKey);
-            formData.append("encryptedKeySender", fileData.encryptedKeySender);
+            const file = new File([fileData.encryptedData], "file", { type: "application/octet-stream" });
+
+            formData.append("file", file);
+            formData.append("iv", fileData.iv); // Uint8Array
+            formData.append("authTag", fileData.authTag); // Uint8Array
+            formData.append("encryptedKey", fileData.encryptedKey); // base64
+            formData.append("encryptedKeySender", fileData.encryptedKeySender); // base64
 
             try {
                 const response = await axiosInstance.post(
@@ -95,6 +96,7 @@ export const useApiStore = defineStore('api', {
                         }
                     }
                 );
+                
                 return response.data;
             } catch (error) {
                 console.error("Error posting file:", error);
