@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center p-3 gap-3 bg-gray-900 rounded-t-lg shadow-md">
+    <div class="flex items-center p-3 gap-3 bg-gray-900 rounded-t-lg shadow-md h-[7vh]">
         <FilesButton @file-selected="handleFile" />
         <!-- Input -->
         <input

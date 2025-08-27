@@ -59,9 +59,12 @@ export const useWebSocketStore = defineStore('websocket', {
 
         async wsSendMessage(to, message, file = null) {
             if (!this.socket) return;
+            
             const apiStore = useApiStore();
             const userStore = useUserStore();
             const privateDiscussionsStore = usePrivateDiscussionsStore();
+
+            const extension = file && file.name.split('.').length > 1 ? file.name.split('.').pop() : '';
 
             // recipient message
             const publicKeyString = await apiStore.getUserPublicKey(to);
@@ -87,6 +90,7 @@ export const useWebSocketStore = defineStore('websocket', {
                 const fileData = new FileManager().createFile(
                     iv,
                     authTag,
+                    extension,
                     encryptedData,
                     encryptedAesKey,
                     encryptedKeySender
@@ -113,9 +117,8 @@ export const useWebSocketStore = defineStore('websocket', {
                 publicKeyString,
                 userStore.user.publicKey
             );
-            console.log(file, fileId)
+
             if (file) messageData.addFileToMessage(fileId);
-            console.log(messageData);
             await privateDiscussionsStore.addMessageToDiscussion(messageData.getMessage());
         }
     }

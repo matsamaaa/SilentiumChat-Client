@@ -28,24 +28,23 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
         },
 
         async addMessageToDiscussion(message) {
-            console.log(message)
             try {
                 const { from, to } = message;
                 const userStore = useUserStore();
-                console.log('test1')
+
                 // check what message we decrypt
                 let newMessage;
                 if (from === userStore.user.uniqueId) { // own message
                     // decrypt message
                     const decryptedBySender = await decryptMessage(message.encryptedMessageBySender);
-                    console.log('test3')
+
                     // decrypt files
                     const files = [];
                     for (const file of message.files) {
                         const url = await getDecryptedFileUrl(file, true);
-                        files.push({ url: url.url, name: url.name });
+                        files.push({ url: url.url, name: url.name, extension: url.extension });
                     }
-                    console.log('test4')
+
                     newMessage = { ...message, encryptedMessageBySender: decryptedBySender, files: files };
                 } else { // received message
                     const decryptedByReceiver = await decryptMessage(message.encryptedMessage);
@@ -54,12 +53,12 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                     const files = [];
                     for (const file of message.files) {
                         const url = await getDecryptedFileUrl(file);
-                        files.push({ url: url.url, name: url.name });
+                        files.push({ url: url.url, name: url.name, extension: url.extension });
                     }
 
                     newMessage = { ...message, encryptedMessage: decryptedByReceiver, files: files };
                 }
-                console.log('test2')
+
                 // check discussion and add message
                 let discussion = this.getDiscussion(from, to);
                 if (!discussion) discussion = this.addDiscussion(from, to);

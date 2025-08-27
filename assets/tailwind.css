@@ -12,3 +12,15 @@
         @apply ml-3 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-full shadow-md transition;
     }
 }
+
+::-webkit-scrollbar
+{
+	width: 5px;
+	background-color: #1f2937;
+}
+
+::-webkit-scrollbar-thumb
+{
+	background-color: white;
+	border-radius: 10px;
+}

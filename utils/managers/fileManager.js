@@ -3,6 +3,7 @@ class FileManager {
         this.file = {
             iv: null,
             authTag: null,
+            extension: null,
 
             encryptedData: null,
             encryptedKey: null,
@@ -10,9 +11,10 @@ class FileManager {
         };
     }
 
-    createFile(iv, authTag, encryptedData, encryptedKey, encryptedKeySender, encryptedDataBySender) {
+    createFile(iv, authTag, extension, encryptedData, encryptedKey, encryptedKeySender, encryptedDataBySender) {
         this.file.iv = iv;
         this.file.authTag = authTag;
+        this.file.extension = extension;
 
         // recipient
         this.file.encryptedData = encryptedData;

@@ -1,15 +1,7 @@
 <template>
-    <div class="flex flex-col h-full static">
+    <div class="flex flex-col static overflow-y-scroll h-[86vh]">
         <h1>{{ recipientUsername }}</h1>
-        <div v-for="(msg, index) in filteredDiscussions" :key="index">
-            <p v-if="msg.from === userStore.user.uniqueId" class="text-right">
-                {{ msg.encryptedMessageBySender }}
-            </p>
-            <p v-else class="text-left">
-                {{ msg.encryptedMessage }}
-            </p>
-            <img v-for="value in msg.files" :src="value.url" :alt="value.name">
-        </div>
+        <MessageOutput v-for="(msg, index) in filteredDiscussions" :key="index" :msg="msg" />
         <MessageInput @send="handleSend" class="absolute bottom-0 left-0 right-0" />
     </div>
 </template>
@@ -17,6 +9,7 @@
 <script setup>
 import { ref } from 'vue'
 import MessageInput from '@/components/messages/MessageInput.vue'
+import MessageOutput from '@/components/messages/MessageOutput.vue'
 import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
@@ -46,7 +39,7 @@ const filteredDiscussions = computed(() => {
     if (!discussion) {
         return null;
     }
-
+    console.log(discussion.encryptedMessages);
     return discussion.encryptedMessages ?? null;
 });
 

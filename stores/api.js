@@ -76,6 +76,7 @@ export const useApiStore = defineStore('api', {
             const file = new File([fileData.encryptedData], "file", { type: "application/octet-stream" });
 
             formData.append("file", file);
+            formData.append("extension", fileData.extension);
             formData.append("iv", fileData.iv); // Uint8Array
             formData.append("authTag", fileData.authTag); // Uint8Array
             formData.append("encryptedKey", fileData.encryptedKey); // base64
@@ -96,7 +97,7 @@ export const useApiStore = defineStore('api', {
                         }
                     }
                 );
-                
+
                 return response.data;
             } catch (error) {
                 console.error("Error posting file:", error);

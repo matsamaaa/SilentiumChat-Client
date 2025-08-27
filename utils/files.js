@@ -49,7 +49,7 @@ const getDecryptedFileUrl = async (file, own = false) => {
         const fileMetadata = await apiStore.getFileMetadata(file);
 
         // Décryptage de la clé AES avec RSA
-        const decryptAesKey = await decryptAesKeyWithRSA(own ?fileMetadata.encryptedKeySender : fileMetadata.encryptedKey);
+        const decryptAesKey = await decryptAesKeyWithRSA(own ? fileMetadata.encryptedKeySender : fileMetadata.encryptedKey);
 
         // Décryptage du fichier
         const decryptedFile = await decryptFile(
@@ -65,7 +65,7 @@ const getDecryptedFileUrl = async (file, own = false) => {
         const blob = new Blob([decryptedFile], { type: fileMetadata.contentType || 'application/octet-stream' });
         const url = URL.createObjectURL(blob);
 
-        return { url, name: fileMetadata.name };
+        return { url, name: fileMetadata.name, extension: fileMetadata.extension };
     } catch (err) {
         console.error("Error getting decrypted file URL:", err);
         throw err;

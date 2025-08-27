@@ -13,7 +13,6 @@
             id="file-upload"
             type="file"
             class="hidden"
-            accept="image/*,video/*"
             @change="handleFileUpload"
         />
 
