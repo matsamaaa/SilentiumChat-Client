@@ -14,6 +14,7 @@
             type="file"
             class="hidden"
             @change="handleFileUpload"
+            ref="fileInput"
         />
     </div>
 </template>
@@ -21,6 +22,8 @@
 <script setup>
 import { ref } from "vue";
 
+
+const fileInput = ref(null);
 const fileName = ref(null);
 const preview = ref(null);
 
@@ -65,9 +68,10 @@ function handleFileUpload(event) {
     }
 }
 
-function clearPreview() {
+const clearPreview = () => {
     fileName.value = null;
     preview.value = null;
+
     if (fileInput.value) {
         fileInput.value.value = "";
     }

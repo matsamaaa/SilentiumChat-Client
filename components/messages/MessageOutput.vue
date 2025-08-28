@@ -31,8 +31,11 @@
 
                 <!-- Other files -->
                 <div v-else class="flex items-center space-x-2 bg-gray-200 p-2 rounded shadow">
-                    <i class="fa-solid fa-file"></i>
-                    <span class="text-sm">{{ file.name }}</span>
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-file"></i>
+                        <span class="text-sm">{{ file.name }}</span>
+                    </div>
+                    <DownloadIcon :url="file.url" :filename="file.name" />
                 </div>
             </div>
         </div>
@@ -47,6 +50,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useUserStore } from '@/stores/user'
+import DownloadIcon from '@/components/messages/downloadIcon.vue'
 
 const props = defineProps({
     msg: {

@@ -23,7 +23,7 @@ import { useApiStore } from '@/stores/api';
 import { useUserStore } from '@/stores/user';
 import { useNavigationStore } from '@/stores/navigation';
 import DiscussionItem from '@/components/discussion/DiscussionPreview.vue';
-import UserInput from '~/components/users/userInput.vue';
+import UserInput from '~/components/users/usersInput.vue';
 
 const privateDiscussionsStore = usePrivateDiscussionsStore();
 const apiStore = useApiStore(); 
