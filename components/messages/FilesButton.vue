@@ -80,4 +80,16 @@ function handleFileUpload(event) {
         preview.value = null;
     }
 }
+
+function clearPreview() {
+    fileName.value = null;
+    preview.value = null;
+    if (fileInput.value) {
+        fileInput.value.value = "";
+    }
+}
+
+defineExpose({
+    clearPreview
+});
 </script>

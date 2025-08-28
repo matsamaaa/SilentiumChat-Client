@@ -1,6 +1,6 @@
 <template>
     <div class="flex items-center p-3 gap-3 bg-gray-900 rounded-t-lg shadow-md h-[7vh]">
-        <FilesButton @file-selected="handleFile" />
+        <FilesButton ref="uploaderRef"  @file-selected="handleFile" />
         <!-- Input -->
         <input
             v-model="message"
@@ -26,6 +26,7 @@ import FilesButton from './FilesButton.vue'
 
 const message = ref('')
 const file = ref(null)
+const uploaderRef = ref(null)
 
 const emit = defineEmits(['send'])
 
@@ -37,5 +38,6 @@ const sendMessage = () => {
     if (!message.value.trim()) return
     emit('send', { message: message.value, file: file.value })
     message.value = ''
+    uploaderRef.value.clearPreview()
 }
 </script>
