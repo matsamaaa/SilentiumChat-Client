@@ -15,16 +15,6 @@
             class="hidden"
             @change="handleFileUpload"
         />
-
-        <!-- Prévisualisation si image ou vidéo -->
-        <div v-if="preview" class="mt-4">
-            <img :src="preview" alt="Aperçu" class="max-w-xs rounded-lg shadow" />
-        </div>
-
-        <!-- Nom du fichier -->
-        <p v-if="fileName" class="mt-2 text-gray-700 text-sm">
-            {{ fileName }}
-        </p>
     </div>
 </template>
 
@@ -40,19 +30,15 @@ function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
 
-    fileName.value = file.name;
-    emit('file-selected', file);
-
+    // Génération preview côté enfant mais on l'envoie au parent
     if (file.type.startsWith("image/")) {
-        // image gestion
         const reader = new FileReader();
         reader.onload = (e) => {
-            preview.value = e.target.result;
+            emit('file-selected', { file, preview: e.target.result });
         };
         reader.readAsDataURL(file);
 
     } else if (file.type.startsWith("video/")) {
-        // video gestion
         const video = document.createElement("video");
         video.src = URL.createObjectURL(file);
         video.muted = true;
@@ -60,7 +46,6 @@ function handleFileUpload(event) {
         video.playsInline = true;
 
         video.addEventListener("loadedmetadata", () => {
-            // choose next frame to not capture black screen
             video.currentTime = Math.min(0.1, video.duration / 2);
         });
 
@@ -72,12 +57,11 @@ function handleFileUpload(event) {
             const ctx = canvas.getContext("2d");
             ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-            preview.value = canvas.toDataURL("image/png");
-
-            URL.revokeObjectURL(video.src); 
+            emit('file-selected', { file, preview: canvas.toDataURL("image/png") });
+            URL.revokeObjectURL(video.src);
         });
     } else {
-        preview.value = null;
+        emit('file-selected', { file, preview: null });
     }
 }
 
