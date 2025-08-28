@@ -1,6 +1,6 @@
 <template>
     <div 
-        :class="[
+        :class="[ 
         'flex flex-col p-2 my-2 max-w-md break-words',
         isOwnMessage ? 'self-end bg-blue-500 rounded-l-lg rounded-br-lg' : 'self-start bg-gray-500 rounded-r-lg rounded-bl-lg'
         ]"
@@ -18,13 +18,15 @@
                     v-if="['png', 'jpg', 'jpeg', 'gif', 'webp'].includes(file.extension)" 
                     :src="file.url" 
                     :alt="file.name" 
-                    class="max-w-xs rounded shadow" 
+                    class="max-w-xs rounded shadow cursor-pointer hover:opacity-90"
+                    @click="openImage(file.url, `${file.name}.${file.extension}`)"
                 />
 
                 <!-- Videos -->
                 <video
                     v-else-if="['mp4', 'mov', 'webm', 'ogg'].includes(file.extension)"
                     :src="file.url"
+                    :alt="file.name"
                     controls
                     class="max-w-xs rounded shadow"
                 ></video>
@@ -35,7 +37,7 @@
                         <i class="fa-solid fa-file"></i>
                         <span class="text-sm">{{ file.name }}</span>
                     </div>
-                    <DownloadIcon :url="file.url" :filename="file.name" />
+                    <DownloadIcon :url="file.url" :filename="`${file.name}.${file.extension}`" />
                 </div>
             </div>
         </div>
@@ -44,13 +46,39 @@
         <span class="text-xs text-gray-300 mt-1 self-end">
             {{ formattedDate }}
         </span>
+
+        <!-- Lightbox (agrandissement image) -->
+        <div 
+            v-if="selectedImage" 
+            class="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center z-50"
+        >
+            <!-- Boutons top-right -->
+            <div class="absolute top-4 right-4 flex space-x-4 text-white text-2xl">
+
+                <!-- Bouton download -->
+                <DownloadIcon :url="selectedImage.url" :filename="selectedImage.alt" />
+
+                <!-- Bouton close -->
+                <button @click="selectedImage = null" class="hover:text-red-400 transition">
+                    <FontAwesomeIcon :icon="['fas', 'xmark']" />
+                </button>
+            </div>
+
+            <!-- Image affichée -->
+            <img 
+                :src="selectedImage.url" 
+                :alt="selectedImage.alt" 
+                class="max-w-full max-h-full rounded shadow-lg"
+            />
+        </div>
     </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import DownloadIcon from '@/components/messages/downloadIcon.vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
 const props = defineProps({
     msg: {
@@ -75,4 +103,14 @@ const formattedDate = computed(() => {
         month: 'short'
     })
 })
+
+// lightbox
+const selectedImage = ref(null)
+const openImage = (url, alt) => {
+    selectedImage.value = {
+        url,
+        alt
+    }
+    console.log(selectedImage.value.url, selectedImage.value.alt)
+}
 </script>
