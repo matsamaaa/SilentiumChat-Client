@@ -59,7 +59,7 @@ const clearFile = () => {
 }
 
 const sendMessage = () => {
-    if (!message.value.trim()) return
+    if (!message.value.trim() && !file.value) return
     emit('send', { message: message.value, file: file.value })
     message.value = ''
     file.value = null
