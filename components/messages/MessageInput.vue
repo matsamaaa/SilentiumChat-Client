@@ -15,7 +15,7 @@
         </div>
 
         <!-- Zone d'écriture -->
-        <div class="flex items-center p-3 gap-3 h-[7vh] bg-gray-900 w-full">
+        <div class="flex items-center p-3 gap-3 h-[7vh] bg-gray-900">
             <FilesButton ref="uploaderRef" @file-selected="handleFile" />
             
             <input

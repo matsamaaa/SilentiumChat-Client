@@ -1,7 +1,7 @@
 <template>
-    <div class="flex flex-row w-screen justify-between">
+    <div class="flex flex-row w-screen justify-between h-[93vh]">
         <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
-            <div class="text-2xl font-bold rounded-full px-8 py-5 bg-gray-300 text-gray-800 inline-block">
+            <div class="text-2xl font-bold rounded-full px-8 py-6 bg-gray-300 text-gray-800 inline-block">
                 {{ String(recipientUsername).toUpperCase().trim().split('')[0] }}
             </div>
             <br>
@@ -9,7 +9,7 @@
         </div>
         <div class="flex flex-col static overflow-y-scroll h-[86vh] flex-1">
             <MessageOutput v-for="(msg, index) in filteredDiscussions" :key="index" :msg="msg" />
-            <MessageInput @send="handleSend" class="absolute bottom-0 left-0 right-0" />
+            <MessageInput @send="handleSend" class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden" />
         </div>
     </div>
 </template>

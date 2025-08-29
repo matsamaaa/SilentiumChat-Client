@@ -1,9 +1,9 @@
 <template>
-    <div class="flex flex-col items-center">
+    <div>
         <!-- Bouton personnalisé -->
         <label
             for="file-upload"
-            class="cursor-pointer px-3 py-2 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition"
+            class="cursor-pointer p-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition"
         >
             <FontAwesomeIcon :icon="['fas', 'plus']" />
         </label>
