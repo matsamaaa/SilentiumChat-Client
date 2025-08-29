@@ -63,7 +63,11 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 let discussion = this.getDiscussion(from, to);
                 if (!discussion) discussion = this.addDiscussion(from, to);
 
+                // add message
                 discussion.encryptedMessages.push(newMessage);
+
+                // update message order with timestamp
+                discussion.encryptedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                 return newMessage;
             } catch (err) {
                 console.error("Error adding message to discussion:", err);
