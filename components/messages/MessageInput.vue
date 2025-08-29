@@ -48,8 +48,6 @@ const emit = defineEmits(['send'])
 const handleFile = ({ file: selectedFile, preview: selectedPreview }) => {
     file.value = selectedFile
     preview.value = selectedPreview
-
-    console.log('File selected:', file.value, 'Preview:', preview.value)
 }
 
 const clearFile = () => {

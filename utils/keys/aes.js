@@ -56,8 +56,6 @@ const decryptAesKeyWithRSA = async (encryptedAesKeyBase64) => {
 
         // convert privateKeyString to ArrayBuffer
         const privateKeyBuffer = base64ToBuffer(privateKeyString);
-
-        // 2. Importer la clé privée pour RSA-OAEP
         const privateKey = await crypto.subtle.importKey(
             "pkcs8",
             privateKeyBuffer,

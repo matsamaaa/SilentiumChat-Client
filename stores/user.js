@@ -96,7 +96,6 @@ export const useUserStore = defineStore('user', {
                     navigationStore.goToHome();
                 }
             } catch (err) {
-                // si l'API a renvoyé une erreur 400, 401, etc.
                 if (err.response && err.response.data && err.response.data.message) {
                     throw new Error(err.response.data.message);
                 } else {

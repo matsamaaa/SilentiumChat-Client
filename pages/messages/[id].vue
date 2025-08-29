@@ -39,7 +39,7 @@ const filteredDiscussions = computed(() => {
     if (!discussion) {
         return null;
     }
-    console.log(discussion.encryptedMessages);
+
     return discussion.encryptedMessages ?? null;
 });
 

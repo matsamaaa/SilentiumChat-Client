@@ -8,9 +8,7 @@
 <script setup>
 const route = useRoute()
 
-// Récupérer le code depuis l'URL
 const code = route.params.code
 
-// Récupérer le message depuis les query params ou fallback
 const message = route.query.message || 'Une erreur est survenue'
 </script>

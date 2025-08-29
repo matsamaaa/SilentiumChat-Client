@@ -29,7 +29,7 @@ const emit = defineEmits(['search'])
 const searchUser = () => {
     if (!query.value.trim()) return
 
-    // Vérifie le format pseudo#1234
+    // check format username#0001
     const match = query.value.match(/^([^#]+)#(\d{4})$/)
     if (!match) {
         emit('error', 'Invalid format. Use: username#0001');

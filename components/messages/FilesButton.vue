@@ -33,7 +33,6 @@ function handleFileUpload(event) {
     const file = event.target.files[0];
     if (!file) return;
 
-    // Génération preview côté enfant mais on l'envoie au parent
     if (file.type.startsWith("image/")) {
         const reader = new FileReader();
         reader.onload = (e) => {

@@ -104,13 +104,11 @@ const formattedDate = computed(() => {
     })
 })
 
-// lightbox
 const selectedImage = ref(null)
 const openImage = (url, alt) => {
     selectedImage.value = {
         url,
         alt
     }
-    console.log(selectedImage.value.url, selectedImage.value.alt)
 }
 </script>
