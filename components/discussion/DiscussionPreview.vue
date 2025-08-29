@@ -1,5 +1,6 @@
 <template>
     <div 
+        v-if="userStore.user"
         @click="goToMessaging"
         class="flex items-center justify-between p-3 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors duration-200"
     >

@@ -120,6 +120,9 @@ export const useUserStore = defineStore('user', {
                 this.updateToken(token);
                 this.updateUser(user);
 
+                const privateKey = await getPrivateKeyFromDB(user.uniqueId);
+                this.updatePrivateKey(privateKey);
+
                 webSocketStore.connect(user.uniqueId, token);
                 navigationStore.goToHome();
             } else {
