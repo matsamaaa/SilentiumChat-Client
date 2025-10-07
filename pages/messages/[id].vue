@@ -6,22 +6,41 @@
             </div>
             <br>
             <h1>{{ recipientUsername }}</h1>
-        </div>
-        <div v-if="Array.isArray(filteredDiscussions) && filteredDiscussions.length > 0" class="flex flex-col static overflow-y-scroll h-[86vh] flex-1">
-            <MessageOutput v-for="(msg, index) in filteredDiscussions" :key="index" :msg="msg" />
-            <MessageInput v-if="discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0].from === userStore.user.uniqueId" @send="handleSend" class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden" />
-            <div v-if="filteredDiscussions?.[0].from != userStore.user.uniqueId" class="flex flex-row justify-center gap-3 h-full items-end">
-                <StatusDiscussion 
-                    v-if="discussionData?.isWaitingForResponse === null" 
-                    :user="id" 
-                    status="accepted"
-                    @updated="refreshDiscussion"
+            </div>
+
+            <div v-if="isLoading" class="flex-1 flex justify-center items-center">
+                <p>Chargement de la discussion...</p>
+            </div>
+
+            <div
+            v-else
+            class="flex flex-col static overflow-y-scroll h-[86vh] flex-1"
+            >
+            <MessageOutput
+                v-for="(msg, index) in filteredDiscussions"
+                :key="index"
+                :msg="msg"
+            />
+
+            <MessageInput
+                v-if="discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
+                @send="handleSend"
+                class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden"
+            />
+
+            <div
+                v-if="filteredDiscussions?.[0]?.from != userStore.user.uniqueId && discussionData?.isWaitingForResponse === null"
+                class="flex flex-row justify-center gap-3 h-full items-end"
+            >
+                <StatusDiscussion
+                :user="id"
+                status="accepted"
+                @updated="refreshDiscussion"
                 />
-                <StatusDiscussion 
-                    v-if="discussionData?.isWaitingForResponse === null" 
-                    :user="id" 
-                    status="refused" 
-                    @updated="refreshDiscussion"
+                <StatusDiscussion
+                :user="id"
+                status="refused"
+                @updated="refreshDiscussion"
                 />
             </div>
         </div>
@@ -29,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import MessageInput from '@/components/messages/MessageInput.vue'
 import MessageOutput from '@/components/messages/MessageOutput.vue'
 import StatusDiscussion from '@/components/messages/StatusDiscussion.vue'
@@ -37,65 +56,62 @@ import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
+import { useRoute } from 'vue-router'
 
 const recipientUsername = ref('')
-const discussionData = ref(null);
+const discussionData = ref(null)
+const isLoading = ref(true)
 
 const webSocketStore = useWebSocketStore()
 const apiStore = useApiStore()
 const userStore = useUserStore()
+const privateDiscussionsStore = usePrivateDiscussionsStore()
 const route = useRoute()
 
 const id = route.params.id
 
 const handleSend = (data) => {
-    webSocketStore.wsSendMessage(id, data.message, data.file);
+  webSocketStore.wsSendMessage(id, data.message, data.file)
 }
-
-const privateDiscussionsStore = usePrivateDiscussionsStore();
 
 const filteredDiscussions = computed(() => {
     const discussion = privateDiscussionsStore.getDiscussion(
         userStore.user.uniqueId,
         id
-    );
+    )
 
-    if (!discussion) {
-        return null;
-    }
+    if (!discussion) return []
 
-    discussionData.value = discussion;
-    return discussion.encryptedMessages ?? null;
-});
+    discussionData.value = discussion
+    return discussion.encryptedMessages ?? []
+})
 
 const refreshDiscussion = async () => {
-    const messagesData = await apiStore.getPrivateDiscussion(userStore.user.uniqueId, id);
+    const messagesData = await apiStore.getPrivateDiscussion(id)
     if (messagesData) {
-        discussionData.value = messagesData;
+        discussionData.value = messagesData
     }
-};
+}
 
 onMounted(async () => {
-    //get username
-    recipientUsername.value = await apiStore.getUsername(id);
+    isLoading.value = true
+    recipientUsername.value = await apiStore.getUsername(id)
 
-    // delete old messages
-    const privateDiscussionsStore = usePrivateDiscussionsStore();
-    privateDiscussionsStore.removeDiscussion(id, userStore.user.uniqueId);
+    privateDiscussionsStore.removeDiscussion(id, userStore.user.uniqueId)
 
-    // add all messages to discussion
-    const messagesData = await apiStore.getPrivateDiscussion(userStore.user.uniqueId, id);
+    const messagesData = await apiStore.getPrivateDiscussion(id)
+
     if (messagesData) {
-        // decrypt all messages
         try {
-            messagesData.encryptedMessages = await Promise.all(
-                messagesData.encryptedMessages.map(async (msg) => {
-                    return await privateDiscussionsStore.addMessageToDiscussion(msg);
-                })
-            );
+        messagesData.encryptedMessages = await Promise.all(
+            messagesData.encryptedMessages.map(async (msg) => {
+                return await privateDiscussionsStore.addMessageToDiscussion(msg)
+            })
+        )
         } catch (error) {
-            console.error("Error decrypting messages:", error);
+            console.error('Error decrypting messages:', error)
         }
     }
-});
+    isLoading.value = false
+})
 </script>

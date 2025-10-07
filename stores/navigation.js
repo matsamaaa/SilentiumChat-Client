@@ -31,6 +31,11 @@ export const useNavigationStore = defineStore('navigation', {
         goToWaitingMessages() {
             const router = useRouter();
             router.push('/?waiting=true');
+        },
+
+        goToSettings() {
+            const router = useRouter();
+            router.push({ name: 'settings' });
         }
     }
 });

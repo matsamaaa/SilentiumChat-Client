@@ -36,9 +36,10 @@ const route = useRoute();
 const discussions = computed(() => privateDiscussionsStore.discussions);
 const waiting = computed(() => route.query.waiting);
 const messagesList = computed(() => {
-    if (waiting.value) {
+    if (waiting.value === 'true') {
         return discussions.value.filter(d => d.isWaitingForResponse == null);
     }
+
     return discussions.value.filter(d => d.isWaitingForResponse == true);
 });
 const error = ref(null);

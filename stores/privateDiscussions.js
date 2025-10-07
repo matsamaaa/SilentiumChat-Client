@@ -22,7 +22,7 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             return newDiscussion;
         },
 
-        async updateStatusDiscussion(from, to, status) {
+        async updateStatusDiscussion(to, from, status) {
             const apiStore = useApiStore();
             try {
                 const discussion = this.getDiscussion(from, to);
@@ -83,6 +83,9 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 let discussion = this.getDiscussion(from, to);
                 if (!discussion) {
                     discussion = this.addDiscussion(from, to);
+                    await this.updateStatusDiscussion(from, to);
+                    discussion = this.getDiscussion(from, to); // re-fetch discussion
+                } else if (discussion.isWaitingForResponse != true) {
                     await this.updateStatusDiscussion(from, to);
                     discussion = this.getDiscussion(from, to); // re-fetch discussion
                 }
