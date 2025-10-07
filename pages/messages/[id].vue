@@ -7,9 +7,23 @@
             <br>
             <h1>{{ recipientUsername }}</h1>
         </div>
-        <div class="flex flex-col static overflow-y-scroll h-[86vh] flex-1">
+        <div v-if="Array.isArray(filteredDiscussions) && filteredDiscussions.length > 0" class="flex flex-col static overflow-y-scroll h-[86vh] flex-1">
             <MessageOutput v-for="(msg, index) in filteredDiscussions" :key="index" :msg="msg" />
-            <MessageInput @send="handleSend" class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden" />
+            <MessageInput v-if="discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0].from === userStore.user.uniqueId" @send="handleSend" class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden" />
+            <div v-if="filteredDiscussions?.[0].from != userStore.user.uniqueId" class="flex flex-row justify-center gap-3 h-full items-end">
+                <StatusDiscussion 
+                    v-if="discussionData?.isWaitingForResponse === null" 
+                    :user="id" 
+                    status="accepted"
+                    @updated="refreshDiscussion"
+                />
+                <StatusDiscussion 
+                    v-if="discussionData?.isWaitingForResponse === null" 
+                    :user="id" 
+                    status="refused" 
+                    @updated="refreshDiscussion"
+                />
+            </div>
         </div>
     </div>
 </template>
@@ -18,12 +32,14 @@
 import { ref } from 'vue'
 import MessageInput from '@/components/messages/MessageInput.vue'
 import MessageOutput from '@/components/messages/MessageOutput.vue'
+import StatusDiscussion from '@/components/messages/StatusDiscussion.vue'
 import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 
 const recipientUsername = ref('')
+const discussionData = ref(null);
 
 const webSocketStore = useWebSocketStore()
 const apiStore = useApiStore()
@@ -41,15 +57,23 @@ const privateDiscussionsStore = usePrivateDiscussionsStore();
 const filteredDiscussions = computed(() => {
     const discussion = privateDiscussionsStore.getDiscussion(
         userStore.user.uniqueId,
-        route.params.id
+        id
     );
 
     if (!discussion) {
         return null;
     }
 
+    discussionData.value = discussion;
     return discussion.encryptedMessages ?? null;
 });
+
+const refreshDiscussion = async () => {
+    const messagesData = await apiStore.getPrivateDiscussion(userStore.user.uniqueId, id);
+    if (messagesData) {
+        discussionData.value = messagesData;
+    }
+};
 
 onMounted(async () => {
     //get username

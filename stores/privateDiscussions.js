@@ -15,10 +15,30 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
         addDiscussion(from, to) {
             const newDiscussion = {
                 users: [from, to],
-                encryptedMessages: []
+                encryptedMessages: [],
+                isWaitingForResponse: null
             };
             this.discussions.push(newDiscussion);
             return newDiscussion;
+        },
+
+        async updateStatusDiscussion(from, to, status) {
+            const apiStore = useApiStore();
+            try {
+                const discussion = this.getDiscussion(from, to);
+                if (discussion) {
+                    if (status) {
+                        discussion.isWaitingForResponse = status === 'accepted' ? true : false;
+                    } else {
+                        const onlineDiscussion = await apiStore.getPrivateDiscussion(to);
+                        discussion.isWaitingForResponse = onlineDiscussion.isWaitingForResponse;
+                    }
+                }
+
+                return discussion;
+            } catch (err) {
+                console.error("Error updating discussion status:", err);
+            }
         },
 
         removeDiscussion(from, to) {
@@ -61,7 +81,11 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
 
                 // check discussion and add message
                 let discussion = this.getDiscussion(from, to);
-                if (!discussion) discussion = this.addDiscussion(from, to);
+                if (!discussion) {
+                    discussion = this.addDiscussion(from, to);
+                    await this.updateStatusDiscussion(from, to);
+                    discussion = this.getDiscussion(from, to); // re-fetch discussion
+                }
 
                 // add message
                 discussion.encryptedMessages.push(newMessage);

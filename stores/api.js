@@ -131,6 +131,17 @@ export const useApiStore = defineStore('api', {
                 console.error("Error fetching file metadata:", error);
                 throw error;
             }
+        },
+
+        async updateDiscussionStatus(to, status) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.patch(`${this.urls.backend}/message/${to}/status`, { status });
+                return response.data;
+            } catch (error) {
+                console.error("Error updating discussion status:", error);
+                throw error;
+            }
         }
     }
 })

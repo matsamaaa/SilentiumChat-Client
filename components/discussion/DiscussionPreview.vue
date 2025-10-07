@@ -7,7 +7,7 @@
         <div class="flex flex-col">
             <p class="font-semibold text-white">{{ discussion.encryptedMessages[0]?.username || 'Utilisateur' }}</p>
             <p class="text-gray-400 text-sm truncate max-w-xs">
-                {{ lastMessage }}
+                {{ lastMessage ? lastMessage : 'File' }}
             </p>
         </div>
         <div class="text-gray-500 text-xs">

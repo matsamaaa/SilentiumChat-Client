@@ -11,7 +11,7 @@
         </header>
 
         <!-- Contenu principal -->
-        <main class="flex-1 overflow-y-auto">
+        <main class="flex-1 overflow-y-auto overflow-x-hidden">
             <slot />
         </main>
     </div>
