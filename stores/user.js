@@ -49,6 +49,20 @@ export const useUserStore = defineStore('user', {
             useCookie('user').value = JSON.stringify(user)
         },
 
+        updateUsername(newUsername) {
+            if (this.user) {
+                this.user.username = newUsername;
+                useCookie('user').value = JSON.stringify(this.user);
+            }
+        },
+
+        updateTag(newTag) {
+            if (this.user) {
+                this.user.tag = newTag;
+                useCookie('user').value = JSON.stringify(this.user);
+            }
+        },
+
         updateToken(token) {
             this.token = token
             useCookie('token').value = token

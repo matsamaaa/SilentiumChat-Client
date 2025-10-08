@@ -144,8 +144,34 @@ export const useApiStore = defineStore('api', {
             }
         },
 
-        async updateUserProfile(username, tag, profilePicture) {
-            
-        }
+        async updateUsername(newUsername) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.patch(`${this.urls.backend}/me/username`, { username: newUsername });
+                if (response.data.success) {
+                    const userStore = useUserStore();
+                    userStore.updateUsername(newUsername);
+                }
+                return response.data;
+            } catch (error) {
+                console.error("Error updating username:", error);
+                throw error;
+            }
+        },
+
+        async updateTag(newTag) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.patch(`${this.urls.backend}/me/tag`, { tag: newTag });
+                if (response.data.success) {
+                    const userStore = useUserStore();
+                    userStore.updateTag(newTag);
+                }
+                return response.data;
+            } catch (error) {
+                console.error("Error updating tag:", error);
+                throw error;
+            }
+        },
     }
 })
