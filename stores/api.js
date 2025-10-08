@@ -142,6 +142,10 @@ export const useApiStore = defineStore('api', {
                 console.error("Error updating discussion status:", error);
                 throw error;
             }
+        },
+
+        async updateUserProfile(username, tag, profilePicture) {
+            
         }
     }
 })
