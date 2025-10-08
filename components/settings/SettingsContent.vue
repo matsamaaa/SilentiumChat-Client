@@ -1,26 +1,22 @@
 <template>
   <div>
-    <h1 class="text-3xl font-extrabold text-gray-900 mb-8">
+    <h1 class="text-3xl font-extrabold text-gray-100 mb-8">
       {{ getTitle(currentTab) }}
     </h1>
 
     <ProfileSettings v-if="currentTab === 'profile'" />
-    <SecuritySettings v-else-if="currentTab === 'security'" />
-    <BlockedUsersSettings v-else-if="currentTab === 'blocked'" />
-    <div v-else class="text-gray-500">
-      Sélectionnez une option dans le panneau de gauche pour commencer.
-    </div>
+    <SecuritySettings v-if="currentTab === 'security'" />
+    <BlockedUsersSettings v-if="currentTab === 'blocked'" />
   </div>
 </template>
 
 <script setup>
 import { defineProps } from 'vue';
-// Importe les sous-composants qui gèrent chaque section
 import ProfileSettings from './sections/ProfileSettings.vue';
 import SecuritySettings from './sections/SecuritySettings.vue';
 import BlockedUsersSettings from './sections/BlockedUsersSettings.vue';
 
-defineProps({
+const props = defineProps({
   currentTab: {
     type: String,
     required: true
@@ -30,15 +26,15 @@ defineProps({
 const getTitle = (tab) => {
   switch (tab) {
     case 'profile':
-      return 'Modifier le Profil';
+      return 'Edit Profile';
     case 'security':
-      return 'Gérer la Sécurité et le Mot de Passe';
+      return 'Manage Security and Password';
     case 'blocked':
-      return 'Liste des Utilisateurs Bloqués';
+      return 'Blocked Users List';
     case 'notifications':
-      return 'Préférences de Notifications';
+      return 'Notification Preferences';
     default:
-      return 'Paramètres';
+      return 'Settings';
   }
 };
 </script>
