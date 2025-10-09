@@ -209,5 +209,37 @@ export const useApiStore = defineStore('api', {
                 throw error;
             }
         },
+
+        async getAvatar(userId) {
+            const axiosInstance = createAxiosInstance();
+            let url;
+            if (userId) {
+                url = `${this.urls.backend}/user/${userId}/avatar`;
+            } else {
+                url = `${this.urls.backend}/me/avatar`;
+            }
+
+            try {
+                const response = await axiosInstance.get(url, {
+                    responseType: 'arraybuffer',
+                });
+
+                // La ligne `if (response)` était incomplète, elle est retirée ou la logique est déplacée
+
+                const contentType = response.headers['content-type'] || 'image/jpeg';
+                const blob = new Blob([response.data], { type: contentType });
+                const imageUrl = URL.createObjectURL(blob);
+                console.log(imageUrl)
+                return imageUrl;
+
+            } catch (error) {
+                if (error.response) {
+                    return null; 
+                } 
+                
+                throw error;
+            }
+        },
+
     }
 })

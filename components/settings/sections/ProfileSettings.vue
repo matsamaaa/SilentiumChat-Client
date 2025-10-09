@@ -15,7 +15,13 @@
                         class="w-full h-full object-cover"
                     >
                 </div>
-                
+                <div v-else-if="avatar" class="w-full h-full">
+                    <img 
+                        :src="avatar" 
+                        alt="Avatar" 
+                        class="w-full h-full object-cover"
+                    >
+                </div>
                 <div v-else>
                     {{ String(userStore.user.username).toUpperCase().trim().split('')[0] }}
                 </div>
@@ -86,6 +92,7 @@ const tag = ref(userStore.user.tag.toString().padStart(4, '0') || '');
 const username = ref(userStore.user.username || '');
 const preview = ref(null);
 const file = ref(null);
+const avatar = ref(null); 
 
 const formatTag = () => {
     tag.value = tag.value.replace(/\D/g, "");
@@ -114,7 +121,7 @@ const handleSave = async () => {
         if (preview.value) {
             const response = await apiStore.uploadAvatar(file.value);
             preview.value = null;
-            console.log("Avatar uploaded:", response);
+            avatar.value = await apiStore.getAvatar();
         }
     } catch (error) {
 
@@ -129,4 +136,8 @@ async function handleAvatar({ file: uploadedFile, preview: pre }) {
         console.error("Upload failed:", err);
     }
 }
+
+onMounted(async () => {
+    avatar.value = await apiStore.getAvatar();
+})
 </script>

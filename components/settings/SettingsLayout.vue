@@ -20,5 +20,4 @@ import SettingsSidebar from './SettingsSidebar.vue';
 import SettingsContent from './SettingsContent.vue';
 
 const activeTab = ref('profile'); 
-console.log(activeTab);
 </script>
