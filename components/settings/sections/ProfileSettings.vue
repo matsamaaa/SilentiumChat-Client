@@ -6,14 +6,24 @@
         <h2 class="text-xl font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Profile Picture</h2>
         
         <div class="flex items-center space-x-6">
-          <div class="text-4xl font-bold rounded-full w-24 h-24 flex items-center justify-center bg-indigo-500 text-white border-4 border-indigo-400">
-             {{ String(useUserStore().user.username).toUpperCase().trim().split('')[0] }}
-          </div>
+            <div class="text-4xl font-bold rounded-full w-24 h-24 flex items-center justify-center bg-indigo-500 text-white border-4 border-indigo-400 overflow-hidden">
+            
+                <div v-if="preview" class="w-full h-full">
+                    <img 
+                        :src="preview" 
+                        alt="Avatar preview" 
+                        class="w-full h-full object-cover"
+                    >
+                </div>
+                
+                <div v-else>
+                    {{ String(userStore.user.username).toUpperCase().trim().split('')[0] }}
+                </div>
+
+            </div>
           
           <div class="flex flex-col space-y-2">
-            <button class="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition duration-150 shadow-md">
-              Change Picture
-            </button>
+            <AvatarUpload @avatar-selected="handleAvatar" />
             <button class="px-4 py-2 bg-gray-700 text-red-400 border border-red-600 rounded-lg hover:bg-gray-600 transition duration-150">
               Delete
             </button>
@@ -38,7 +48,7 @@
                     placeholder="Entrez votre nouveau nom d'utilisateur"
                     class="block flex-1 px-3 py-2 bg-gray-900 text-white focus:outline-none sm:text-sm rounded-l-md rounded-r-none"
                 >
-                  <span class="text-gray-400 px-2">#</span>
+                <span class="text-gray-400 px-2">#</span>
 
                 <input 
                     v-model="tag" 
@@ -58,7 +68,7 @@
       
     </section>
 
-    <SaveButton @saved="handleSave" />
+    <SaveButton :updates="hasChanges" @saved="handleSave" />
   </div>
 </template>
 
@@ -66,12 +76,16 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useApiStore } from '@/stores/api';
+import AvatarUpload from '../others/ChangeAvatarButton.vue';
 import SaveButton from '../others/saveButton.vue';
 
-const tag = ref(useUserStore().user.tag.toString().padStart(4, '0') || '');
-const username = ref(useUserStore().user.username || '');
-
 const apiStore = useApiStore();
+const userStore = useUserStore();
+
+const tag = ref(userStore.user.tag.toString().padStart(4, '0') || '');
+const username = ref(userStore.user.username || '');
+const preview = ref(null);
+const file = ref(null);
 
 const formatTag = () => {
     tag.value = tag.value.replace(/\D/g, "");
@@ -81,16 +95,38 @@ const formatTag = () => {
     }
 }
 
+const hasChanges = computed(() => {
+    return (
+        username.value !== userStore.user.username ||
+        tag.value !== userStore.user.tag.toString().padStart(4, '0') ||
+        preview.value !== null
+    );
+});
+
 const handleSave = async () => {
     try {
-        if (username.value !== useUserStore().user.username) {
+        if (username.value !== userStore.user.username) {
             await apiStore.updateUsername(username.value);
         }
-        if (tag.value !== useUserStore().user.tag.toString().padStart(4, '0')) {
+        if (tag.value !== userStore.user.tag.toString().padStart(4, '0')) {
             await apiStore.updateTag(tag.value);
+        }
+        if (preview.value) {
+            const response = await apiStore.uploadAvatar(file.value);
+            preview.value = null;
+            console.log("Avatar uploaded:", response);
         }
     } catch (error) {
 
     }
 };
+
+async function handleAvatar({ file: uploadedFile, preview: pre }) {
+    try {
+        preview.value = pre;
+        file.value = uploadedFile;
+    } catch (err) {
+        console.error("Upload failed:", err);
+    }
+}
 </script>

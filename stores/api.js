@@ -173,5 +173,41 @@ export const useApiStore = defineStore('api', {
                 throw error;
             }
         },
+
+        async uploadAvatar(file) {
+            const axiosInstance = createAxiosInstance();
+            const formData = new FormData();
+
+            // 'avatar' doit correspondre au champ défini dans le backend (upload.single('avatar'))
+            formData.append('avatar', file);
+
+            try {
+                const response = await axiosInstance.post(
+                    `${this.urls.backend}/me/avatar`,
+                    formData,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        },
+                        onUploadProgress: (progressEvent) => {
+                            const { loaded, total } = progressEvent;
+                            const percent = Math.round((loaded * 100) / total);
+                            console.log(`Avatar upload progress: ${percent}%`);
+                        }
+                    }
+                );
+
+                if (response.data.success) {
+                    const userStore = useUserStore();
+                    // Si le backend renvoie l’URL publique du nouvel avatar
+                    userStore.updateAvatar(response.data.avatarUrl);
+                }
+
+                return response.data;
+            } catch (error) {
+                console.error("Error uploading avatar:", error);
+                throw error;
+            }
+        },
     }
 })

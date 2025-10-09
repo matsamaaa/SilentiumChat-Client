@@ -63,6 +63,13 @@ export const useUserStore = defineStore('user', {
             }
         },
 
+        updateAvatar(newAvatar) {
+            if (this.user) {
+                this.user.avatar = newAvatar;
+                useCookie('user').value = JSON.stringify(this.user);
+            }
+        },
+
         updateToken(token) {
             this.token = token
             useCookie('token').value = token
