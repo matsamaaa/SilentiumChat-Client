@@ -30,7 +30,7 @@
           
           <div class="flex flex-col space-y-2">
             <AvatarUpload @avatar-selected="handleAvatar" />
-            <button class="px-4 py-2 bg-gray-700 text-red-400 border border-red-600 rounded-lg hover:bg-gray-600 transition duration-150">
+            <button @click="deleteAvatar" class="px-4 py-2 bg-gray-700 text-red-400 border border-red-600 rounded-lg hover:bg-gray-600 transition duration-150">
               Delete
             </button>
           </div>
@@ -127,6 +127,13 @@ const handleSave = async () => {
 
     }
 };
+
+const deleteAvatar = async () => {
+    await apiStore.deleteAvatar();
+    preview.value = null;
+    file.value = null;
+    avatar.value = null;
+}
 
 async function handleAvatar({ file: uploadedFile, preview: pre }) {
     try {

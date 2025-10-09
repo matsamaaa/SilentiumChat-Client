@@ -224,7 +224,9 @@ export const useApiStore = defineStore('api', {
                     responseType: 'arraybuffer',
                 });
 
-                // La ligne `if (response)` était incomplète, elle est retirée ou la logique est déplacée
+                if (response.status === 204) {
+                    return null;
+                }
 
                 const contentType = response.headers['content-type'] || 'image/jpeg';
                 const blob = new Blob([response.data], { type: contentType });
@@ -240,6 +242,20 @@ export const useApiStore = defineStore('api', {
                 throw error;
             }
         },
+
+        async deleteAvatar() {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.delete(`${this.urls.backend}/me/avatar`);
+                return response.data;
+            } catch (error) {
+                if (error.response) {
+                    return null; 
+                } 
+                
+                throw error;
+            }
+        }
 
     }
 })
