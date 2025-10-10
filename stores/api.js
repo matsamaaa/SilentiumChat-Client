@@ -233,7 +233,7 @@ export const useApiStore = defineStore('api', {
                 const blob = new Blob([response.data], { type: contentType });
                 const imageUrl = URL.createObjectURL(blob);
                 
-                userStore.avatar = imageUrl;
+                if(!userId) userStore.avatar = imageUrl;
                 return imageUrl;
 
             } catch (error) {
