@@ -7,7 +7,6 @@
         
         <div class="flex items-center space-x-6">
             <div class="text-4xl font-bold rounded-full w-24 h-24 flex items-center justify-center bg-indigo-500 text-white border-4 border-indigo-400 overflow-hidden">
-            
                 <div v-if="preview" class="w-full h-full">
                     <img 
                         :src="preview" 
@@ -15,9 +14,9 @@
                         class="w-full h-full object-cover"
                     >
                 </div>
-                <div v-else-if="avatar" class="w-full h-full">
+                <div v-else-if="userStore.avatar" class="w-full h-full">
                     <img 
-                        :src="avatar" 
+                        :src="userStore.avatar" 
                         alt="Avatar" 
                         class="w-full h-full object-cover"
                     >
@@ -92,7 +91,6 @@ const tag = ref(userStore.user.tag.toString().padStart(4, '0') || '');
 const username = ref(userStore.user.username || '');
 const preview = ref(null);
 const file = ref(null);
-const avatar = ref(null); 
 
 const formatTag = () => {
     tag.value = tag.value.replace(/\D/g, "");
@@ -119,9 +117,9 @@ const handleSave = async () => {
             await apiStore.updateTag(tag.value);
         }
         if (preview.value) {
-            const response = await apiStore.uploadAvatar(file.value);
+            await apiStore.uploadAvatar(file.value);
             preview.value = null;
-            avatar.value = await apiStore.getAvatar();
+            await apiStore.getAvatar();
         }
     } catch (error) {
 
@@ -132,7 +130,6 @@ const deleteAvatar = async () => {
     await apiStore.deleteAvatar();
     preview.value = null;
     file.value = null;
-    avatar.value = null;
 }
 
 async function handleAvatar({ file: uploadedFile, preview: pre }) {
@@ -143,8 +140,4 @@ async function handleAvatar({ file: uploadedFile, preview: pre }) {
         console.error("Upload failed:", err);
     }
 }
-
-onMounted(async () => {
-    avatar.value = await apiStore.getAvatar();
-})
 </script>

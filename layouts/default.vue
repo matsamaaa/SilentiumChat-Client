@@ -3,8 +3,8 @@
         <!-- Header -->
         <header class="bg-blue-600 p-4 h-[7vh] flex items-center justify-between">
             <h1 class="text-xl font-bold cursor-pointer" @click="navigationStore.goToHome">SilentiumChat</h1>
-
             <div v-if="userStore.isLoggedIn" class="flex flex-row gap-3 justify-center items-center">
+                <AvatarIcon/>
                 <a @click="navigationStore.goToSettings" class="cursor-pointer">{{ userStore.user.username }}</a>
                 <button @click="userStore.logout" class="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded">Logout</button>
             </div>
@@ -22,11 +22,15 @@ import { useUserStore } from '@/stores/user'
 import { useNavigationStore } from '@/stores/navigation'
 import { useWebSocketStore } from '@/stores/ws'
 import { useRoute } from 'vue-router'
+import AvatarIcon from '~/components/users/AvatarIcon.vue'
 
 const userStore = useUserStore()
+const apiStore = useApiStore()
 const navigationStore = useNavigationStore()
 const webSocketStore = useWebSocketStore()
 const route = useRoute()
+
+const avatar = ref(null);
 
 onMounted(() => {
     if (!userStore.isLoggedIn) {

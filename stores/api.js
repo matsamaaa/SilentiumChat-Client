@@ -212,6 +212,7 @@ export const useApiStore = defineStore('api', {
 
         async getAvatar(userId) {
             const axiosInstance = createAxiosInstance();
+            const userStore = useUserStore();
             let url;
             if (userId) {
                 url = `${this.urls.backend}/user/${userId}/avatar`;
@@ -231,7 +232,8 @@ export const useApiStore = defineStore('api', {
                 const contentType = response.headers['content-type'] || 'image/jpeg';
                 const blob = new Blob([response.data], { type: contentType });
                 const imageUrl = URL.createObjectURL(blob);
-                console.log(imageUrl)
+                
+                userStore.avatar = imageUrl;
                 return imageUrl;
 
             } catch (error) {

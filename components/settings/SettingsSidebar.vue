@@ -20,8 +20,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
-
 // Définition des propriétés (props)
 defineProps({
   activeTab: {

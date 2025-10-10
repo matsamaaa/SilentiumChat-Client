@@ -11,7 +11,6 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
 import ProfileSettings from './sections/ProfileSettings.vue';
 import SecuritySettings from './sections/SecuritySettings.vue';
 import BlockedUsersSettings from './sections/BlockedUsersSettings.vue';

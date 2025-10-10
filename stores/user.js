@@ -13,7 +13,8 @@ export const useUserStore = defineStore('user', {
         token: null,
         user: null,
         privateKey: null,
-        initialized: false
+        initialized: false,
+        avatar: null,
     }),
 
     getters: {
@@ -25,6 +26,7 @@ export const useUserStore = defineStore('user', {
         async initialize() {
             const token = useCookie('token');
             const user = useCookie('user');
+            const apiStore = useApiStore();
             const privateKey = await getPrivateKeyFromDB(user.value.uniqueId);
 
             if (token) {
@@ -35,6 +37,8 @@ export const useUserStore = defineStore('user', {
                 this.user = typeof user.value === 'string'
                     ? JSON.parse(user.value)
                     : user.value || null
+
+                await apiStore.getAvatar();
             }
 
             if (privateKey) {
