@@ -1,10 +1,18 @@
 <template>
-  <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+  <div
+    :class="[
+      'flex items-center justify-center rounded-full bg-gray-200 overflow-hidden',
+      props.userId ? 'w-16 h-16' : 'w-10 h-10'
+    ]"
+  >
     <template v-if="avatarUrl">
       <img
         :src="avatarUrl"
         alt="Avatar"
-        class="w-9 h-9 object-cover rounded-full"
+        :class="[
+          'object-cover rounded-full',
+          props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
+        ]"
       >
     </template>
     <template v-else>

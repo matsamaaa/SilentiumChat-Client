@@ -1,10 +1,7 @@
 <template>
     <div class="flex flex-row w-screen justify-between h-[93vh]">
         <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
-            <div class="text-2xl font-bold rounded-full px-8 py-6 bg-gray-300 text-gray-800 inline-block">
-                {{ String(recipientUsername).toUpperCase().trim().split('')[0] }}
-            </div>
-            <br>
+            <AvatarIcon :userId="id" />
             <h1>{{ recipientUsername }}</h1>
             <FriendsButton :id="id" />
         </div>
@@ -59,6 +56,7 @@ import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
 import FriendsButton from '@/components/messages/FriendsButton.vue'
+import AvatarIcon from '~/components/users/AvatarIcon.vue'
 
 const recipientUsername = ref('')
 const discussionData = ref(null)
