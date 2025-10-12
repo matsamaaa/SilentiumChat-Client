@@ -257,6 +257,50 @@ export const useApiStore = defineStore('api', {
                 
                 throw error;
             }
+        },
+
+        async getFriendStatus(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.get(`${this.urls.backend}/friends/${userId}/status`);
+                return response.data;
+            } catch (error) {
+                console.error("Error fetching friend status:", error);
+                throw error;
+            }
+        },
+
+        async sendFriendRequest(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/request`);
+                return response.data;
+            } catch (error) {
+                console.error("Error sending friend request:", error);
+                throw error;
+            }
+        },
+
+        async acceptFriendRequest(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/accept`);
+                return response.data;
+            } catch (error) {
+                console.error("Error accepting friend request:", error);
+                throw error;
+            }
+        },
+
+        async refuseFriendRequest(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/refuse`);
+                return response.data;
+            } catch (error) {
+                console.error("Error refusing friend request:", error);
+                throw error;
+            }
         }
 
     }

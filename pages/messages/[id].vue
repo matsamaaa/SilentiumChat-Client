@@ -6,11 +6,12 @@
             </div>
             <br>
             <h1>{{ recipientUsername }}</h1>
-            </div>
+            <FriendsButton :id="id" />
+        </div>
 
-            <div v-if="isLoading" class="flex-1 flex justify-center items-center">
-                <p>Chargement de la discussion...</p>
-            </div>
+        <div v-if="isLoading" class="flex-1 flex justify-center items-center">
+            <p>Chargement de la discussion...</p>
+        </div>
 
             <div
             v-else
@@ -57,6 +58,7 @@ import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
+import FriendsButton from '@/components/messages/FriendsButton.vue'
 
 const recipientUsername = ref('')
 const discussionData = ref(null)
