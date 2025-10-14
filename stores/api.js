@@ -301,6 +301,28 @@ export const useApiStore = defineStore('api', {
                 console.error("Error refusing friend request:", error);
                 throw error;
             }
+        },
+
+        async blockUser(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/block`);
+                return response.data;
+            } catch (error) {
+                console.error("Error blocking user:", error);
+                throw error;
+            }
+        },
+
+        async unblockUser(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/unblock`);
+                return response.data;
+            } catch (error) {
+                console.error("Error unblocking user:", error);
+                throw error;
+            }
         }
 
     }

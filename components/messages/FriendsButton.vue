@@ -1,5 +1,11 @@
 <template>
     <div>
+        <button 
+            v-if="friendDoc?.isBlocked"
+            @click="!friendDoc.isBlocked.includes(id) ? blockUser() : unblockUser()"
+        >
+            <FontAwesomeIcon :icon="['fas', 'ban']" />
+        </button>
         <button
             v-if="friendStatus === 'rejected' || !friendStatus"
             @click="addFriend"
@@ -89,6 +95,28 @@ const refuseFriendRequest = async () => {
         friendStatus.value = 'rejected';
     } catch (error) {
         console.error('Error refusing friend request:', error);
+    }
+}
+
+const blockUser = async () => {
+    try {
+        console.log("Blocking user", id);
+        await apiStore.blockUser(id);
+        friendStatus.value = 'blocked';
+        friendDoc.value = { ...friendDoc.value, isBlocked: [...(friendDoc.value?.isBlocked || []), id] };
+    } catch (error) {
+        console.error('Error blocking user:', error);
+    }
+}
+
+const unblockUser = async () => {
+    try {
+        console.log("Unblocking user", id);
+        await apiStore.unblockUser(id);
+        friendStatus.value = 'rejected';
+        friendDoc.value = { ...friendDoc.value, isBlocked: friendDoc.value?.isBlocked.filter(uid => uid !== id), status: 'rejected' };
+    } catch (error) {
+        console.error('Error unblocking user:', error);
     }
 }
 
