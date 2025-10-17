@@ -5,21 +5,18 @@
       props.userId ? 'w-16 h-16' : 'w-10 h-10'
     ]"
   >
-    <template v-if="avatarUrl">
-      <img
-        :src="avatarUrl"
-        alt="Avatar"
-        :class="[
-          'object-cover rounded-full',
-          props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
-        ]"
-      >
-    </template>
-    <template v-else>
-      <span class="text-lg font-semibold text-gray-700">
-        {{ userStore.user.username ? userStore.user.username.trim().charAt(0).toUpperCase() : '?' }}
-      </span>
-    </template>
+    <img
+      v-if="avatarUrl"
+      :src="avatarUrl"
+      alt="Avatar"
+      :class="[
+        'object-cover rounded-full h-full w-full p-[0.125rem]',
+        props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
+      ]"
+    >
+    <span v-else class="text-lg font-semibold text-gray-700">
+      {{ userStore.user.username ? userStore.user.username.trim().charAt(0).toUpperCase() : '?' }}
+    </span>
   </div>
 </template>
 
