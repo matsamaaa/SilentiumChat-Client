@@ -323,7 +323,18 @@ export const useApiStore = defineStore('api', {
                 console.error("Error unblocking user:", error);
                 throw error;
             }
-        }
+        },
+
+        async cancelFriendRequest(userId) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/cancel`);
+                return response.data;
+            } catch (error) {
+                console.error("Error cancelling friend request:", error);
+                throw error;
+            }
+        },
 
     }
 })

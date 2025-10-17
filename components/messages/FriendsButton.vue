@@ -1,13 +1,13 @@
 <template>
     <div>
         <button 
-            v-if="friendDoc?.isBlocked"
-            @click="!friendDoc.isBlocked.includes(id) ? blockUser() : unblockUser()"
+            v-if="props.friendDoc?.isBlocked"
+            @click="!props.friendDoc.isBlocked.includes(id) ? blockUser() : unblockUser()"
         >
             <FontAwesomeIcon :icon="['fas', 'ban']" />
         </button>
         <button
-            v-if="friendStatus === 'rejected' || !friendStatus"
+            v-if="props.friendStatus === 'rejected' || !props.friendStatus"
             @click="addFriend"
             class="mt-4 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-xl hover:bg-blue-500 transition duration-150"
         >
@@ -15,15 +15,15 @@
             <FontAwesomeIcon :icon="['fa', 'user-plus']" />
         </button>
         <button
-            v-else-if="friendStatus === 'pending' && friendDoc?.userId === userStore.user.uniqueId"
-            disabled
-            class="mt-4 px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow-xl cursor-not-allowed"
+            v-else-if="props.friendStatus === 'pending' && props.friendDoc?.userId === userStore.user.uniqueId"
+            @click="cancelRequest"
+            class="mt-4 px-4 py-2 bg-gray-400 text-white font-semibold rounded-lg shadow-xl"
         >
             Friend Request Sent
             <FontAwesomeIcon :icon="['fa', 'clock']" />
         </button>
         <div 
-            v-else-if="friendStatus === 'pending' && friendDoc?.userId != userStore.user.uniqueId"
+            v-else-if="props.friendStatus === 'pending' && props.friendDoc?.userId != userStore.user.uniqueId"
             class="flex flex-col items-center justify-center"    
         >
             <button
@@ -42,7 +42,7 @@
             </button>
         </div>
         <button
-            v-else-if="friendStatus === 'accepted'"
+            v-else-if="props.friendStatus === 'accepted'"
             disabled
             class="mt-4 px-4 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-xl cursor-not-allowed"
         >
@@ -57,24 +57,28 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useApiStore, useUserStore } from '#imports';
 
 const props = defineProps({
-    id: {
+    friendStatus: {
         type: String,
         required: true
-    }
+    },
+    friendDoc: {
+        type: Object,
+        required: true
+    },
 })
 
 const apiStore = useApiStore();
 const userStore = useUserStore();
 
-const id = props.id;
-const friendStatus = ref(null);
-const friendDoc = ref(null);
+const route = useRoute();
+const id = route.params.id;
+const emit = defineEmits(['updateStatus', 'updateDoc']);
 
 const addFriend = async () => {
     try {
         await apiStore.sendFriendRequest(id);
-        friendStatus.value = 'pending';
-        friendDoc.value = { userId: userStore.user.uniqueId, status: 'pending' };
+        emit('updateStatus', 'pending');
+        emit('updateDoc', { ...props.friendDoc, userId: userStore.user.uniqueId, status: 'pending' });
     } catch (error) {
         console.error('Error sending friend request:', error);
     }
@@ -83,7 +87,7 @@ const addFriend = async () => {
 const acceptFriendRequest = async () => {
     try {
         await apiStore.acceptFriendRequest(id);
-        friendStatus.value = 'accepted';
+        emit('updateStatus', 'accepted');
     } catch (error) {
         console.error('Error accepting friend request:', error);
     }
@@ -92,7 +96,7 @@ const acceptFriendRequest = async () => {
 const refuseFriendRequest = async () => {
     try {
         await apiStore.refuseFriendRequest(id);
-        friendStatus.value = 'rejected';
+        emit('updateStatus', 'rejected');
     } catch (error) {
         console.error('Error refusing friend request:', error);
     }
@@ -100,29 +104,31 @@ const refuseFriendRequest = async () => {
 
 const blockUser = async () => {
     try {
-        console.log("Blocking user", id);
         await apiStore.blockUser(id);
-        friendStatus.value = 'blocked';
-        friendDoc.value = { ...friendDoc.value, isBlocked: [...(friendDoc.value?.isBlocked || []), id] };
+        emit('updateStatus', 'blocked');
+        emit('updateDoc', { ...props.friendDoc, isBlocked: [...(props.friendDoc?.isBlocked || []), id] });
     } catch (error) {
         console.error('Error blocking user:', error);
     }
 }
 
+const cancelRequest = async () => {
+    try {
+        await apiStore.cancelFriendRequest(id);
+        emit('updateStatus', 'rejected');
+        emit('updateDoc', { ...props.friendDoc, status: 'rejected' });
+    } catch (error) {
+        console.error('Error cancelling friend request:', error);
+    }
+}
+
 const unblockUser = async () => {
     try {
-        console.log("Unblocking user", id);
         await apiStore.unblockUser(id);
-        friendStatus.value = 'rejected';
-        friendDoc.value = { ...friendDoc.value, isBlocked: friendDoc.value?.isBlocked.filter(uid => uid !== id), status: 'rejected' };
+        emit('updateStatus', 'rejected');
+        emit('updateDoc', { ...props.friendDoc, isBlocked: props.friendDoc?.isBlocked.filter(uid => uid !== id), status: 'rejected' });
     } catch (error) {
         console.error('Error unblocking user:', error);
     }
 }
-
-onMounted(async () => {
-    const statusDoc = await apiStore.getFriendStatus(id);
-    friendStatus.value = statusDoc.status;
-    friendDoc.value = statusDoc.doc;
-});
 </script>
