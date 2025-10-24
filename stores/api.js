@@ -336,5 +336,19 @@ export const useApiStore = defineStore('api', {
             }
         },
 
+        async updatePassword(newPassword, passwordConfirmation, currentPassword) {
+            const axiosInstance = createAxiosInstance();
+            try {
+                const response = await axiosInstance.patch(`${this.urls.backend}/me/password/update`, {
+                    newPassword,
+                    passwordConfirmation,
+                    currentPassword
+                });
+                return response.data;
+            } catch (error) {
+                console.error("Error updating password:", error);
+                throw error;
+            }
+        }
     }
 })
