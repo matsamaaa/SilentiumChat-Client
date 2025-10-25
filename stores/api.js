@@ -349,6 +349,21 @@ export const useApiStore = defineStore('api', {
                 console.error("Error updating password:", error);
                 throw error;
             }
+        },
+
+        async isValidPassword(password) {
+            const axiosInstance = createAxiosInstance();
+            try {
+            const response = await axiosInstance.post(`${this.urls.backend}/me/password/validate`, {
+                password
+            });
+
+                return response.data;
+            } catch (error) {
+                console.error("Error validating password:", error);
+                throw error?.response?.data.message || error;
+            }
         }
+
     }
 })
