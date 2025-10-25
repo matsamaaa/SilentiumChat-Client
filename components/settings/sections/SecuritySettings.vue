@@ -13,6 +13,10 @@
 
       <CopyPrivateKey />
 
+      <hr class="border-gray-700">
+
+      <ImportPrivateKey />
+
     </section>
   </div>
 </template>
@@ -20,4 +24,5 @@
 <script setup>
 import ChangePasswordForm from '@/components/settings/others/ChangePassword.vue';
 import CopyPrivateKey from '@/components/settings/others/CopyPrivateKey.vue';
+import ImportPrivateKey from '@/components/settings/others/ImportPrivateKey.vue';
 </script>

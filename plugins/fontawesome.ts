@@ -6,10 +6,10 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
 // Import of icons
-import { faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
 
 // add icons
-library.add(faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock)
+library.add(faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation)
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon)
