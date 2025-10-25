@@ -17,8 +17,8 @@
         </div>
 
             <div
-            v-else
-            class="flex flex-col static overflow-y-scroll h-[86vh] flex-1"
+                v-else
+                class="flex flex-col static overflow-y-scroll h-[86vh] flex-1"
             >
             <MessageOutput
                 v-for="(msg, index) in filteredDiscussions"
@@ -27,7 +27,7 @@
             />
 
             <MessageInput
-                v-if="discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
+                v-if="!discussionData || discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
                 @send="handleSend"
                 :friendStatus="friendStatus"
                 :friendDoc="friendDoc"
@@ -39,14 +39,14 @@
                 class="flex flex-row justify-center gap-3 h-full items-end"
             >
                 <StatusDiscussion
-                :user="id"
-                status="accepted"
-                @updated="refreshDiscussion"
+                    :user="id"
+                    status="accepted"
+                    @updated="refreshDiscussion"
                 />
                 <StatusDiscussion
-                :user="id"
-                status="refused"
-                @updated="refreshDiscussion"
+                    :user="id"
+                    status="refused"
+                    @updated="refreshDiscussion"
                 />
             </div>
         </div>
@@ -66,22 +66,22 @@ import { useRoute } from 'vue-router'
 import FriendsButton from '@/components/messages/FriendsButton.vue'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
 
-const recipientUsername = ref('')
-const discussionData = ref(null)
-const isLoading = ref(true)
+const recipientUsername = ref('');
+const discussionData = ref(null);
+const isLoading = ref(true);
 
-const webSocketStore = useWebSocketStore()
-const apiStore = useApiStore()
-const userStore = useUserStore()
-const privateDiscussionsStore = usePrivateDiscussionsStore()
-const route = useRoute()
+const webSocketStore = useWebSocketStore();
+const apiStore = useApiStore();
+const userStore = useUserStore();
+const privateDiscussionsStore = usePrivateDiscussionsStore();
+const route = useRoute();
 
-const id = route.params.id
+const id = route.params.id;
 const friendStatus = ref(null);
 const friendDoc = ref(null);
 
 const handleSend = (data) => {
-  webSocketStore.wsSendMessage(id, data.message, data.file)
+    webSocketStore.wsSendMessage(id, data.message, data.file)
 }
 
 const filteredDiscussions = computed(() => {
@@ -89,9 +89,9 @@ const filteredDiscussions = computed(() => {
         userStore.user.uniqueId,
         id
     )
-
+    console.log('bz ta grand mere 2', discussion)
     if (!discussion) return []
-
+    console.log('bz ta grand mere')
     discussionData.value = discussion
     return discussion.encryptedMessages ?? []
 })
@@ -121,11 +121,11 @@ onMounted(async () => {
 
     if (messagesData) {
         try {
-        messagesData.encryptedMessages = await Promise.all(
-            messagesData.encryptedMessages.map(async (msg) => {
-                return await privateDiscussionsStore.addMessageToDiscussion(msg)
-            })
-        )
+            messagesData.encryptedMessages = await Promise.all(
+                messagesData.encryptedMessages.map(async (msg) => {
+                    return await privateDiscussionsStore.addMessageToDiscussion(msg)
+                })
+            )
         } catch (error) {
             console.error('Error decrypting messages:', error)
         }
