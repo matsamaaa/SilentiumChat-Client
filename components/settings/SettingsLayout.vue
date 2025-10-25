@@ -1,5 +1,5 @@
 <template>
-  <div class="flex w-screen h-screen pt-16 bg-gray-900 text-gray-100"> 
+  <div class="flex w-screen pt-16 bg-gray-900 text-gray-100 h-[93vh]"> 
     
     <SettingsSidebar 
       :activeTab="activeTab" 
