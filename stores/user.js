@@ -111,8 +111,8 @@ export const useUserStore = defineStore('user', {
                     publicKey: publicKeyBase64,
                 });
 
-                if (response.status === 201) {
-                    const { token, user } = response.data;
+                if (response.data.success) {
+                    const { token, user } = response.data.datas;
                     this.updateToken(token);
                     this.updateUser(user);
                     await this.updatePrivateKey(privateKeyBase64);
@@ -140,8 +140,8 @@ export const useUserStore = defineStore('user', {
                 password
             });
 
-            if (response.status === 200) {
-                const { token, user } = response.data;
+            if (response.data.success) {
+                const { token, user } = response.data.datas;
                 this.updateToken(token);
                 this.updateUser(user);
 

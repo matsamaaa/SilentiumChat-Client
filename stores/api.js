@@ -15,7 +15,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/user/${userId}/publicKey`);
-                return response.data.publicKey;
+                return response.data.datas.publicKey;
             } catch (error) {
                 console.error("Error fetching user public key:", error);
                 throw error;
@@ -26,7 +26,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/user/${userId}/username`);
-                return response.data.username;
+                return response.data.datas.username;
             } catch (error) {
                 console.error("Error fetching user username:", error);
                 throw error;
@@ -39,7 +39,7 @@ export const useApiStore = defineStore('api', {
 
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/message/${to}/messages`);
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error fetching private discussion:", error);
                 throw error;
@@ -51,7 +51,7 @@ export const useApiStore = defineStore('api', {
 
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/message/lastmessages`);
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error fetching last messages:", error);
                 throw error;
@@ -62,7 +62,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/user/${username}/${code}/id`);
-                return response.data.userId;
+                return response.data.datas.userId;
             } catch (error) {
                 console.error("Error fetching user ID by full name:", error);
                 throw error;
@@ -98,7 +98,7 @@ export const useApiStore = defineStore('api', {
                     }
                 );
 
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error posting file:", error);
                 throw error;
@@ -126,7 +126,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/files/${fileId}/meta`);
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error fetching file metadata:", error);
                 throw error;
@@ -137,7 +137,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.patch(`${this.urls.backend}/message/${to}/status`, { status });
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error updating discussion status:", error);
                 throw error;
@@ -263,7 +263,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.get(`${this.urls.backend}/friends/${userId}/status`);
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error fetching friend status:", error);
                 throw error;
@@ -274,7 +274,7 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/request`);
-                return response.data;
+                return response.data.datas;
             } catch (error) {
                 console.error("Error sending friend request:", error);
                 throw error;
@@ -354,9 +354,9 @@ export const useApiStore = defineStore('api', {
         async isValidPassword(password) {
             const axiosInstance = createAxiosInstance();
             try {
-            const response = await axiosInstance.post(`${this.urls.backend}/me/password/validate`, {
-                password
-            });
+                const response = await axiosInstance.post(`${this.urls.backend}/me/password/validate`, {
+                    password
+                });
 
                 return response.data;
             } catch (error) {
