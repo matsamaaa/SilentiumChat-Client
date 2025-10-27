@@ -14,6 +14,9 @@
         props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
       ]"
     >
+    <span v-else-if="userId" class="text-lg font-semibold text-gray-700">
+      {{ username ? props.username.trim().charAt(0).toUpperCase() : '?' }}
+    </span>
     <span v-else class="text-lg font-semibold text-gray-700">
       {{ userStore.user.username ? userStore.user.username.trim().charAt(0).toUpperCase() : '?' }}
     </span>
@@ -32,6 +35,10 @@ const props = defineProps({
   userId: {
     type: String,
     default: null
+  },
+  username: {
+    type: String,
+    default: ''
   }
 })
 

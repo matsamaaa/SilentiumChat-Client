@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-row w-screen justify-between h-[93vh]">
         <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
-            <AvatarIcon :userId="id" />
+            <AvatarIcon :userId="id" :username="recipientUsername" />
             <h1>{{ recipientUsername }}</h1>
             <FriendsButton 
                 :id="id" 
@@ -89,9 +89,9 @@ const filteredDiscussions = computed(() => {
         userStore.user.uniqueId,
         id
     )
-    console.log('bz ta grand mere 2', discussion)
+
     if (!discussion) return []
-    console.log('bz ta grand mere')
+
     discussionData.value = discussion
     return discussion.encryptedMessages ?? []
 })
