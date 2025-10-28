@@ -6,7 +6,7 @@ export const useNotificationStore = defineStore('notification', {
         notifications: [],
     }),
     actions: {
-        add(message, type = 'info', duration = 20000) {
+        add(message, type = 'info', duration = 4000) {
             const id = Date.now() + Math.random();
             this.notifications.push({ id, message, type });
             if (duration > 0) {

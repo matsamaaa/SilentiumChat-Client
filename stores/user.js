@@ -7,6 +7,7 @@ import { useWebSocketStore } from './ws';
 import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
 import { generateRSAKeyPair } from '~/utils/keys/rsa';
 import { bufferToBase64 } from '~/utils/conversion';
+import { useNotificationStore } from './notifications';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -82,6 +83,8 @@ export const useUserStore = defineStore('user', {
         async updatePrivateKey(privateKey) {
             this.privateKey = privateKey
             await setPrivateKeyInDB(privateKey, this.user.uniqueId);
+            const notif = useNotificationStore();
+            notif.add("Private key updated successfully", "success");
         },
 
         clearUser() {

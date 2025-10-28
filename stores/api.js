@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import createAxiosInstance from './axios';
+import { useNotificationStore } from '#imports';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -146,11 +147,13 @@ export const useApiStore = defineStore('api', {
 
         async updateUsername(newUsername) {
             const axiosInstance = createAxiosInstance();
+            const notif = useNotificationStore();
             try {
                 const response = await axiosInstance.patch(`${this.urls.backend}/me/username`, { username: newUsername });
                 if (response.data.success) {
                     const userStore = useUserStore();
                     userStore.updateUsername(newUsername);
+                    notif.add("Username updated successfully", "success");
                 }
                 return response.data;
             } catch (error) {
@@ -161,11 +164,13 @@ export const useApiStore = defineStore('api', {
 
         async updateTag(newTag) {
             const axiosInstance = createAxiosInstance();
+            const notif = useNotificationStore();
             try {
                 const response = await axiosInstance.patch(`${this.urls.backend}/me/tag`, { tag: newTag });
                 if (response.data.success) {
                     const userStore = useUserStore();
                     userStore.updateTag(newTag);
+                    notif.add("Tag updated successfully", "success");
                 }
                 return response.data;
             } catch (error) {
@@ -176,6 +181,7 @@ export const useApiStore = defineStore('api', {
 
         async uploadAvatar(file) {
             const axiosInstance = createAxiosInstance();
+            const notif = useNotificationStore();
             const formData = new FormData();
 
             // 'avatar' doit correspondre au champ défini dans le backend (upload.single('avatar'))
@@ -201,6 +207,7 @@ export const useApiStore = defineStore('api', {
                     const userStore = useUserStore();
                     // Si le backend renvoie l’URL publique du nouvel avatar
                     userStore.updateAvatar(response.data.avatarUrl);
+                    notif.add("Avatar uploaded successfully", "success");
                 }
 
                 return response.data;
@@ -344,6 +351,12 @@ export const useApiStore = defineStore('api', {
                     passwordConfirmation,
                     currentPassword
                 });
+
+                if (response.data.success) {
+                    const notif = useNotificationStore();
+                    notif.add("Password updated successfully", "success");
+                }
+
                 return response.data;
             } catch (error) {
                 console.error("Error updating password:", error);
