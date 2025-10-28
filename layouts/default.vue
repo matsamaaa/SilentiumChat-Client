@@ -25,7 +25,7 @@ import { useNavigationStore } from '@/stores/navigation'
 import { useWebSocketStore } from '@/stores/ws'
 import { useRoute } from 'vue-router'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
-import Notification from '~/components/popups/Notification.vue'
+import Notification from '~/components/popups/Notifications.vue'
 
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()
