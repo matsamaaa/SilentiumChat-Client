@@ -14,6 +14,8 @@
         <main class="flex-1 overflow-y-auto overflow-x-hidden">
             <slot />
         </main>
+
+        <Notification />
     </div>
 </template>
 
@@ -23,14 +25,12 @@ import { useNavigationStore } from '@/stores/navigation'
 import { useWebSocketStore } from '@/stores/ws'
 import { useRoute } from 'vue-router'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
+import Notification from '~/components/popups/Notification.vue'
 
 const userStore = useUserStore()
-const apiStore = useApiStore()
 const navigationStore = useNavigationStore()
 const webSocketStore = useWebSocketStore()
 const route = useRoute()
-
-const avatar = ref(null);
 
 onMounted(() => {
     if (!userStore.isLoggedIn) {
