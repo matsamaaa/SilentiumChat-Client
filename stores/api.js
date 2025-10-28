@@ -256,6 +256,14 @@ export const useApiStore = defineStore('api', {
             const axiosInstance = createAxiosInstance();
             try {
                 const response = await axiosInstance.delete(`${this.urls.backend}/me/avatar`);
+
+                if (response.data.success) {
+                    const userStore = useUserStore();
+                    userStore.avatar = null;
+                    const notif = useNotificationStore();
+                    notif.add("Avatar deleted successfully", "success");
+                }
+
                 return response.data;
             } catch (error) {
                 if (error.response) {

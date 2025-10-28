@@ -128,7 +128,6 @@ const handleSave = async () => {
 
 const deleteAvatar = async () => {
     await apiStore.deleteAvatar();
-    userStore.avatar = null;
     preview.value = null;
     file.value = null;
 }
