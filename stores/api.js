@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
-import createAxiosInstance from './axios';
-import { useNotificationStore } from '#imports';
+
+// api imports
+import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword } from './api/meApi'
+import { getUserPublicKey, getUsername, getUserIdByFullName } from './api/userApi'
+import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
+import { getFile, postFile, getFileMetadata } from './api/fileApi'
+import { getFriendStatus, sendFriendRequest, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest } from './api/friendApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -11,380 +16,123 @@ export const useApiStore = defineStore('api', {
     }),
 
     actions: {
-        // User Informations
+
+
+        /**
+         * Api functions for the root /user
+         */
+
         async getUserPublicKey(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/user/${userId}/publicKey`);
-                return response.data.datas.publicKey;
-            } catch (error) {
-                console.error("Error fetching user public key:", error);
-                throw error;
-            }
+            return getUserPublicKey(this.urls, userId);
         },
 
         async getUsername(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/user/${userId}/username`);
-                return response.data.datas.username;
-            } catch (error) {
-                console.error("Error fetching user username:", error);
-                throw error;
-            }
-        },
-
-        // Privates Discussion
-        async getPrivateDiscussion(to) {
-            const axiosInstance = createAxiosInstance();
-
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/message/${to}/messages`);
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error fetching private discussion:", error);
-                throw error;
-            }
-        },
-
-        async getLastMessages() {
-            const axiosInstance = createAxiosInstance();
-
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/message/lastmessages`);
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error fetching last messages:", error);
-                throw error;
-            }
+            return getUsername(this.urls, userId);
         },
 
         async getUserIdByFullName(username, code) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/user/${username}/${code}/id`);
-                return response.data.datas.userId;
-            } catch (error) {
-                console.error("Error fetching user ID by full name:", error);
-                throw error;
-            }
+            return getUserIdByFullName(this.urls, username, code);
         },
 
-        async postFile(fileData) {
-            const axiosInstance = createAxiosInstance();
-            const formData = new FormData();
-
-            const file = new File([fileData.encryptedData], "file", { type: "application/octet-stream" });
-
-            formData.append("file", file);
-            formData.append("extension", fileData.extension);
-            formData.append("iv", fileData.iv); // Uint8Array
-            formData.append("authTag", fileData.authTag); // Uint8Array
-            formData.append("encryptedKey", fileData.encryptedKey); // base64
-            formData.append("encryptedKeySender", fileData.encryptedKeySender); // base64
-
-            try {
-                const response = await axiosInstance.post(
-                    `${this.urls.backend}/files/upload`, 
-                    formData,
-                    {
-                        headers: {
-                            "Content-Type": "multipart/form-data"
-                        },
-                        onUploadProgress: (progressEvent) => {
-                            const { loaded, total } = progressEvent;
-                            const percent = Math.round((loaded * 100) / total);
-                            console.log(`File upload progress: ${percent}%`);
-                        }
-                    }
-                );
-
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error posting file:", error);
-                throw error;
-            }
-        },
-
-        async getFile(fileId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/files/${fileId}`, {
-                    responseType: 'arraybuffer',
-                });
-
-                // Convert ArrayBuffer en Uint8Array
-                const fileBuffer = new Uint8Array(response.data);
-
-                return fileBuffer;
-            } catch (error) {
-                console.error("Error fetching file:", error);
-                throw error;
-            }
-        },
-
-        async getFileMetadata(fileId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/files/${fileId}/meta`);
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error fetching file metadata:", error);
-                throw error;
-            }
-        },
-
-        async updateDiscussionStatus(to, status) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.patch(`${this.urls.backend}/message/${to}/status`, { status });
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error updating discussion status:", error);
-                throw error;
-            }
-        },
+        
+        /**
+         * Api functions for the root /me
+         */
 
         async updateUsername(newUsername) {
-            const axiosInstance = createAxiosInstance();
-            const notif = useNotificationStore();
-            try {
-                const response = await axiosInstance.patch(`${this.urls.backend}/me/username`, { username: newUsername });
-                if (response.data.success) {
-                    const userStore = useUserStore();
-                    userStore.updateUsername(newUsername);
-                    notif.add("Username updated successfully", "success");
-                }
-                return response.data;
-            } catch (error) {
-                console.error("Error updating username:", error);
-                throw error;
-            }
+            return updateUsername(this.urls, newUsername);
         },
 
         async updateTag(newTag) {
-            const axiosInstance = createAxiosInstance();
-            const notif = useNotificationStore();
-            try {
-                const response = await axiosInstance.patch(`${this.urls.backend}/me/tag`, { tag: newTag });
-                if (response.data.success) {
-                    const userStore = useUserStore();
-                    userStore.updateTag(newTag);
-                    notif.add("Tag updated successfully", "success");
-                }
-                return response.data;
-            } catch (error) {
-                console.error("Error updating tag:", error);
-                throw error;
-            }
-        },
-
-        async uploadAvatar(file) {
-            const axiosInstance = createAxiosInstance();
-            const notif = useNotificationStore();
-            const formData = new FormData();
-
-            // 'avatar' doit correspondre au champ défini dans le backend (upload.single('avatar'))
-            formData.append('avatar', file);
-
-            try {
-                const response = await axiosInstance.post(
-                    `${this.urls.backend}/me/avatar`,
-                    formData,
-                    {
-                        headers: {
-                            'Content-Type': 'multipart/form-data'
-                        },
-                        onUploadProgress: (progressEvent) => {
-                            const { loaded, total } = progressEvent;
-                            const percent = Math.round((loaded * 100) / total);
-                            console.log(`Avatar upload progress: ${percent}%`);
-                        }
-                    }
-                );
-
-                if (response.data.success) {
-                    const userStore = useUserStore();
-                    // Si le backend renvoie l’URL publique du nouvel avatar
-                    userStore.updateAvatar(response.data.avatarUrl);
-                    notif.add("Avatar uploaded successfully", "success");
-                }
-
-                return response.data;
-            } catch (error) {
-                console.error("Error uploading avatar:", error);
-                throw error;
-            }
+            return updateTag(this.urls, newTag);
         },
 
         async getAvatar(userId) {
-            const axiosInstance = createAxiosInstance();
-            const userStore = useUserStore();
-            let url;
-            if (userId) {
-                url = `${this.urls.backend}/user/${userId}/avatar`;
-            } else {
-                url = `${this.urls.backend}/me/avatar`;
-            }
+            return getAvatar(this.urls, userId);
+        },
 
-            try {
-                const response = await axiosInstance.get(url, {
-                    responseType: 'arraybuffer',
-                });
-
-                if (response.status === 204) {
-                    return null;
-                }
-
-                const contentType = response.headers['content-type'] || 'image/jpeg';
-                const blob = new Blob([response.data], { type: contentType });
-                const imageUrl = URL.createObjectURL(blob);
-                
-                if(!userId) userStore.avatar = imageUrl;
-                return imageUrl;
-
-            } catch (error) {
-                if (error.response) {
-                    return null; 
-                } 
-                
-                throw error;
-            }
+        async uploadAvatar(file) {
+            return uploadAvatar(this.urls, file);
         },
 
         async deleteAvatar() {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.delete(`${this.urls.backend}/me/avatar`);
-
-                if (response.data.success) {
-                    const userStore = useUserStore();
-                    userStore.avatar = null;
-                    const notif = useNotificationStore();
-                    notif.add("Avatar deleted successfully", "success");
-                }
-
-                return response.data;
-            } catch (error) {
-                if (error.response) {
-                    return null; 
-                } 
-                
-                throw error;
-            }
-        },
-
-        async getFriendStatus(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.get(`${this.urls.backend}/friends/${userId}/status`);
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error fetching friend status:", error);
-                throw error;
-            }
-        },
-
-        async sendFriendRequest(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/request`);
-                return response.data.datas;
-            } catch (error) {
-                console.error("Error sending friend request:", error);
-                throw error;
-            }
-        },
-
-        async acceptFriendRequest(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/accept`);
-                return response.data;
-            } catch (error) {
-                console.error("Error accepting friend request:", error);
-                throw error;
-            }
-        },
-
-        async refuseFriendRequest(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/refuse`);
-                return response.data;
-            } catch (error) {
-                console.error("Error refusing friend request:", error);
-                throw error;
-            }
-        },
-
-        async blockUser(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/block`);
-                return response.data;
-            } catch (error) {
-                console.error("Error blocking user:", error);
-                throw error;
-            }
-        },
-
-        async unblockUser(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/unblock`);
-                return response.data;
-            } catch (error) {
-                console.error("Error unblocking user:", error);
-                throw error;
-            }
-        },
-
-        async cancelFriendRequest(userId) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/friends/${userId}/cancel`);
-                return response.data;
-            } catch (error) {
-                console.error("Error cancelling friend request:", error);
-                throw error;
-            }
+            return deleteAvatar(this.urls);
         },
 
         async updatePassword(newPassword, passwordConfirmation, currentPassword) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.patch(`${this.urls.backend}/me/password/update`, {
-                    newPassword,
-                    passwordConfirmation,
-                    currentPassword
-                });
-
-                if (response.data.success) {
-                    const notif = useNotificationStore();
-                    notif.add("Password updated successfully", "success");
-                }
-
-                return response.data;
-            } catch (error) {
-                console.error("Error updating password:", error);
-                throw error;
-            }
+            return updatePassword(this.urls, newPassword, passwordConfirmation, currentPassword);
         },
 
         async isValidPassword(password) {
-            const axiosInstance = createAxiosInstance();
-            try {
-                const response = await axiosInstance.post(`${this.urls.backend}/me/password/validate`, {
-                    password
-                });
+            return isValidPassword(this.urls, password);
+        },
 
-                return response.data;
-            } catch (error) {
-                console.error("Error validating password:", error);
-                throw error?.response?.data.message || error;
-            }
-        }
+
+        /**
+         * Api functions for the root /message
+         */
+
+        async getPrivateDiscussion(to) {
+            return getPrivateDiscussion(this.urls, to);
+        },
+
+        async updateDiscussionStatus(to, status) {
+            return updateDiscussionStatus(this.urls, to, status);
+        },
+
+        async getLastMessages() {
+            return getLastMessages(this.urls);
+        },
+
+
+        /**
+         * Api functions for the root /file
+         */
+
+        async getFile(fileId) {
+            return getFile(this.urls, fileId);
+        },
+
+        async postFile(fileData) {
+            return postFile(this.urls, fileData);
+        },
+
+        async getFileMetadata(fileId) {
+            return getFileMetadata(this.urls, fileId);
+        },
+
+
+        /**
+         * Api functions for the root /friend
+         */
+
+        async getFriendStatus(userId) {
+            return getFriendStatus(this.urls, userId);
+        },
+
+        async sendFriendRequest(userId) {
+            return sendFriendRequest(this.urls, userId);
+        },
+
+        async acceptFriendRequest(userId) {
+            return acceptFriendRequest(this.urls, userId);
+        },
+
+        async refuseFriendRequest(userId) {
+            return refuseFriendRequest(this.urls, userId);
+        },
+
+        async blockUser(userId) {
+            return blockUser(this.urls, userId);
+        },
+
+        async unblockUser(userId) {
+            return unblockUser(this.urls, userId);
+        },
+
+        async cancelFriendRequest(userId) {
+            return cancelFriendRequest(this.urls, userId);
+        },
 
     }
 })
