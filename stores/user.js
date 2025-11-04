@@ -13,7 +13,6 @@ export const useUserStore = defineStore('user', {
     state: () => ({
         token: null,
         user: null,
-        privateKey: null,
         initialized: false,
         avatar: null,
     }),
@@ -28,7 +27,6 @@ export const useUserStore = defineStore('user', {
             const token = useCookie('token');
             const user = useCookie('user');
             const apiStore = useApiStore();
-            const privateKey = await getPrivateKeyFromDB(user.value.uniqueId);
 
             if (token) {
                 this.token = token;
@@ -40,10 +38,6 @@ export const useUserStore = defineStore('user', {
                     : user.value || null
 
                 await apiStore.getAvatar();
-            }
-
-            if (privateKey) {
-                this.privateKey = privateKey;
             }
 
             this.initialized = true;
@@ -81,16 +75,21 @@ export const useUserStore = defineStore('user', {
         },
 
         async updatePrivateKey(privateKey) {
-            this.privateKey = privateKey
             await setPrivateKeyInDB(privateKey, this.user.uniqueId);
             const notif = useNotificationStore();
             notif.add("Private key updated successfully", "success");
         },
 
+        async getPrivateKey() {
+            if (this.user) {
+                const privateKey = await getPrivateKeyFromDB(this.user.uniqueId);
+                return privateKey;
+            }
+        },
+
         clearUser() {
             this.user = null
             this.token = null
-            this.privateKey = null
             useCookie('user').value = null
             useCookie('token').value = null
         },

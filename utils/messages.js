@@ -30,7 +30,7 @@ const encryptMessage = async (messageText, publicKeyString) => {
 
 const decryptMessage = async (message) => {
     const userStore = useUserStore();
-    const privateKeyString = userStore.privateKey;
+    const privateKeyString = await userStore.getPrivateKey();
     if(!privateKeyString) {
         throw new Error("Error with private key");
     }

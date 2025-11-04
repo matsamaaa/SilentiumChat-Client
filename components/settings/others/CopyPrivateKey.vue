@@ -9,7 +9,7 @@
             
             <div class="flex items-start justify-between">
                 <span class="text-sm font-mono text-gray-300 select-all break-all mr-4 flex-grow">
-                    {{ userStore.privateKey }}
+                    {{ privateKey }}
                 </span>
 
                 <button 
@@ -38,7 +38,7 @@
 
     <PasswordValidation 
         v-if="hasRequest && !isValidPassword" 
-        @submit="isValidPassword = true; hasRequest = false" 
+        @submit="revealPrivateKey" 
         @close="hasRequest = false"
     />
 </template>
@@ -54,11 +54,19 @@ const hasRequest = ref(false);
 const isValidPassword = ref(false);
 const isCopied = ref(false);
 
+const privateKey = ref('');
+
+const revealPrivateKey = async () => {
+    privateKey.value = await userStore.getPrivateKey();
+    isValidPassword.value = true;
+    hasRequest.value = false;
+};
+
 const copyKey = async () => {
-    if (!userStore.privateKey) return;
+    if (!privateKey.value) return;
 
     try {
-        await navigator.clipboard.writeText(userStore.privateKey);
+        await navigator.clipboard.writeText(privateKey.value);
         isCopied.value = true;
         
         setTimeout(() => {

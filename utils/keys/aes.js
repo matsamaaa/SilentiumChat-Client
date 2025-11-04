@@ -49,7 +49,7 @@ const encryptAesKeyWithRSA = async (aesKey, publicKeyBase64) => {
 const decryptAesKeyWithRSA = async (encryptedAesKeyBase64) => {
     try {
         const userStore = useUserStore();
-        const privateKeyString = userStore.privateKey;
+        const privateKeyString = await userStore.getPrivateKey();
         if (!privateKeyString) {
             throw new Error("Private key not found");
         }

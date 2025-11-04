@@ -34,8 +34,6 @@ defineEmits(['changeTab']);
 // Liste des onglets de navigation (inchangée)
 const tabs = [
   { id: 'profile', label: 'Profile' }, 
-  { id: 'security', label: 'Sécurity & Connexion' }, 
-  { id: 'blocked', label: 'Blocked Users' }, 
-  { id: 'notifications', label: 'Notifications' },
+  { id: 'security', label: 'Sécurity & Connexion' }
 ];
 </script>
