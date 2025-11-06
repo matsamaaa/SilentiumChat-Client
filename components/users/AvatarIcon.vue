@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[
-      'flex items-center justify-center rounded-full bg-gray-200 overflow-hidden',
+      'flex items-center justify-center rounded-full bg-indigo-200 overflow-hidden',
       props.userId ? 'w-16 h-16' : 'w-10 h-10'
     ]"
   >
@@ -14,10 +14,10 @@
         props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
       ]"
     >
-    <span v-else-if="userId" class="text-lg font-semibold text-gray-700">
+    <span v-else-if="userId" class="text-lg font-semibold text-indigo-800">
       {{ username ? props.username.trim().charAt(0).toUpperCase() : '?' }}
     </span>
-    <span v-else class="text-lg font-semibold text-gray-700">
+    <span v-else class="text-lg font-semibold text-indigo-800">
       {{ userStore.user.username ? userStore.user.username.trim().charAt(0).toUpperCase() : '?' }}
     </span>
   </div>

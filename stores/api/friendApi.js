@@ -1,4 +1,5 @@
 import createAxiosInstance from "../axios";
+import { useNotificationStore } from "../notifications";
 
 // status
 export async function getFriendStatus(urls, userId) {
@@ -20,6 +21,20 @@ export async function sendFriendRequest(urls, userId) {
         return response.data.datas;
     } catch (error) {
         console.error("Error sending friend request:", error);
+        throw error;
+    }
+}
+
+export async function removeFriend(urls, userId) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+
+    try {
+        const response = await axiosInstance.post(`${urls.backend}/friends/${userId}/remove`);
+        notif.add("Friend removed successfully", "success");
+        return response.data;
+    } catch (error) {
+        console.error("Error removing friend:", error);
         throw error;
     }
 }
@@ -76,6 +91,19 @@ export async function refuseFriendRequest(urls, userId) {
         return response.data;
     } catch (error) {
         console.error("Error refusing friend request:", error);
+        throw error;
+    }
+}
+
+// lists
+
+export async function getFriendsList(urls) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/friends/list/accepted`);
+        return response.data.datas;
+    } catch (error) {
+        console.error("Error fetching friend list:", error);
         throw error;
     }
 }
