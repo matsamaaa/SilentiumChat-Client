@@ -9,3 +9,5 @@ const formatDate = (dateValue) => {
         day: 'numeric'
     });
 };
+
+export { formatDate };

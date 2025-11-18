@@ -18,13 +18,13 @@
                 />
                 
                 <div class="flex space-x-2">
-                    <button v-if="listType === 'pending'" class="text-green-500 hover:text-green-700 p-2 rounded-full hover:bg-green-50 transition">
-                        
+                    <button v-if="listType === 'pending'" @click="handleApiFriend(user.targetId, 'accepted')" class="text-green-500 hover:text-green-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
+                        <FontAwesomeIcon icon="user-check" />
                     </button>
-                    <button v-if="listType === 'pending'" class="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50 transition">
-                        
+                    <button v-if="listType === 'pending'" @click="handleApiFriend(user.targetId, 'rejected')" class="text-red-500 hover:text-red-700 px-3 p-2 rounded-full hover:bg-red-50 transition">
+                        <FontAwesomeIcon icon="user-xmark" />
                     </button>
-                    <button v-if="listType === 'friend'" @click="handleRemoveUserFromList(user.targetId)" class="text-indigo-500 hover:text-indigo-700 px-3 py-2 rounded-full hover:bg-indigo-50 transition">
+                    <button v-if="listType === 'friend'" @click="handleApiFriend(user.targetId, 'remove')" class="text-indigo-500 hover:text-indigo-700 px-3 py-2 rounded-full hover:bg-indigo-50 transition">
                         <FontAwesomeIcon icon="user-xmark" />
                     </button>
                 </div>
@@ -57,9 +57,16 @@ const userStore = useUserStore();
 const usersWithNames = ref([]);
 const isLoadingUsernames = ref(true);
 
+const handleApiFriend = async (userId, status) => {
+    if (status === 'remove') await apiStore.removeFriend(userId);
+    if (status === 'rejected') await apiStore.refuseFriendRequest(userId);
+    if (status === 'accepted') await apiStore.acceptFriendRequest(userId);
+
+    handleRemoveUserFromList(userId);
+};
+
 const handleRemoveUserFromList = async (userId) => {
     usersWithNames.value = usersWithNames.value.filter(user => user.targetId !== userId);
-    apiStore.removeFriend(userId);
 };
 
 onMounted(async () => {

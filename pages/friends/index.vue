@@ -85,7 +85,7 @@ const fetchLists = async () => {
     isLoading.value = true;
     try {
         friends.value = await apiStore.getFriendsList();  
-        //pending.value = await apiStore.getPendingRequests();
+        pending.value = await apiStore.getPendingRequests();
         //blocked.value = await apiStore.getBlockedUsers();
     } catch (error) {
         console.error(error);

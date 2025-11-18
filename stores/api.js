@@ -5,7 +5,7 @@ import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updat
 import { getUserPublicKey, getUsername, getUserIdByFullName } from './api/userApi'
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
-import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList } from './api/friendApi';
+import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList, getPendingRequests } from './api/friendApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -140,6 +140,10 @@ export const useApiStore = defineStore('api', {
 
         async getFriendsList() {
             return getFriendsList(this.urls);
+        },
+
+        async getPendingRequests() {
+            return getPendingRequests(this.urls);
         }
 
     }
