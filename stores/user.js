@@ -193,6 +193,17 @@ export const useUserStore = defineStore('user', {
             friendsStatus.map(status => {
                 this.friends[status] = this.friends[status].filter(user => user.userId !== friendId);
             });
-        }
+        },
+
+        getFriendStatus(friendId) {
+            const friendsStatus = ['accepted', 'pending', 'blocked'];
+            for (const status of friendsStatus) {
+                const friend = this.friends[status].find(user => user.userId === friendId);
+                if (friend) {
+                    return status;
+                }
+            }
+            return null;
+        },
     }
 });

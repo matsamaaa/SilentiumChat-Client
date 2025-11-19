@@ -57,6 +57,10 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useApiStore, useUserStore } from '#imports';
 
 const props = defineProps({
+    userId: {
+        type: String,
+        required: true
+    },
     friendStatus: {
         type: String,
         required: true
@@ -69,6 +73,8 @@ const props = defineProps({
 
 const apiStore = useApiStore();
 const userStore = useUserStore();
+
+const friendStatus = computed(() => userStore.getFriendStatus(props.userId));
 
 const route = useRoute();
 const id = route.params.id;
