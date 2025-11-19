@@ -23,7 +23,8 @@ import { usePrivateDiscussionsStore } from '@/stores/privateDiscussions';
 import { useApiStore } from '@/stores/api';
 import { useUserStore } from '@/stores/user';
 import { useNavigationStore } from '@/stores/navigation';
-import DiscussionItem from '@/components/discussion/DiscussionPreview.vue';
+import DiscussionItem from '@/components/pages/discussion/DiscussionPreview.vue';
+import DiscussionWaitingButton from '@/components/pages/discussion/DiscussionWaitingButton.vue';
 import UserInput from '~/components/users/usersInput.vue';
 
 const privateDiscussionsStore = usePrivateDiscussionsStore();

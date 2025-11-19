@@ -44,7 +44,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import UserList from '@/components/friends/UserList.vue';
+import UserList from '@/components/pages/friends/UserList.vue';
 
 const activeTab = ref('accepted'); // 'accepted', 'pending', 'blocked'
 

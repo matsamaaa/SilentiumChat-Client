@@ -53,7 +53,7 @@ export const useUserStore = defineStore('user', {
                     this.addFriend(friend, status);
                 });
             }
-            
+
             this.initialized = true;
         },
 
@@ -184,7 +184,11 @@ export const useUserStore = defineStore('user', {
          * Friend management actions
          */
 
-        addFriend(friend, status = 'accepted') {
+        addFriend(friend, status = 'accepted', ask) {
+            if (status === 'pending' && ask) {
+                friend.hasAsk = ask;
+            }
+
             this.friends[status].push(friend);
         },
 
@@ -198,9 +202,12 @@ export const useUserStore = defineStore('user', {
         getFriendStatus(friendId) {
             const friendsStatus = ['accepted', 'pending', 'blocked'];
             for (const status of friendsStatus) {
-                const friend = this.friends[status].find(user => user.userId === friendId);
+                const friend = this.friends[status].find(user => user.uniqueId === friendId);
                 if (friend) {
-                    return status;
+                    return {
+                        ...friend,
+                        status: status
+                    };
                 }
             }
             return null;

@@ -3,5 +3,5 @@
 </template>
 
 <script setup>
-import SettingsLayout from '@/components/settings/SettingsLayout.vue'; 
+import SettingsLayout from '@/components/pages/settings/SettingsLayout.vue'; 
 </script>

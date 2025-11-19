@@ -3,13 +3,7 @@
         <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
             <AvatarIcon :userId="id" :username="recipientUsername" />
             <h1>{{ recipientUsername }}</h1>
-            <FriendsButton 
-                :id="id" 
-                :friendStatus="friendStatus" 
-                :friendDoc="friendDoc"
-                @updateStatus="updateFriendStatus"
-                @updateDoc="updateFriendDoc"
-            />
+            <FriendsButton />
         </div>
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
@@ -55,15 +49,15 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import MessageInput from '@/components/messages/MessageInput.vue'
-import MessageOutput from '@/components/messages/MessageOutput.vue'
-import StatusDiscussion from '@/components/messages/StatusDiscussion.vue'
+import MessageInput from '@/components/pages/messages/MessageInput.vue'
+import MessageOutput from '@/components/pages/messages/MessageOutput.vue'
+import StatusDiscussion from '@/components/pages/messages/StatusDiscussion.vue'
 import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
-import FriendsButton from '@/components/messages/FriendsButton.vue'
+import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
 
 const recipientUsername = ref('');
@@ -101,14 +95,6 @@ const refreshDiscussion = async () => {
     if (messagesData) {
         discussionData.value = messagesData
     }
-}
-
-const updateFriendStatus = async (status) => {
-    friendStatus.value = status
-}
-
-const updateFriendDoc = async (doc) => {
-    friendDoc.value = doc
 }
 
 onMounted(async () => {

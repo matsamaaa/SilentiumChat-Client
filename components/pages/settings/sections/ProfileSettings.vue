@@ -81,8 +81,8 @@
 import { ref } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useApiStore } from '@/stores/api';
-import AvatarUpload from '../others/ChangeAvatarButton.vue';
-import SaveButton from '../others/saveButton.vue';
+import AvatarUpload from '@/components/pages/settings/others/ChangeAvatarButton.vue';
+import SaveButton from '@/components/pages/settings/others/saveButton.vue';
 
 const apiStore = useApiStore();
 const userStore = useUserStore();

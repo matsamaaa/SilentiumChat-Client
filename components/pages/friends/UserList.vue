@@ -14,15 +14,20 @@
                 />
                 
                 <div class="flex space-x-2">
-                    <button v-if="listType === 'pending'" @click="handleApiFriend(user, 'accepted')" class="text-green-500 hover:text-green-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
-                        <FontAwesomeIcon icon="user-check" />
-                    </button>
-                    <button v-if="listType === 'pending'" @click="handleApiFriend(user, 'rejected')" class="text-red-500 hover:text-red-700 px-3 p-2 rounded-full hover:bg-red-50 transition">
-                        <FontAwesomeIcon icon="user-xmark" />
-                    </button>
-                    <button v-if="listType === 'accepted'" @click="handleApiFriend(user, 'remove')" class="text-indigo-500 hover:text-indigo-700 px-3 py-2 rounded-full hover:bg-indigo-50 transition">
-                        <FontAwesomeIcon icon="user-xmark" />
-                    </button>
+                    <div v-if="listType === 'pending'">
+                        <CancelFriendButton 
+                            v-if="user.hasAsk" 
+                            :user-id="user.userId" />
+                        <AcceptFriendButton 
+                            v-if="!user.hasAsk"
+                            :user-id="user.userId" />
+                        <RefuseFriendButton 
+                            v-if="!user.hasAsk"
+                            :user-id="user.userId" />
+                    </div>
+                    <AcceptFriendButton 
+                        v-if="listType === 'accepted' && user.hasAsk" 
+                        :user-id="user.userId" />
                 </div>
             </div>
             <div v-if="users.length < 1">
@@ -36,10 +41,14 @@
 
 <script setup>
 import UserCard from './UserCard.vue';
-import { useApiStore } from '#imports';
 import { useUserStore } from '#imports';
-import { ref, onMounted } from 'vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+
+// components
+import CancelFriendButton from '@/components/friends/CancelFriendButton.vue';
+import RemoveFriendButton from '@/components/friends/RemoveFriendButton.vue';
+import RefuseFriendButton from '@/components/friends/RefuseFriendButton.vue';
+import AcceptFriendButton from '~/components/friends/AcceptFriendButton.vue';
 
 
 const props = defineProps({
@@ -49,26 +58,8 @@ const props = defineProps({
     }
 });
 
-const apiStore = useApiStore();
 const userStore = useUserStore();
 
 const users = computed(() => userStore.friends[props.listType]);
 
-const handleApiFriend = async (user, status) => {
-    if (status === 'remove') {
-        await apiStore.removeFriend(user.userId);
-        return userStore.removeFriend(user.userId);
-    }
-
-    if (status === 'rejected') {
-        await apiStore.refuseFriendRequest(user.userId);
-        return userStore.removeFriend(user.userId);
-    }
-
-    if (status === 'accepted') {
-        await apiStore.acceptFriendRequest(user.userId);
-        userStore.removeFriend(user.userId);
-        return userStore.addFriend(user)
-    }
-};
 </script>
