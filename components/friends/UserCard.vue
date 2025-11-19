@@ -8,7 +8,7 @@
             </p>
             
             <p v-if="createdAt" class="text-sm text-gray-500 mt-0.5">
-                <span v-if="listType === 'friend'">Ami depuis le {{ formatDate(createdAt) }}</span>
+                <span v-if="listType === 'accepted'">Ami depuis le {{ formatDate(createdAt) }}</span>
                 <span v-else-if="listType === 'pending'">Demande envoyée le {{ formatDate(createdAt) }}</span>
             </p>
         </div>

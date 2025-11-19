@@ -97,24 +97,13 @@ export async function refuseFriendRequest(urls, userId) {
 
 // lists
 
-export async function getFriendsList(urls) {
+export async function getFriendsList(urls, status = 'accepted') {
     const axiosInstance = createAxiosInstance();
     try {
-        const response = await axiosInstance.get(`${urls.backend}/friends/list/accepted`);
+        const response = await axiosInstance.get(`${urls.backend}/friends/list/${status}`);
         return response.data.datas;
     } catch (error) {
         console.error("Error fetching friend list:", error);
-        throw error;
-    }
-}
-
-export async function getPendingRequests(urls) {
-    const axiosInstance = createAxiosInstance();
-    try {
-        const response = await axiosInstance.get(`${urls.backend}/friends/list/pending`);
-        return response.data.datas;
-    } catch (error) {
-        console.error("Error fetching pending requests:", error);
         throw error;
     }
 }

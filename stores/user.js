@@ -8,6 +8,7 @@ import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
 import { generateRSAKeyPair } from '~/utils/keys/rsa';
 import { bufferToBase64 } from '~/utils/conversion';
 import { useNotificationStore } from './notifications';
+import { removeFriend } from './api/friendApi';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -15,6 +16,11 @@ export const useUserStore = defineStore('user', {
         user: null,
         initialized: false,
         avatar: null,
+        friends: {
+            accepted: [],
+            pending: [],
+            blocked: []
+        },
     }),
 
     getters: {
@@ -40,6 +46,14 @@ export const useUserStore = defineStore('user', {
                 await apiStore.getAvatar();
             }
 
+            const friendStatus = ['accepted', 'pending', 'blocked'];
+            for (const status of friendStatus) {
+                const friendsList = await apiStore.getFriendsList(status);
+                friendsList.forEach(friend => {
+                    this.addFriend(friend, status);
+                });
+            }
+            
             this.initialized = true;
         },
 
@@ -164,6 +178,21 @@ export const useUserStore = defineStore('user', {
             this.clearUser();
             webSocketStore.wsDisconnect();
             navigationStore.goToLogin();
+        },
+
+        /**
+         * Friend management actions
+         */
+
+        addFriend(friend, status = 'accepted') {
+            this.friends[status].push(friend);
+        },
+
+        removeFriend(friendId) {
+            const friendsStatus = ['accepted', 'pending', 'blocked'];
+            friendsStatus.map(status => {
+                this.friends[status] = this.friends[status].filter(user => user.userId !== friendId);
+            });
         }
     }
 });
