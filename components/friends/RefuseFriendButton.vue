@@ -1,5 +1,5 @@
 <template>
-    <button @click="refuse" class="text-green-500 hover:text-green-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
+    <button @click="refuse" class="text-red-500 hover:text-red-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
         <FontAwesomeIcon icon="user-xmark" />
     </button>
 </template>

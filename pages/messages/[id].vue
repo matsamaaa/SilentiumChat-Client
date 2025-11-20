@@ -3,7 +3,8 @@
         <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
             <AvatarIcon :userId="id" :username="recipientUsername" />
             <h1>{{ recipientUsername }}</h1>
-            <FriendsButton />
+            <FriendsButton
+                :username="recipientUsername" />
         </div>
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
@@ -23,8 +24,6 @@
             <MessageInput
                 v-if="!discussionData || discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
                 @send="handleSend"
-                :friendStatus="friendStatus"
-                :friendDoc="friendDoc"
                 class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden"
             />
 
@@ -71,8 +70,6 @@ const privateDiscussionsStore = usePrivateDiscussionsStore();
 const route = useRoute();
 
 const id = route.params.id;
-const friendStatus = ref(null);
-const friendDoc = ref(null);
 
 const handleSend = (data) => {
     webSocketStore.wsSendMessage(id, data.message, data.file)
@@ -117,9 +114,5 @@ onMounted(async () => {
         }
     }
     isLoading.value = false
-
-    const statusDoc = await apiStore.getFriendStatus(id);
-    friendStatus.value = statusDoc.status;
-    friendDoc.value = statusDoc.doc;
 })
 </script>

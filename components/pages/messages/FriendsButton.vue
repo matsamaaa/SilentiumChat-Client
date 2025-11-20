@@ -15,15 +15,18 @@
             <AcceptFriendButton 
                 v-if="user.status === 'accepted' && user.hasAsk" 
                 :user-id="user.userId" />
-            <AskFriendButton 
-                v-if="!user.status || user.status === 'rejected'" 
+            <RemoveFriendButton 
+                v-if="user.status === 'accepted'" 
                 :user-id="user.userId" />
         </div>
+        <AskFriendButton 
+            v-if="!user || user.status === 'rejected'" 
+            :user-id="userId"
+            :username="username" />
     </div>
 </template>
 
 <script setup>
-
 import { useUserStore } from '#imports';
 
 // components
@@ -31,9 +34,18 @@ import CancelFriendButton from '~/components/friends/CancelFriendButton.vue';
 import AcceptFriendButton from '~/components/friends/AcceptFriendButton.vue';
 import RefuseFriendButton from '~/components/friends/RefuseFriendButton.vue';
 import AskFriendButton from '~/components/friends/AskFriendButton.vue';
+import RemoveFriendButton from '~/components/friends/RemoveFriendButton.vue';
+
+const props = defineProps({
+    username: {
+        type: String,
+        required: false
+    }
+});
 
 const route = useRoute();
 const userId = route.params.id;
+const username = ref(props.username);
 
 const userStore = useUserStore();
 const user = computed(() => userStore.getFriendStatus(userId));

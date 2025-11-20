@@ -12,6 +12,11 @@ const props = defineProps({
     userId: {
         type: String,
         required: true
+    },
+    username: {
+        type: String,
+        required: false,
+        default: 'Unknown'
     }
 });
 
@@ -20,6 +25,7 @@ const apiStore = useApiStore();
 
 const ask = async () => {
     await apiStore.sendFriendRequest(props.userId);
-    return userStore.addFriend(props.userId, 'pending', true);
+    const user = userStore.createFriendObject(props.userId, props.username);
+    return userStore.addFriend(user, 'pending', true);
 }
 </script>

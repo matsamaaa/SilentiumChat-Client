@@ -20,7 +20,9 @@ const apiStore = useApiStore();
 
 const accept = async () => {
     await apiStore.acceptFriendRequest(props.userId);
+    const user = userStore.getFriendStatus(props.userId);
     userStore.removeFriend(props.userId);
-    return userStore.addFriend(props.userId)
+    const userObject = userStore.createFriendObject(props.userId, user.username, false);
+    return userStore.addFriend(userObject, 'accepted', false);
 }
 </script>

@@ -28,6 +28,9 @@
                     <AcceptFriendButton 
                         v-if="listType === 'accepted' && user.hasAsk" 
                         :user-id="user.userId" />
+                    <RemoveFriendButton 
+                        v-if="listType === 'accepted'"
+                        :user-id="user.userId" />
                 </div>
             </div>
             <div v-if="users.length < 1">

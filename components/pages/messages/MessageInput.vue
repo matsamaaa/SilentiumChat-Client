@@ -1,5 +1,5 @@
 <template>
-<div class="flex flex-col rounded-t-lg shadow-md">
+    <div class="flex flex-col rounded-t-lg shadow-md">
         <div v-if="file" class="p-2 flex flex-col h-[200px] justify-between items-center w-[150px] max-w-xs bg-gray-800 ml-2 rounded-lg">
             <button 
                 @click="clearFile"
@@ -56,26 +56,15 @@
 import { ref } from 'vue'
 import FilesButton from './FilesButton.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { useApiStore } from '#imports';
+import { useUserStore } from '#imports';
 import { useRoute } from 'vue-router'
-
-const props = defineProps({
-    friendStatus: {
-        type: String,
-        required: true
-    },
-    friendDoc: {
-        type: Object,
-        required: true
-    },
-})
 
 const message = ref('')
 const file = ref(null)
 const preview = ref(null)
 const uploaderRef = ref(null)
 
-const apiStore = useApiStore();
+const userStore = useUserStore();
 const route = useRoute();
 const id = route.params.id;
 const emit = defineEmits(['send'])
@@ -100,9 +89,9 @@ const sendMessage = () => {
     uploaderRef.value.clearPreview()
 }
 
-const isBlocked = computed(() => props.friendStatus === 'blocked')
+const isBlocked = computed(() => (userStore.getFriendStatus(id)).status === 'blocked')
 
 const inputPlaceholder = computed(() => {
-    return isBlocked.value && props.friendDoc ? (props.friendDoc.userId === id ? "You can't send message to this user." : "You have blocked this user.") : "Envoyer un message..."
+    return isBlocked.value ? "You can't send messages to this user." : "Type your message..."
 })
 </script>
