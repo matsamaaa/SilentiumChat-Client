@@ -34,11 +34,11 @@ export const useUserStore = defineStore('user', {
             const user = useCookie('user');
             const apiStore = useApiStore();
 
-            if (token) {
+            if (token.value) {
                 this.token = token;
             }
 
-            if (user) {
+            if (user.value) {
                 this.user = typeof user.value === 'string'
                     ? JSON.parse(user.value)
                     : user.value || null
@@ -46,12 +46,14 @@ export const useUserStore = defineStore('user', {
                 await apiStore.getAvatar();
             }
 
-            const friendStatus = ['accepted', 'pending', 'blocked'];
-            for (const status of friendStatus) {
-                const friendsList = await apiStore.getFriendsList(status);
-                friendsList.forEach(friend => {
-                    this.addFriend(friend, status);
-                });
+            if (user.value) {
+                const friendStatus = ['accepted', 'pending', 'blocked'];
+                for (const status of friendStatus) {
+                    const friendsList = await apiStore.getFriendsList(status);
+                    friendsList.forEach(friend => {
+                        this.addFriend(friend, status);
+                    });
+                }
             }
 
             this.initialized = true;
