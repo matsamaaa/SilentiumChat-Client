@@ -39,11 +39,23 @@ const navigationStore = useNavigationStore()
 const webSocketStore = useWebSocketStore()
 const route = useRoute()
 
-onMounted(() => {
+const checkConnectionAndRoute = (routeName) => {
     if (!userStore.isLoggedIn) {
-        if (route.name !== 'login' && route.name !== 'register') navigationStore.goToLogin();
+        const isRouteWithoutConnection = navigationStore.isRouteWithoutConnection(routeName);
+        if (!isRouteWithoutConnection) {
+            navigationStore.goToLogin();
+        }
+        //if (route.name !== 'login' && route.name !== 'register') navigationStore.goToLogin();
     } else {
         webSocketStore.connect(userStore.user.uniqueId, userStore.token);
     }
+}
+
+onMounted(() => {
+    checkConnectionAndRoute(route.name);
 })
+
+watch(() => route.name, () => {
+    checkConnectionAndRoute(route.name);
+});
 </script>

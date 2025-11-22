@@ -2,7 +2,21 @@ import { defineStore } from 'pinia'
 import { useRouter } from '#imports'
 
 export const useNavigationStore = defineStore('navigation', {
+    state: () => ({
+        routesWithoutConnection: ['login', 'register', '/error', '/password'],
+    }),
     actions: {
+        isRouteWithoutConnection(routeName) {
+            console.log("Checking route without connection for:", routeName);
+            const routesWithoutConnection = this.routesWithoutConnection.map(route => {
+                if(route.startsWith('/')) {
+                    return routeName.includes(route.replaceAll('/', ''));
+                } else {
+                    return routeName === route ? true : false;
+                }
+            });
+            return routesWithoutConnection.includes(true);
+        },
         goToError(error = 404, message = 'Page not found') {
             const router = useRouter();
             router.push({ name: 'error', params: { error, message } });
