@@ -23,6 +23,14 @@
             v-if="!user || user.status === 'rejected'" 
             :user-id="userId"
             :username="username" />
+        <BlockFriendButton 
+            v-if="!user || user.status !== 'blocked'" 
+            :user-id="userId"
+            :username="username" />
+        <UnblockFriendButton 
+            v-if="user && user.status === 'blocked'" 
+            :user-id="userId"
+            :username="username" />
     </div>
 </template>
 
@@ -35,6 +43,8 @@ import AcceptFriendButton from '~/components/friends/AcceptFriendButton.vue';
 import RefuseFriendButton from '~/components/friends/RefuseFriendButton.vue';
 import AskFriendButton from '~/components/friends/AskFriendButton.vue';
 import RemoveFriendButton from '~/components/friends/RemoveFriendButton.vue';
+import BlockFriendButton from '~/components/friends/BlockFriendButton.vue';
+import UnblockFriendButton from '~/components/friends/UnblockFriendButton.vue';
 
 const props = defineProps({
     username: {

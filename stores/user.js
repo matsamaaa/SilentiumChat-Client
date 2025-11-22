@@ -8,7 +8,6 @@ import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
 import { generateRSAKeyPair } from '~/utils/keys/rsa';
 import { bufferToBase64 } from '~/utils/conversion';
 import { useNotificationStore } from './notifications';
-import { removeFriend } from './api/friendApi';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
