@@ -1,6 +1,19 @@
 <template>
-    <button @click="remove" class="text-red-500 hover:text-red-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
+    <button @click="remove" class="relative group text-red-500 hover:text-red-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
         <FontAwesomeIcon icon="user-xmark" />
+        
+        <span class="
+            hidden group-hover:block 
+            absolute top-full left-1/2 
+            transform -translate-x-1/2 mt-2 
+            px-3 py-1 
+            bg-gray-800 text-white text-xs font-semibold 
+            rounded-md whitespace-nowrap 
+            shadow-lg 
+            z-10
+        ">
+            Remove Friend
+        </span>
     </button>
 </template>
 
