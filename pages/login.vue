@@ -7,6 +7,7 @@
 
             <p v-if="error" class="text-red-500">{{ error }}</p>
             <a href="/register" class="text-blue-500">Don't have an account? Register</a>
+            <a href="/password/forgot" class="text-blue-500">Forgot Password?</a>
 
             <button type="submit">Login</button>
         </form>
