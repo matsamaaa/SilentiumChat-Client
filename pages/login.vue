@@ -1,15 +1,53 @@
 <template>
-    <div>
-        <form @submit.prevent="handleLogin" class="flex flex-col justify-center items-center gap-3 h-[93vh]">
-            <h1 class="text-2xl font-bold">Login</h1>
-            <input v-model="email" type="email" placeholder="Email" required />
-            <input v-model="password" type="password" placeholder="Password" required />
+    <div class="flex items-center justify-center h-[93vh] w-full"> 
+        
+        <form @submit.prevent="handleLogin" 
+              class="bg-gray-800/80 backdrop-blur-sm p-8 rounded-xl shadow-2xl w-full max-w-sm 
+                     flex flex-col items-center gap-6 border border-gray-700">
 
-            <p v-if="error" class="text-red-500">{{ error }}</p>
-            <a href="/register" class="text-blue-500">Don't have an account? Register</a>
-            <a href="/password/forgot" class="text-blue-500">Forgot Password?</a>
+            <h1 class="text-3xl font-extrabold text-white mb-2">
+                Login
+            </h1>
+            
+            <input 
+                v-model="email" 
+                type="email" 
+                placeholder="Email" 
+                required 
+                class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white 
+                       focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 placeholder-gray-400"
+            />
+            
+            <input 
+                v-model="password" 
+                type="password" 
+                placeholder="Password" 
+                required 
+                class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white 
+                       focus:ring-indigo-500 focus:border-indigo-500 transition duration-150 placeholder-gray-400"
+            />
 
-            <button type="submit">Login</button>
+            <div v-if="error" class="w-full p-3 bg-red-900/50 text-red-300 rounded-lg text-center font-medium border border-red-600">
+                {{ error }}
+            </div>
+            
+            <div class="flex flex-col w-full text-sm text-center gap-2 mt-2">
+                <router-link to="/register" class="text-indigo-400 hover:text-indigo-300 transition duration-150">
+                    Don't have an account? Register
+                </router-link>
+                
+                <router-link to="/password/forgot" class="text-indigo-400 hover:text-indigo-300 transition duration-150">
+                    Forgot Password?
+                </router-link>
+            </div>
+
+            <button 
+                type="submit"
+                class="w-full py-3 px-4 rounded-lg font-semibold text-white transition duration-200 uppercase tracking-wider bg-indigo-600 hover:bg-indigo-500 mt-4"
+            >
+                Login
+            </button>
+
         </form>
     </div>
 </template>
