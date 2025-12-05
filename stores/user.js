@@ -56,7 +56,6 @@ export const useUserStore = defineStore('user', {
             }
 
             this.initialized = true;
-            console.log("User store initialized");
         },
 
         updateUser(user) {

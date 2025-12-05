@@ -6,7 +6,7 @@ import { getUserPublicKey, getUsername, getUserIdByFullName } from './api/userAp
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList } from './api/friendApi';
-import { sendResetPasswordMail } from './api/mailApi';
+import { sendResetPasswordMail, sendChangePasswordMail } from './api/mailApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -148,7 +148,11 @@ export const useApiStore = defineStore('api', {
          */
 
         async sendResetPasswordMail(email) {
-            return sendResetPasswordMail(email);
+            return sendResetPasswordMail(this.urls, email);
         },
+
+        async sendChangePasswordMail(id, token, currentPassword, passwordConfirmation) {
+            return sendChangePasswordMail(this.urls, id, token, currentPassword, passwordConfirmation);
+        }
     }
 })
