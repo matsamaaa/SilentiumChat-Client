@@ -7,6 +7,7 @@ import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from '.
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList } from './api/friendApi';
 import { sendResetPasswordMail, sendChangePasswordMail, sendChangeEmailMail } from './api/mailApi';
+import { postVerificationChangeMail } from './api/verificationApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -157,6 +158,14 @@ export const useApiStore = defineStore('api', {
 
         async sendChangeEmailMail(id, newEmail, password) {
             return sendChangeEmailMail(this.urls, id, newEmail, password);
+        },
+
+        /**
+         * End of Api functions for the root /verification
+         */
+
+        async postVerificationChangeMail(id ,token) {
+            return postVerificationChangeMail(this.urls, id, token);
         }
     }
 })
