@@ -28,3 +28,20 @@ export async function sendChangePasswordMail(urls, id, token, currentPassword, p
         throw error;
     }
 }
+
+export async function sendChangeEmailMail(urls, id, newEmail, password) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+    try {
+        const response = await axiosInstance.post(`${urls.backend}/mail/email/change`, {
+            id,
+            newEmail,
+            password
+        });
+        if (response.data.success) notif.add("Change email mail sent successfully", "success");
+        return response.data;
+    } catch (error) {
+        console.error("Error sending change email mail:", error);
+        throw error;
+    }
+}

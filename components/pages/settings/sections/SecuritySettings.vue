@@ -7,6 +7,10 @@
         <p class="text-sm text-gray-400">Manage your account's security and privacy settings.</p>
       </div>
 
+      <ChangeEmail />
+
+      <hr class="border-gray-700">
+
       <ChangePasswordForm />
 
       <hr class="border-gray-700">
@@ -25,4 +29,5 @@
 import ChangePasswordForm from '@/components/pages/settings/others/ChangePassword.vue';
 import CopyPrivateKey from '@/components/pages/settings/others/CopyPrivateKey.vue';
 import ImportPrivateKey from '@/components/pages/settings/others/ImportPrivateKey.vue';
+import ChangeEmail from '@/components/pages/settings/others/ChangeEmail.vue';
 </script>
