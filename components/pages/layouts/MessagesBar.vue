@@ -1,5 +1,5 @@
 <template>
-    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg">
+    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
         <br />
         <UserInput 
             @search="handleSearchUser"
@@ -13,23 +13,6 @@
             :discussion="discussion"
         />
     </div>
-    <!--<div class="flex flex-row gap-0">
-        <div class="flex flex-col gap-2 p-4 bg-gray-900 h-full w-1/4 overflow-y-auto">
-            <DiscussionWaitingButton :waitingDiscussions="discussions.filter(d => d.isWaitingForResponse == null)" />
-            <DiscussionItem 
-                v-for="discussion in messagesList" 
-                :key="discussion._id" 
-                :discussion="discussion"
-            />
-        </div>
-        <div class="w-full justify-center items-center flex flex-col p-4">
-            <UserInput 
-                @search="handleSearchUser"
-                @error="error = $event"
-            />
-            <p v-if="error" class="text-red-500">{{ error }}</p>
-        </div>
-    </div>-->
 </template>
 
 <script setup>
