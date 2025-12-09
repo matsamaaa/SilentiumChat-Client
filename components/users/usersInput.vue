@@ -1,5 +1,5 @@
 <template>
-    <div class="flex justify-center items-center w-fit">
+    <div class="flex justify-center items-center mx-2">
         <!-- Input de recherche -->
         <input
             v-model="query"
@@ -8,15 +8,6 @@
             placeholder="username#0001"
             class="flex-1 px-3 py-2 rounded-md bg-gray-800 text-white focus:outline-none"
         />
-
-        <!-- Bouton Rechercher -->
-        <button
-            type="button"
-            @click="searchUser"
-            class="ml-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-        >
-            Rechercher
-        </button>
     </div>
 </template>
 

@@ -22,6 +22,6 @@ import { useNavigationStore } from '@/stores/navigation';
 const userStore = useUserStore();
 const navigationStore = useNavigationStore();
 
-const username = ref(userStore.user.username || 'unknown');
-const tag = ref(userStore.user.tag.toString().padStart(4, '0') || '');
+const username = computed(() => userStore.user.username || 'unknown');
+const tag = computed(() => userStore.user.tag.toString().padStart(4, '0') || '');
 </script>

@@ -3,7 +3,7 @@
         <button
             @click="navigationStore.goToHome"
             class="bg-gray-800 flex flex-col justify-center items-start p-4 rounded-lg">
-            <FontAwesomeIcon icon="fa-solid fa-message" class="text-indigo-600 hover:text-indigo-500 text-2xl duration-150"/>
+            <FontAwesomeIcon icon="fa-solid fa-message" class="text-indigo-600 hover:text-indigo-500 text-2xl duration-200"/>
         </button>
     </div>
 </template>
