@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-700 rounded-br-lg">
+    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg">
         <br />
         <UserInput 
             @search="handleSearchUser"

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-[18vw] h-[6vh] bg-gray-900 absolute bottom-0 left-0 border-t border-r rounded-r-lg border-gray-700 flex items-center justify-between p-2 flex-row">
+    <div class="w-[18vw] h-[6vh] bg-gray-900 absolute bottom-0 left-0 border-t border-r rounded-r-lg border-gray-800 flex items-center justify-between p-2 flex-row">
         <div class="flex flex-row justify-start items-center">
             <AvatarIcon />
             <div class="flex flex-col">
