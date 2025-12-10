@@ -7,10 +7,16 @@
                 <p class="pl-4 text-gray-500 text-sm">#{{ tag }}</p>
             </div>
         </div>
-        <FontAwesomeIcon
-            @click="navigationStore.goToSettings"
-            icon="fa-solid fa-gear" 
-            class="pl-4 text-gray-500 text-sm cursor-pointer" />
+        <div class="flex flex-row">
+            <FontAwesomeIcon
+                @click="navigationStore.goToSettings"
+                icon="fa-solid fa-gear" 
+                class="pl-4 text-gray-500 text-sm cursor-pointer" />
+            <FontAwesomeIcon
+                @click="userStore.logout"
+                icon="fa-solid fa-arrow-right-from-bracket" 
+                class="pl-4 text-red-500 text-sm cursor-pointer" />
+        </div>
     </div>
 </template>
 
@@ -18,6 +24,7 @@
 import AvatarIcon from '~/components/users/AvatarIcon.vue';
 import { useUserStore } from '@/stores/user';
 import { useNavigationStore } from '@/stores/navigation';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const userStore = useUserStore();
 const navigationStore = useNavigationStore();

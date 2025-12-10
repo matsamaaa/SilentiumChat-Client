@@ -105,6 +105,12 @@ export const useUserStore = defineStore('user', {
         clearUser() {
             this.user = null
             this.token = null
+            this.avatar = null
+            this.friends = {
+                accepted: [],
+                pending: [],
+                blocked: []
+            };
             useCookie('user').value = null
             useCookie('token').value = null
         },
