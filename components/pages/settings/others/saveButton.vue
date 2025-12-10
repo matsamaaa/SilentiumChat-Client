@@ -1,5 +1,5 @@
 <template>
-    <div class="mt-8 pt-4 border-t border-gray-700 flex flex-row justify-end items-center space-x-4">
+    <div class="mt-8 pt-4 flex flex-row justify-end items-center space-x-4">
         <p v-if="updates" class="text-red-400 font-medium italic">You have unsaved changes.</p>
         <button
             @click="$emit('saved')"

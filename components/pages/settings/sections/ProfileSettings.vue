@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="bg-gray-800 p-6 rounded-xl shadow-xl space-y-8">
+        <section class="bg-gray-800 p-6 h-full rounded-xl shadow-xl space-y-8">
         
             <div>
                 <h2 class="text-xl font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Profile Picture</h2>

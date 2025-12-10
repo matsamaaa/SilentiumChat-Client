@@ -1,6 +1,5 @@
 <template>
-    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
-        <br />
+    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0 pt-5">
         <UserInput 
             @search="handleSearchUser"
             @error="notificationStore.add($event, 'error')"

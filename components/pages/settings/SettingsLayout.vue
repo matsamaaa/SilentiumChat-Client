@@ -1,16 +1,14 @@
 <template>
-  <div class="flex w-screen pt-16 bg-gray-900 text-gray-100 h-[93vh]"> 
-    
-    <SettingsSidebar 
-      :activeTab="activeTab" 
-      @change-tab="activeTab = $event" 
-    />
-    
-    <main class="flex-1 overflow-y-auto p-8">
-      
+  <div class="flex flex-row">
+    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
+      <SettingsSidebar 
+        :activeTab="activeTab" 
+        @change-tab="activeTab = $event" 
+      />
+    </div>
+    <div class="flex flex-col p-5 w-full h-[100vh] gap-4"> 
       <SettingsContent :currentTab="activeTab" />
-      
-    </main>
+    </div>
   </div>
 </template>
 

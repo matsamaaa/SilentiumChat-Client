@@ -1,8 +1,10 @@
 <template>
-  <div>
-    <h1 class="text-3xl font-extrabold text-gray-100 mb-8">
+  <div class="h-full overflow-y-scroll">
+    <h1 class="text-3xl font-extrabold text-gray-100">
       {{ getTitle(currentTab) }}
     </h1>
+
+    <br />
 
     <ProfileSettings v-if="currentTab === 'profile'" />
     <SecuritySettings v-if="currentTab === 'security'" />

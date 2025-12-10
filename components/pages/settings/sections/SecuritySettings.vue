@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-full">
     <section class="bg-gray-800 p-6 rounded-xl shadow-xl space-y-8">
       
       <div>
