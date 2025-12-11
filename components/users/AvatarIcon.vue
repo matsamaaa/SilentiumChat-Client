@@ -2,7 +2,7 @@
   <div
     :class="[
       'flex items-center justify-center rounded-full bg-indigo-200 overflow-hidden',
-      props.userId ? 'w-16 h-16' : 'w-10 h-10'
+      isBanner ? (props.userId ? 'w-16 h-16 -translate-y-8' : 'w-10 h-10 -translate-y-8') : (props.userId ? 'w-16 h-16' : 'w-10 h-10'),
     ]"
   >
     <img
@@ -39,6 +39,11 @@ const props = defineProps({
   username: {
     type: String,
     default: ''
+  },
+  isBanner: {
+    type: Boolean,
+    default: false,
+    required: false
   }
 })
 

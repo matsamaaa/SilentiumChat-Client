@@ -1,0 +1,45 @@
+<template>
+    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
+        <div class="w-full h-[13vh] bg-indigo-600">
+            <FriendsButton
+                class="mt-1 mr-1"
+                :username="username" />
+        </div>
+        
+        <AvatarIcon 
+            :userId="id" :username="username" :isBanner="true" 
+            class="ml-3"   
+            />
+        <h1 class="ml-3 text-2xl -translate-y-4 text-white">{{ username }}</h1>
+        <p class="ml-3 text-sm -translate-y-4 text-gray-500">{{ username }}#{{ tag }}</p>
+        <br />
+        <p class="ml-3 text-sm text-white font-bold">Member Since</p>
+        <p class="ml-3 text-sm text-gray-500">{{ formatDate(creationDate) }}</p>
+    </div>
+</template>
+
+<script setup>
+import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
+import AvatarIcon from '~/components/users/AvatarIcon.vue'
+
+import { defineProps } from 'vue';
+
+const props = defineProps({
+    id: {
+        type: String,
+        required: true
+    },
+    username: {
+        type: String,
+        required: true
+    },
+    tag: {
+        type: String,
+        required: true
+    },
+    creationDate: {
+        type: String,
+        required: true
+    }
+});
+</script>

@@ -24,6 +24,28 @@ export async function getUsername(urls, userId) {
     }
 }
 
+export async function getUserTag(urls, userId) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/user/${userId}/tag`);
+        return response.data.datas.tag;
+    } catch (error) {
+        console.error("Error fetching username:", error);
+        throw error;
+    }
+}
+
+export async function getUserCreationDate(urls, userId) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/user/${userId}/creationdate`);
+        return response.data.datas.creationDate;
+    } catch (error) {
+        console.error("Error fetching username:", error);
+        throw error;
+    }
+}
+
 export async function getUserIdByFullName(urls, username, code) {
     const axiosInstance = createAxiosInstance();
     try {

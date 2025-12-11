@@ -1,11 +1,6 @@
 <template>
     <div class="flex flex-row w-screen justify-between h-[93vh]">
-        <div class="flex flex-col justify-center items-center w-[15vw] border-r-2 border-gray-300 p-5">
-            <AvatarIcon :userId="id" :username="recipientUsername" />
-            <h1>{{ recipientUsername }}</h1>
-            <FriendsButton
-                :username="recipientUsername" />
-        </div>
+        <UserBar :id="id" :username="recipientUsername" :tag="recipientTag" :creationDate="recipientCreationDate" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <p>Chargement de la discussion...</p>
@@ -56,10 +51,12 @@ import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
-import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
-import AvatarIcon from '~/components/users/AvatarIcon.vue'
+import UserBar from '~/components/pages/messages/UserBar.vue'
 
 const recipientUsername = ref('');
+const recipientTag = ref('');
+const recipientCreationDate = ref('');
+
 const discussionData = ref(null);
 const isLoading = ref(true);
 
@@ -96,7 +93,10 @@ const refreshDiscussion = async () => {
 
 onMounted(async () => {
     isLoading.value = true
-    recipientUsername.value = await apiStore.getUsername(id)
+    recipientUsername.value = await apiStore.getUsername(id);
+    recipientTag.value = await apiStore.getUserTag(id);
+    recipientTag.value = recipientTag.value.toString().padStart(4, '0');
+    recipientCreationDate.value = await apiStore.getUserCreationDate(id);
 
     privateDiscussionsStore.removeDiscussion(id, userStore.user.uniqueId)
 

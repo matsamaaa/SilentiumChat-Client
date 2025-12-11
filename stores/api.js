@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 // api imports
 import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword } from './api/meApi'
-import { getUserPublicKey, getUsername, getUserIdByFullName } from './api/userApi'
+import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate } from './api/userApi'
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList } from './api/friendApi';
@@ -30,6 +30,14 @@ export const useApiStore = defineStore('api', {
 
         async getUsername(userId) {
             return getUsername(this.urls, userId);
+        },
+
+        async getUserTag(userId) {
+            return getUserTag(this.urls, userId);
+        },
+
+        async getUserCreationDate(userId) {
+            return getUserCreationDate(this.urls, userId);
         },
 
         async getUserIdByFullName(username, code) {

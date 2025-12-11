@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex flex-row items-center justify-end">
         <div v-if="user" class="flex space-x-2">
             <div v-if="user.status === 'pending'">
                 <CancelFriendButton 
