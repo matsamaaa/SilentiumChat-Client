@@ -29,7 +29,7 @@
                 
                     <div class="flex flex-col space-y-2">
                         <AvatarUpload @avatar-selected="handleAvatar" />
-                        <button @click="deleteAvatar" class="px-4 py-2 bg-gray-700 text-red-400 border border-red-600 rounded-lg hover:bg-gray-600 transition duration-150">
+                        <button @click="deleteAvatar" class="px-4 py-2 bg-gray-800 text-red-500 border border-red-500 rounded-lg hover:bg-gray-700 transition duration-200">
                             Delete
                         </button>
                     </div>

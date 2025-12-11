@@ -10,7 +10,7 @@
 
             <img v-if="preview" :src="preview" alt="Aperçu" class="w-[130px] h-[130px] rounded-lg shadow bg-cover" />
             <FontAwesomeIcon v-else :icon="['fas', 'file']" class="text-5xl text-gray-400" />
-            <p class="truncate max-w-[130px] ml-2">{{ file.name }}</p>
+            <p class="truncate max-w-[130px] ml-2 text-white">{{ file.name }}</p>
         </div>
 
         <div class="flex items-center p-3 gap-3 h-[7vh] bg-gray-900">
@@ -27,9 +27,7 @@
                 :placeholder="inputPlaceholder" class="flex-1 transition duration-150 ease-in-out"
                 :disabled="isBlocked" 
                 :class="{
-                    // 2. Custom style when blocked: darker background, disabled cursor, red text
                     'bg-gray-700 text-gray-500 placeholder-red-400 cursor-not-allowed': isBlocked, 
-                    // Default style when active:
                     'bg-gray-800 text-white': !isBlocked
                 }"
             />
@@ -39,9 +37,7 @@
                 @click="sendMessage"
                 :disabled="isBlocked"
                 :class="{
-                    // Blocked style: darker background, less opacity, disabled cursor
                     'bg-red-900 text-gray-400 opacity-60 cursor-not-allowed': isBlocked,
-                    // Default style (assuming a blue/primary color for active)
                     'bg-blue-600 hover:bg-blue-700 text-white': !isBlocked 
                 }"
                 class="px-4 py-2 rounded-lg font-semibold transition duration-150 ease-in-out"
@@ -89,7 +85,8 @@ const sendMessage = () => {
     uploaderRef.value.clearPreview()
 }
 
-const isBlocked = computed(() => (userStore.getFriendStatus(id)).status === 'blocked')
+const friendStatus = userStore.getFriendStatus(id);
+const isBlocked = computed(() => friendStatus?.status === 'blocked')
 
 const inputPlaceholder = computed(() => {
     return isBlocked.value ? "You can't send messages to this user." : "Type your message..."

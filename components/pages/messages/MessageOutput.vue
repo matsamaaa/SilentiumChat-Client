@@ -6,7 +6,7 @@
         ]"
     >
         <!-- Message text -->
-        <p class="whitespace-pre-wrap text-sm" :class="{'text-right': isOwnMessage}">
+        <p class="whitespace-pre-wrap text-sm text-white" :class="{'text-right': isOwnMessage}">
             {{ isOwnMessage ? msg.encryptedMessageBySender : msg.encryptedMessage }}
         </p>
 
@@ -59,7 +59,7 @@
                 <DownloadIcon :url="selectedImage.url" :filename="selectedImage.alt" />
 
                 <!-- Bouton close -->
-                <button @click="selectedImage = null" class="hover:text-red-400 transition">
+                <button @click="selectedImage = null" class="hover:text-red-500 transition">
                     <FontAwesomeIcon :icon="['fas', 'xmark']" />
                 </button>
             </div>

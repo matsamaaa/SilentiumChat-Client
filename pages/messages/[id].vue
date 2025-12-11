@@ -1,15 +1,15 @@
 <template>
-    <div class="flex flex-row w-screen justify-between h-[93vh]">
+    <div class="flex flex-row w-full justify-between h-full">
         <UserBar :id="id" :username="recipientUsername" :tag="recipientTag" :creationDate="recipientCreationDate" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <p>Chargement de la discussion...</p>
         </div>
 
-            <div
-                v-else
-                class="flex flex-col static overflow-y-scroll h-[86vh] flex-1"
-            >
+        <div
+            v-else
+            class="flex flex-col static overflow-y-scroll h-full w-full mx-1"
+        >
             <MessageOutput
                 v-for="(msg, index) in filteredDiscussions"
                 :key="index"
@@ -19,21 +19,21 @@
             <MessageInput
                 v-if="!discussionData || discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
                 @send="handleSend"
-                class="absolute bottom-0 right-0 w-[84.5vw] overflow-hidden"
+                class="absolute bottom-0 right-0 w-[82vw] overflow-hidden"
             />
 
             <div
                 v-if="filteredDiscussions?.[0]?.from != userStore.user.uniqueId && discussionData?.isWaitingForResponse === null"
-                class="flex flex-row justify-center gap-3 h-full items-end"
+                class="flex flex-row justify-center gap-3 h-full items-end p-3"
             >
                 <StatusDiscussion
                     :user="id"
-                    status="accepted"
+                    status="refused"
                     @updated="refreshDiscussion"
                 />
                 <StatusDiscussion
                     :user="id"
-                    status="refused"
+                    status="accepted"
                     @updated="refreshDiscussion"
                 />
             </div>
@@ -113,6 +113,7 @@ onMounted(async () => {
             console.error('Error decrypting messages:', error)
         }
     }
+    console.log('messagesData', messagesData);
     isLoading.value = false
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="w-full">
         <button 
-            class="w-full flex flex-row justify-center items-center gap-1 px-3 py-2 rounded-md text-red-500 focus:outline-none bg-gray-800"
+            class="w-full flex flex-row justify-center items-center gap-1 px-3 py-2 rounded-md text-red-500 focus:outline-none bg-gray-800 hover:bg-gray-700 duration-200"
             @click="userStore.logout"
         >
             Logout

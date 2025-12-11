@@ -2,10 +2,10 @@
     <button 
         @click="updateDiscussion(user, status)"
         :class="{
-            'bg-blue-600 hover:bg-blue-400 text-white font-bold py-1 px-2 rounded': status === 'accepted',
-            'bg-red-600 hover:bg-red-400 text-white font-bold py-1 px-2 rounded': status === 'refused'
+            'bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-1 px-2 rounded': status === 'accepted',
+            'bg-gray-500 hover:bg-gray-400 text-white font-bold py-1 px-2 rounded': status === 'refused'
         }"
-        class="w-[200px] py-3 max-h-fit"
+        class="w-[200px] py-3 max-h-fit duration-200"
     >
         {{ status === 'accepted' ? 'Accept' : 'Decline' }} Discussion
     </button>

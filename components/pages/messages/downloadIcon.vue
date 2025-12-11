@@ -2,7 +2,7 @@
     <a 
         :href="url" 
         :download="filename" 
-        class="text-blue-600 hover:text-blue-800 transition"
+        class="text-indigo-600 hover:text-indigo-500 transition"
     >
         <FontAwesomeIcon :icon="['fas', 'download']" />
     </a>
