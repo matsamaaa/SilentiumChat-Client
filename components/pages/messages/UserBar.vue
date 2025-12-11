@@ -22,8 +22,6 @@
 import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
 
-import { defineProps } from 'vue';
-
 const props = defineProps({
     id: {
         type: String,
