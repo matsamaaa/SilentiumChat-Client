@@ -12,7 +12,7 @@
                 :class="{
                 'bg-red-600': notif.type === 'error',
                 'bg-green-600': notif.type === 'success',
-                'bg-blue-600': notif.type === 'info',
+                'bg-indigo-600': notif.type === 'info',
                 }"
                 @click="notificationStore.remove(notif.id)"
             >

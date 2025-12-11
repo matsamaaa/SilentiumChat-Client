@@ -3,13 +3,13 @@
         <div v-if="file" class="p-2 flex flex-col h-[200px] justify-between items-center w-[150px] max-w-xs bg-gray-800 ml-2 rounded-lg">
             <button 
                 @click="clearFile"
-                class="top-1 right-1 text-gray-400 hover:text-red-500"
+                class="top-1 right-1 text-gray-500 hover:text-red-500"
             >
                 <FontAwesomeIcon :icon="['fas', 'xmark']" />
             </button>
 
             <img v-if="preview" :src="preview" alt="Aperçu" class="w-[130px] h-[130px] rounded-lg shadow bg-cover" />
-            <FontAwesomeIcon v-else :icon="['fas', 'file']" class="text-5xl text-gray-400" />
+            <FontAwesomeIcon v-else :icon="['fas', 'file']" class="text-5xl text-gray-500" />
             <p class="truncate max-w-[130px] ml-2 text-white">{{ file.name }}</p>
         </div>
 
@@ -37,8 +37,8 @@
                 @click="sendMessage"
                 :disabled="isBlocked"
                 :class="{
-                    'bg-red-900 text-gray-400 opacity-60 cursor-not-allowed': isBlocked,
-                    'bg-blue-600 hover:bg-blue-700 text-white': !isBlocked 
+                    'bg-red-900 text-gray-500 opacity-60 cursor-not-allowed': isBlocked,
+                    'bg-indigo-600 hover:bg-indigo-500 text-white': !isBlocked 
                 }"
                 class="px-4 py-2 rounded-lg font-semibold transition duration-150 ease-in-out"
             >

@@ -5,7 +5,7 @@
             <div class="flex items-center justify-between border-b border-gray-700 pb-3">
                 <h3 class="text-xl font-bold text-gray-100">Warn</h3>
                 
-                <button @click="close" class="text-gray-400 hover:text-white transition duration-150 p-1 rounded-full hover:bg-gray-700">
+                <button @click="close" class="text-gray-500 hover:text-gray-400 transition duration-150 p-1 rounded-full">
                     <FontAwesomeIcon icon="fa-xmark" class="text-xl" />
                 </button>
             </div>

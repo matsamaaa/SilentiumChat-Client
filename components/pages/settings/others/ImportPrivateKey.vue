@@ -2,7 +2,7 @@
     <div class="space-y-4">
         <h3 class="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">Import Private Key</h3>
         
-        <p class="text-sm text-gray-400">Paste your private key below to import and use it for message decryption.</p>
+        <p class="text-sm text-gray-500">Paste your private key below to import and use it for message decryption.</p>
 
         <form @submit.prevent="handleImport" class="space-y-4">
             <input 

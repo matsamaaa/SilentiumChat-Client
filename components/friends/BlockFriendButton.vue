@@ -1,5 +1,5 @@
 <template>
-    <button @click="block" class="relative group text-gray-500 hover:text-gray-700 px-3 p-2 rounded-full hover:bg-green-50 transition">
+    <button @click="block" class="relative group text-gray-500 hover:text-gray-400 px-3 p-2 rounded-full hover:bg-green-50 transition">
         <FontAwesomeIcon icon="user-lock" />
         
         <span class="

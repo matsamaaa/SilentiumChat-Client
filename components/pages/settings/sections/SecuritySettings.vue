@@ -4,7 +4,7 @@
       
       <div>
         <h2 class="text-xl font-semibold text-gray-100 mb-4 border-b border-gray-700 pb-2">Security Settings</h2>
-        <p class="text-sm text-gray-400">Manage your account's security and privacy settings.</p>
+        <p class="text-sm text-gray-500">Manage your account's security and privacy settings.</p>
       </div>
 
       <ChangeEmail />

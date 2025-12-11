@@ -2,7 +2,7 @@
     <div 
         :class="[ 
         'flex flex-col p-2 my-2 max-w-md break-words',
-        isOwnMessage ? 'self-end bg-blue-500 rounded-l-lg rounded-br-lg' : 'self-start bg-gray-500 rounded-r-lg rounded-bl-lg'
+        isOwnMessage ? 'self-end bg-indigo-600 rounded-l-lg rounded-br-lg' : 'self-start bg-gray-500 rounded-r-lg rounded-bl-lg'
         ]"
     >
         <!-- Message text -->

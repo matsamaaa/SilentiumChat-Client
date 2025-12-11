@@ -3,7 +3,7 @@
         <!-- Bouton personnalisé -->
         <label
             for="file-upload"
-            class="cursor-pointer p-3 bg-blue-600 text-white rounded-full shadow hover:bg-blue-700 transition"
+            class="cursor-pointer p-3 bg-indigo-600 text-white rounded-full shadow hover:bg-indigo-500 transition"
         >
             <FontAwesomeIcon :icon="['fas', 'plus']" />
         </label>

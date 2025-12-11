@@ -27,7 +27,7 @@
                     required 
                     minlength="8"
                     class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white 
-                           focus:ring-blue-500 focus:border-blue-500 transition duration-150 placeholder-gray-400"
+                    focus:ring-indigo-600 focus:border-indigo-600 transition duration-150 placeholder-gray-400"
                 />
 
                 <input 
@@ -37,7 +37,7 @@
                     required 
                     minlength="8"
                     class="w-full px-4 py-3 border border-gray-600 rounded-lg bg-gray-700 text-white 
-                           focus:ring-blue-500 focus:border-blue-500 transition duration-150 placeholder-gray-400"
+                           focus:ring-indigo-600 focus:border-indigo-500 transition duration-150 placeholder-gray-400"
                 />
 
                 <p v-if="!passwordsMatch && confirmPassword.split('').length > 0" class="text-sm text-red-400">

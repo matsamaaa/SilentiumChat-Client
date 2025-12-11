@@ -44,16 +44,16 @@
                 <div class="space-y-4">
                     <label for="username" class="block text-sm font-medium text-gray-300">New Username and Tag</label>
 
-                    <div class="flex items-center w-full sm:w-96 border border-gray-600 bg-gray-900 rounded-md shadow-sm focus-within:ring-indigo-500 focus-within:border-indigo-500 focus-within:ring-1">
+                    <div class="flex items-center w-full sm:w-96 border border-gray-600 bg-gray-900 rounded-md shadow-sm focus-within:border-indigo-600 focus-within:ring-1">
                         
                         <input 
                             type="text" 
                             id="username" 
                             v-model="username"
                             placeholder="Entrez votre nouveau nom d'utilisateur"
-                            class="block flex-1 px-3 py-2 bg-gray-900 text-white focus:outline-none sm:text-sm rounded-l-md rounded-r-none"
+                            class="block flex-1 px-3 py-2 bg-gray-900 text-white focus:outline-none sm:text-sm rounded-l-md rounded-r-none focus:ring-0"
                         >
-                        <span class="text-gray-400 px-2">#</span>
+                        <span class="text-gray-500 px-2">#</span>
 
                         <input 
                             v-model="tag" 
@@ -65,7 +65,7 @@
                             class="w-16 px-2 py-2 text-center bg-gray-700 text-gray-300 font-mono focus:outline-none sm:text-sm rounded-l-none rounded-r-md"
                         />
                     </div>
-                    <p class="text-xs text-gray-400">
+                    <p class="text-xs text-gray-500">
                         Your username is visible to all other users. The Tag is a unique four-digit identifier.
                     </p>
                 </div>

@@ -2,7 +2,7 @@
     <div class="space-y-6">
         <h3 class="text-xl font-semibold text-gray-100 border-b border-gray-700 pb-2">Private Key</h3>
         
-        <p class="text-gray-400 text-sm">This key is used to decrypt your messages. Keep it safe!</p>
+        <p class="text-gray-500 text-sm">This key is used to decrypt your messages. Keep it safe!</p>
 
         <div v-if="isValidPassword" class="p-4 bg-gray-900 border border-green-600 rounded-lg shadow-md">
             <p class="text-sm font-medium text-green-400 mb-2">Your private key is successfully revealed:</p>
