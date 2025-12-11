@@ -2,13 +2,13 @@
     <div 
         v-if="userStore.user"
         @click="goToMessaging"
-        class="flex flex-col items-start justify-between mx-2 py-2 pl-2 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors duration-200"
+        class="flex flex-col items-start justify-between mx-2 py-2 pl-2 pr-2 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors duration-200 overflow-hidden"
     >
-        <p class="font-semibold text-white">{{ discussion.encryptedMessages[0]?.username || 'Unknow' }}</p>
-        <p class="text-gray-400 text-sm truncate max-w-xs">
+        <p class="font-semibold text-white truncate w-full">{{ discussion.encryptedMessages[0]?.username || 'Unknow' }}</p>
+        <p class="text-gray-400 text-sm truncate w-full">
             {{ lastMessage ? lastMessage : 'File' }}
         </p>
-        <p class="text-gray-500 text-xs">{{ timestamp }}</p>
+        <p class="text-gray-500 text-xs truncate w-full">{{ timestamp }}</p>
     </div>
 </template>
 
