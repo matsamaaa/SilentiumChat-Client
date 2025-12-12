@@ -3,7 +3,7 @@
         <UserBar :id="id" :username="recipientUsername" :tag="recipientTag" :creationDate="recipientCreationDate" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
-            <p>Chargement de la discussion...</p>
+            <Loading />
         </div>
 
         <div
@@ -52,6 +52,7 @@ import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
 import UserBar from '~/components/pages/messages/UserBar.vue'
+import Loading from '~/components/loading.vue'
 
 const recipientUsername = ref('');
 const recipientTag = ref('');

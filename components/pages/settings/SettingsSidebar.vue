@@ -4,10 +4,10 @@
       <button 
         v-for="tab in tabs"
         :key="tab.id"
-        class="w-full flex px-3 py-2 rounded-md text-white focus:outline-none"
+        class="w-full flex px-3 py-2 rounded-md text-white focus:outline-none duration-200"
         :class="{
-          'bg-indigo-600': props.activeTab === tab.id, /* Si ACTIF */
-          'bg-gray-800': props.activeTab !== tab.id              /* Si INACTIF */
+          'bg-indigo-600 hover:bg-indigo-500': props.activeTab === tab.id, /* Si ACTIF */
+          'bg-gray-800 hover:bg-gray-700': props.activeTab !== tab.id              /* Si INACTIF */
         }"
         @click="$emit('changeTab', tab.id)"
       >

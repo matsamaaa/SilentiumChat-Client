@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div v-if="!userStore.initialized" class="flex-1 flex items-center justify-center">
-            <span>Loading...</span>
+        <div v-if="!userStore.initialized" class="flex-1 flex items-center justify-center h-screen w-full bg-gray-900">
+            <Loading />
         </div>
         <template v-else>
             <div class="flex flex-row overflow-y-auto overflow-x-hidden h-[100vh] w-[100vw]" >
@@ -26,6 +26,7 @@ import { useRoute } from 'vue-router'
 import Notification from '~/components/popups/Notifications.vue'
 import ServersBar from '~/components/pages/layouts/ServersBar.vue'
 import ProfilePlate from '~/components/pages/layouts/ProfilePlate.vue'
+import Loading from '~/components/loading.vue'
 
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()
