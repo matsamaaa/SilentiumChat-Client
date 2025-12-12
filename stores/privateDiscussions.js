@@ -2,9 +2,35 @@ import { decryptMessage } from "~/utils/messages";
 
 export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
     state: () => ({
-        discussions: []
+        discussions: [
+
+        ]
     }),
     actions: {
+        async initialize() {
+            const apiStore = useApiStore();
+            
+            const discussions = await apiStore.getLastMessages();
+            discussions.map(async discussion => {
+                const sender = discussion.users[0];
+                const receiver = discussion.users[1];
+
+                // clean discussions
+                this.removeDiscussion(receiver, sender);
+                this.addDiscussion(sender, receiver);
+
+                // get usernames (à mettre dans le backend directement)
+                const username = discussion.encryptedMessages[0].from === userStore.user.uniqueId
+                    ? await apiStore.getUsername(discussion.encryptedMessages[0].to)
+                    : await apiStore.getUsername(discussion.encryptedMessages[0].from);
+
+                // add messages
+                this.addMessageToDiscussion({
+                    ...discussion.encryptedMessages[0],
+                    username: username
+                })
+            });
+        },
         getDiscussion(from, to) {
             const discussion = this.discussions.find(d =>
                 d.users.includes(from) && d.users.includes(to)
