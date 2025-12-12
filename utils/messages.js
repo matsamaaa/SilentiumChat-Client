@@ -32,7 +32,7 @@ const decryptMessage = async (message) => {
     const userStore = useUserStore();
     const privateKeyString = await userStore.getPrivateKey();
     if(!privateKeyString) {
-        throw new Error("Error with private key");
+        return null;
     }
 
     // convert private key base64 to buffer
