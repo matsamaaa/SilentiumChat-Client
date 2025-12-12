@@ -52,7 +52,7 @@ import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
 import UserBar from '~/components/pages/messages/UserBar.vue'
-import Loading from '~/components/loading.vue'
+import Loading from '~/components/Loading.vue'
 
 const recipientUsername = ref('');
 const recipientTag = ref('');

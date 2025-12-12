@@ -26,7 +26,7 @@ import { useRoute } from 'vue-router'
 import Notification from '~/components/popups/Notifications.vue'
 import ServersBar from '~/components/pages/layouts/ServersBar.vue'
 import ProfilePlate from '~/components/pages/layouts/ProfilePlate.vue'
-import Loading from '~/components/loading.vue'
+import Loading from '~/components/Loading.vue'
 
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()
