@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row w-full justify-between h-full">
-        <UserBar :id="id" :username="recipientUsername" :tag="recipientTag" :creationDate="recipientCreationDate" />
+        <MessagesBar />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <Loading />
@@ -8,18 +8,20 @@
 
         <div
             v-else
-            class="flex flex-col static overflow-y-scroll h-full w-full mx-1"
+            class="flex flex-col justify-between static overflow-y-scroll h-full w-full mx-1"
         >
-            <MessageOutput
-                v-for="(msg, index) in filteredDiscussions"
-                :key="index"
-                :msg="msg"
-            />
+            <div class="flex flex-col justify-start">
+                <MessageOutput
+                    v-for="(msg, index) in filteredDiscussions"
+                    :key="index"
+                    :msg="msg"
+                />
+            </div>
 
             <MessageInput
                 v-if="!discussionData || discussionData?.isWaitingForResponse === true || filteredDiscussions?.[0]?.from === userStore.user.uniqueId"
                 @send="handleSend"
-                class="absolute bottom-0 right-0 w-[82vw] overflow-hidden"
+                class="w-full overflow-hidden"
             />
 
             <div
@@ -38,6 +40,7 @@
                 />
             </div>
         </div>
+        <UserBar :id="id" :username="recipientUsername" :tag="recipientTag" :creationDate="recipientCreationDate" />
     </div>
 </template>
 
@@ -53,6 +56,7 @@ import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useRoute } from 'vue-router'
 import UserBar from '~/components/pages/messages/UserBar.vue'
 import Loading from '~/components/Loading.vue'
+import MessagesBar from '~/components/pages/layouts/MessagesBar.vue'
 
 const recipientUsername = ref('');
 const recipientTag = ref('');
