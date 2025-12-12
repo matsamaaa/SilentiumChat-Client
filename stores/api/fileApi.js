@@ -36,7 +36,6 @@ export async function postFile(urls, fileData) {
                 onUploadProgress: (progressEvent) => {
                     const { loaded, total } = progressEvent;
                     const percent = Math.round((loaded * 100) / total);
-                    console.log(`File upload progress: ${percent}%`);
                 }
             }
         );

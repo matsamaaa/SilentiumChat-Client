@@ -7,7 +7,6 @@ export const useNavigationStore = defineStore('navigation', {
     }),
     actions: {
         isRouteWithoutConnection(routeName) {
-            console.log("Checking route without connection for:", routeName);
             const routesWithoutConnection = this.routesWithoutConnection.map(route => {
                 if(route.startsWith('/')) {
                     return routeName.includes(route.replaceAll('/', ''));

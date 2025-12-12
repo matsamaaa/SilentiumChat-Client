@@ -25,7 +25,6 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             });
         },
         async loadMessagesPage(to, page) {
-            console.log("Loading messages page", page, "for discussion with", to);
             const apiStore = useApiStore();
             const messages = await apiStore.getPrivateDiscussion(to, page);
 
