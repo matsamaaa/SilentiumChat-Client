@@ -82,8 +82,8 @@ export const useApiStore = defineStore('api', {
          * Api functions for the root /message
          */
 
-        async getPrivateDiscussion(to) {
-            return getPrivateDiscussion(this.urls, to);
+        async getPrivateDiscussion(to, page = 1) {
+            return getPrivateDiscussion(this.urls, to, page);
         },
 
         async updateDiscussionStatus(to, status) {

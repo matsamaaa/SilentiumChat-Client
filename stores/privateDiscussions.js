@@ -25,14 +25,13 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             });
         },
         async loadMessagesPage(to, page) {
-            // get les messages
+            console.log("Loading messages page", page, "for discussion with", to);
             const apiStore = useApiStore();
             const messages = await apiStore.getPrivateDiscussion(to, page);
 
             messages.encryptedMessages.map(async message => {
                 await this.addMessageToDiscussion(message, true);
             });
-            // ajoute les messages
         },
         getDiscussion(from, to) {
             const discussion = this.discussions.find(d =>
