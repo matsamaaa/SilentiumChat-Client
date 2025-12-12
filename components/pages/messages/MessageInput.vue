@@ -13,7 +13,7 @@
             <p class="truncate max-w-[130px] ml-2 text-white">{{ file.name }}</p>
         </div>
 
-        <div class="flex items-center p-3 gap-3 h-[7vh] bg-gray-900">
+        <div class="flex items-center p-3 gap-3 h-[7vh]">
             <FilesButton 
                 v-if="!isBlocked"
                 ref="uploaderRef" 

@@ -11,25 +11,28 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             const apiStore = useApiStore();
             
             const discussions = await apiStore.getLastMessages();
-            discussions.map(async discussion => {
+            discussions.reverse().map(async discussion => {
                 const sender = discussion.users[0];
                 const receiver = discussion.users[1];
+                const username = discussion.username;
 
                 // clean discussions
                 this.removeDiscussion(receiver, sender);
-                this.addDiscussion(sender, receiver);
-
-                // get usernames (à mettre dans le backend directement)
-                const username = discussion.encryptedMessages[0].from === userStore.user.uniqueId
-                    ? await apiStore.getUsername(discussion.encryptedMessages[0].to)
-                    : await apiStore.getUsername(discussion.encryptedMessages[0].from);
+                this.addDiscussion(sender, receiver, username);
 
                 // add messages
-                this.addMessageToDiscussion({
-                    ...discussion.encryptedMessages[0],
-                    username: username
-                })
+                this.addMessageToDiscussion(discussion.encryptedMessages[0])
             });
+        },
+        async loadMessagesPage(to, page) {
+            // get les messages
+            const apiStore = useApiStore();
+            const messages = await apiStore.getPrivateDiscussion(to, page);
+
+            messages.encryptedMessages.map(async message => {
+                await this.addMessageToDiscussion(message, true);
+            });
+            // ajoute les messages
         },
         getDiscussion(from, to) {
             const discussion = this.discussions.find(d =>
@@ -38,11 +41,12 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             return discussion ? discussion : null;
         },
 
-        addDiscussion(from, to) {
+        addDiscussion(from, to, username = null) {
             const newDiscussion = {
                 users: [from, to],
                 encryptedMessages: [],
-                isWaitingForResponse: null
+                isWaitingForResponse: null,
+                username: username
             };
             this.discussions.push(newDiscussion);
             return newDiscussion;
@@ -73,10 +77,21 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             );
         },
 
-        async addMessageToDiscussion(message) {
+        isAlreadyExistMessage(messageId, from, to) {
+            const discussion = this.getDiscussion(from, to);
+            if (!discussion) return false;
+
+            return discussion.encryptedMessages.some(msg => msg._id === messageId);
+        },
+
+        async addMessageToDiscussion(message, isFront = false) {
             try {
                 const { from, to } = message;
                 const userStore = useUserStore();
+
+                if(this.isAlreadyExistMessage(message._id, from, to)) {
+                    return null;
+                }
 
                 // check what message we decrypt
                 let newMessage;
@@ -117,7 +132,11 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 }
 
                 // add message
-                discussion.encryptedMessages.push(newMessage);
+                if (isFront) {
+                    discussion.encryptedMessages.unshift(newMessage);
+                } else {
+                    discussion.encryptedMessages.push(newMessage);
+                }
 
                 // update message order with timestamp
                 discussion.encryptedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));

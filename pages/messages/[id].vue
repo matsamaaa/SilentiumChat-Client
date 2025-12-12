@@ -10,7 +10,7 @@
             v-else
             class="flex flex-col justify-between static overflow-y-scroll h-full w-full mx-1"
         >
-            <div class="flex flex-col justify-start">
+            <div class="flex flex-col justify-start overflow-y-scroll">
                 <MessageOutput
                     v-for="(msg, index) in filteredDiscussions"
                     :key="index"
@@ -103,22 +103,7 @@ onMounted(async () => {
     recipientTag.value = recipientTag.value.toString().padStart(4, '0');
     recipientCreationDate.value = await apiStore.getUserCreationDate(id);
 
-    privateDiscussionsStore.removeDiscussion(id, userStore.user.uniqueId)
-
-    const messagesData = await apiStore.getPrivateDiscussion(id)
-
-    if (messagesData) {
-        try {
-            messagesData.encryptedMessages = await Promise.all(
-                messagesData.encryptedMessages.map(async (msg) => {
-                    return await privateDiscussionsStore.addMessageToDiscussion(msg)
-                })
-            )
-        } catch (error) {
-            console.error('Error decrypting messages:', error)
-        }
-    }
-    console.log('messagesData', messagesData);
-    isLoading.value = false
+    await privateDiscussionsStore.loadMessagesPage(id, 1);
+    isLoading.value = false;
 })
 </script>

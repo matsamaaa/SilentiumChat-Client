@@ -8,6 +8,7 @@ import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
 import { generateRSAKeyPair } from '~/utils/keys/rsa';
 import { bufferToBase64 } from '~/utils/conversion';
 import { useNotificationStore } from './notifications';
+import { usePrivateDiscussionsStore } from './privateDiscussions';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
@@ -32,6 +33,7 @@ export const useUserStore = defineStore('user', {
             const token = useCookie('token');
             const user = useCookie('user');
             const apiStore = useApiStore();
+            const privateDiscussionsStore = usePrivateDiscussionsStore();
 
             if (token.value) {
                 this.token = token;
@@ -53,6 +55,8 @@ export const useUserStore = defineStore('user', {
                         this.addFriend(friend, status);
                     });
                 }
+
+                await privateDiscussionsStore.initialize();
             }
 
             this.initialized = true;

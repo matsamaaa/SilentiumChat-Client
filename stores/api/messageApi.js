@@ -1,10 +1,10 @@
 import createAxiosInstance from "../axios";
 
 // discussion
-export async function getPrivateDiscussion(urls, to) {
+export async function getPrivateDiscussion(urls, to, page = 1) {
     const axiosInstance = createAxiosInstance();
     try {
-        const response = await axiosInstance.get(`${urls.backend}/message/${to}/messages`);
+        const response = await axiosInstance.get(`${urls.backend}/message/${to}/messages?page=${page}`);
         return response.data.datas;
     } catch (error) {
         console.error("Error fetching private discussion:", error);
