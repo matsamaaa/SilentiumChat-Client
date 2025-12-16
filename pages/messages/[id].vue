@@ -12,7 +12,7 @@
                 class="flex flex-col justify-start overflow-y-auto px-1 h-[93vh]"
                 @scroll="handleScroll"
             >
-                <p v-if="filteredDiscussions[0].isFirstMessage" class="flex flex-row justify-center items-center py-2 text-gray-500">Start of chat</p>
+                <p v-if="filteredDiscussions && filteredDiscussions.length > 0 && filteredDiscussions[0].isFirstMessage" class="flex flex-row justify-center items-center py-2 text-gray-500">Start of chat</p>
                 <MessageOutput
                     v-for="(msg, index) in filteredDiscussions"
                     :key="index"
