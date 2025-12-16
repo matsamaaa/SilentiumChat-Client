@@ -22,6 +22,7 @@
 import { useUserStore } from '@/stores/user'
 import { useNavigationStore } from '@/stores/navigation'
 import { useWebSocketStore } from '@/stores/ws'
+import { useDeviceStore } from '@/stores/device'
 import { useRoute } from 'vue-router'
 import Notification from '~/components/popups/Notifications.vue'
 import ServersBar from '~/components/pages/layouts/ServersBar.vue'
@@ -31,6 +32,7 @@ import Loading from '~/components/Loading.vue'
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()
 const webSocketStore = useWebSocketStore()
+const deviceStore = useDeviceStore()
 const route = useRoute()
 
 const connectedRoute = ref(false);
@@ -51,6 +53,12 @@ const checkConnectionAndRoute = (routeName) => {
 
 onMounted(() => {
     checkConnectionAndRoute(route.name);
+    deviceStore.handleResize()
+    window.addEventListener('resize', deviceStore.handleResize)
+})
+
+onUnmounted(() => {
+    window.removeEventListener('resize', deviceStore.handleResize)
 })
 
 watch(() => route.name, () => {
