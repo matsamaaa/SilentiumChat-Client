@@ -1,5 +1,11 @@
 <template>
-    <div class="w-[5vw] h-[94vh] bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
+    <div 
+            :class="[
+                deviceStore.isTablet ? 'w-[10vw]' : '', 
+                deviceStore.isMobile ? 'w-[15vw]' : '',
+                deviceStore.isDesktop ? 'w-[5vw]' : ''
+            ]"
+        class="w-[5vw] h-[94vh] bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
         <button
             @click="navigationStore.goToHome"
             class="bg-gray-800 flex flex-col justify-center items-start p-4 rounded-lg hover:bg-gray-700 duration-200">
@@ -11,6 +17,8 @@
 <script setup>
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { useNavigationStore } from '@/stores/navigation';
+import { useDeviceStore } from '#imports';
 
 const navigationStore = useNavigationStore();
+const deviceStore = useDeviceStore();
 </script>

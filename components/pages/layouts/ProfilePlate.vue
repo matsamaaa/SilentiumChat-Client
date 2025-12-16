@@ -1,5 +1,11 @@
 <template>
-    <div class="w-[18vw] h-[6vh] bg-gray-900 absolute bottom-0 left-0 border-t border-r rounded-r-lg border-gray-800 flex items-center justify-between p-2 flex-row">
+    <div 
+        :class="[
+            deviceStore.isTablet ? 'w-[40vw]' : '', 
+            deviceStore.isMobile ? 'w-[100vw]' : '',
+            deviceStore.isDesktop ? 'w-[18vw]' : ''
+        ]"
+        class="h-[6vh] bg-gray-900 absolute bottom-0 left-0 border-t border-r rounded-r-lg border-gray-800 flex items-center justify-between p-2 flex-row">
         <div class="flex flex-row justify-start items-center">
             <AvatarIcon />
             <div class="flex flex-col">
@@ -24,10 +30,12 @@
 import AvatarIcon from '~/components/users/AvatarIcon.vue';
 import { useUserStore } from '@/stores/user';
 import { useNavigationStore } from '@/stores/navigation';
+import { useDeviceStore } from '#imports';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const userStore = useUserStore();
 const navigationStore = useNavigationStore();
+const deviceStore = useDeviceStore();
 
 const username = computed(() => userStore.user.username || 'unknown');
 const tag = computed(() => userStore.user.tag.toString().padStart(4, '0') || '');

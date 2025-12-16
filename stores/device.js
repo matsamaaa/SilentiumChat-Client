@@ -5,6 +5,8 @@ export const useDeviceStore = defineStore('device', {
     isMobile: false,
     isTablet: false,
     isDesktop: true,
+
+    isDisabledServersBar: false
   }),
 
   actions: {
@@ -15,7 +17,7 @@ export const useDeviceStore = defineStore('device', {
           this.isMobile = true
           this.isTablet = false
           this.isDesktop = false
-        } else if (width >= 768 && width < 1024) {
+        } else if (width >= 768 && width < 1524) {
           this.isMobile = false
           this.isTablet = true
           this.isDesktop = false

@@ -1,10 +1,23 @@
 <template>
-    <div class="shadow-xl/30 w-[13vw] h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0 pt-5">
+    <div 
+        :class="[
+            deviceStore.isTablet ? 'w-[30vw]' : '', 
+            deviceStore.isMobile ? 'w-[85vw]' : '',
+            deviceStore.isDesktop ? 'w-[13vw]' : ''
+        ]"
+        class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0 pt-5">
         <UserInput 
-            @search="handleSearchUser($event.username, $event.code)"
-            @error="notificationStore.add($event, 'error')"
-        />
+                @search="handleSearchUser($event.username, $event.code)"
+                @error="notificationStore.add($event, 'error')"
+            />
         <br />
+        <div 
+            v-if="deviceStore.isMobile"
+            class="flex items-center justify-center rounded-lg cursor-pointer mx-2 py-2 hover:bg-gray-800 transition-colors duration-200"
+        >
+            <p class="font-semibold text-white">Friends</p>
+        </div>
+        <br v-if="deviceStore.isMobile" />
         <DiscussionWaitingButton :discussionsLength="waitingDiscussions.length" :isWaiting="isWaiting" />
         <DiscussionPreview
             v-for="discussion in validDiscussions" 
@@ -23,11 +36,13 @@ import { usePrivateDiscussionsStore } from '#imports';
 import { useNotificationStore } from '#imports';
 import { useNavigationStore } from '#imports';
 import { useApiStore } from '#imports';
+import { useDeviceStore } from '#imports';
 
 const privateDiscussionsStore = usePrivateDiscussionsStore();
 const notificationStore = useNotificationStore();
 const navigationStore = useNavigationStore();
 const apiStore = useApiStore();
+const deviceStore = useDeviceStore();
 
 const route = useRoute();
 
