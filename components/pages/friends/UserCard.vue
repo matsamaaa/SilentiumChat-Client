@@ -7,8 +7,13 @@
                 {{ username }}
             </p>
             
-            <p v-if="createdAt" class="text-sm text-gray-500 mt-0.5">
-                <span v-if="listType === 'accepted'">Ami depuis le {{ formatDate(createdAt) }}</span>
+            <p  v-if="createdAt" 
+                :class="[
+                    deviceStore.isMobile ? 'text-xs' : 'text-sm'
+                ]"
+                class="text-sm text-gray-500 mt-0.5">
+                <span v-if="deviceStore.isMobile">{{ formatDate(createdAt) }}</span>
+                <span v-else-if="listType === 'accepted'">Ami depuis le {{ formatDate(createdAt) }}</span>
                 <span v-else-if="listType === 'pending'">Demande envoyée le {{ formatDate(createdAt) }}</span>
             </p>
         </div>
@@ -17,6 +22,7 @@
 
 <script setup>
 import AvatarIcon from '@/components/users/AvatarIcon.vue';
+import { useDeviceStore } from '@/stores/device';
 import { formatDate } from '@/utils/date.js';
 
 const props = defineProps({
@@ -37,4 +43,6 @@ const props = defineProps({
         required: false
     }
 });
+
+const deviceStore = useDeviceStore();
 </script>

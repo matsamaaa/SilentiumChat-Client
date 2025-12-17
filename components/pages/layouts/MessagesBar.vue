@@ -13,6 +13,7 @@
         <br />
         <div 
             v-if="deviceStore.isMobile"
+            @click="navigationStore.goToFriends"
             class="flex items-center justify-center rounded-lg cursor-pointer mx-2 py-2 hover:bg-gray-800 transition-colors duration-200"
         >
             <p class="font-semibold text-white">Friends</p>
