@@ -3,9 +3,10 @@
         :class="[
             deviceStore.isTablet ? 'w-[10vw]' : '', 
             deviceStore.isMobile ? 'w-[15vw]' : '',
-            deviceStore.isDesktop ? 'w-[5vw]' : ''
+            deviceStore.isDesktop ? 'w-[5vw]' : '',
+            deviceStore.isDisabledMessagesBar && deviceStore.isMobile ? 'h-[100vh]' : 'h-[94vh]'
         ]"
-        class="h-[94vh] bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
+        class="bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
         <button
             @click="navigationStore.goToHome"
             class="bg-gray-800 flex flex-col justify-center items-start p-4 rounded-lg hover:bg-gray-700 duration-200">

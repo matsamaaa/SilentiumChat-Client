@@ -9,7 +9,7 @@
         @mouseup="handleMouseUp"
         @mouseleave="handleMouseLeave"
     >
-        <MessagesBar v-if="!deviceStore.isMobile" />
+        <MessagesBar v-if="!deviceStore.isDisabledMessagesBar" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <Loading />
@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
 import MessageInput from '@/components/pages/messages/MessageInput.vue'
 import MessageOutput from '@/components/pages/messages/MessageOutput.vue'
 import StatusDiscussion from '@/components/pages/messages/StatusDiscussion.vue'
@@ -272,7 +272,19 @@ watch(() => route.params.id, () => {
     }
 });
 
+watch(() => deviceStore.isMobile, (isMobile) => {
+    deviceStore.isDisabledMessagesBar = isMobile;
+});
+
+onUnmounted(() => {
+    deviceStore.isDisabledMessagesBar = false;
+});
+
 onMounted(async () => {
+    if (deviceStore.isMobile) {
+        deviceStore.isDisabledMessagesBar = true
+    }
+
     isLoading.value = true;
 
     recipientUsername.value = await apiStore.getUsername(id);

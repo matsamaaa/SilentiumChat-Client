@@ -6,7 +6,8 @@ export const useDeviceStore = defineStore('device', {
     isTablet: false,
     isDesktop: true,
 
-    isDisabledServersBar: false
+    isDisabledServersBar: false,
+    isDisabledMessagesBar: false
   }),
 
   actions: {

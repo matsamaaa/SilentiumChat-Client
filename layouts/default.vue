@@ -6,7 +6,7 @@
         <template v-else>
             <div class="flex flex-row overflow-y-auto overflow-x-hidden h-[100vh] w-[100vw]" >
                 <ServersBar v-if="connectedRoute && !deviceStore.isDisabledServersBar" />
-                <ProfilePlate v-if="connectedRoute" />
+                <ProfilePlate v-if="connectedRoute && !deviceStore.isDisabledMessagesBar" />
 
                 <main class="flex-1 bg-gray-900">
                     <slot />
