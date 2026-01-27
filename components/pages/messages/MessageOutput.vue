@@ -6,7 +6,7 @@
         ]"
     >
         <!-- Message text -->
-        <p class="whitespace-pre-wrap text-sm text-white" :class="{'text-right': isOwnMessage}">
+        <p class="whitespace-pre-wrap text-sm select-none text-white" :class="{'text-right': isOwnMessage}">
             {{ isOwnMessage ? msg.encryptedMessageBySender : msg.encryptedMessage }}
         </p>
 
@@ -43,7 +43,7 @@
         </div>
 
         <!-- Timestamp -->
-        <span class="text-xs text-gray-300 mt-1 self-end">
+        <span class="text-xs text-gray-300 mt-1 self-end select-none">
             {{ formattedDate }}
         </span>
 

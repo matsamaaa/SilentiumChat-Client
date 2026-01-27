@@ -1,6 +1,15 @@
 <template>
-    <div class="flex flex-row w-full justify-between h-full">
-        <MessagesBar />
+    <div
+        class="relative flex flex-row w-full justify-between h-full"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+        @mousedown="handleMouseDown"
+        @mousemove="handleMouseMove"
+        @mouseup="handleMouseUp"
+        @mouseleave="handleMouseLeave"
+    >
+        <MessagesBar v-if="!deviceStore.isMobile" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <Loading />
@@ -49,12 +58,42 @@
                 />
             </div>
         </div>
-        <UserBar
-            :id="id"
-            :username="recipientUsername"
-            :tag="recipientTag"
-            :creationDate="recipientCreationDate"
-        />
+        <div
+            v-if="!deviceStore.isDesktop && !isUserBarVisible"
+            class="absolute right-0 top-1/2 -translate-y-1/2 bg-gray-800/50 p-2 rounded-l-lg animate-pulse"
+        >
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                class="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+            >
+                <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M15 19l-7-7 7-7"
+                />
+            </svg>
+        </div>
+        <transition name="slide-right">
+            <div
+                v-if="deviceStore.isDesktop || isUserBarVisible"
+                :class="{
+                    'absolute right-0 top-0 h-full z-10 w-[20vw]': deviceStore.isTablet,
+                    'absolute right-0 top-0 h-full z-10 w-[85vw]': deviceStore.isMobile,
+
+                }"
+            >
+                <UserBar
+                    :id="id"
+                    :username="recipientUsername"
+                    :tag="recipientTag"
+                    :creationDate="recipientCreationDate"
+                />
+            </div>
+        </transition>
     </div>
 </template>
 
@@ -67,10 +106,15 @@ import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
+import { useDeviceStore } from '#imports'
 import { useRoute } from 'vue-router'
 import UserBar from '~/components/pages/messages/UserBar.vue'
 import Loading from '~/components/Loading.vue'
 import MessagesBar from '~/components/pages/layouts/MessagesBar.vue'
+
+const isUserBarVisible = ref(false);
+const touchStartX = ref(0);
+const touchEndX = ref(0);
 
 const recipientUsername = ref('');
 const recipientTag = ref('');
@@ -85,6 +129,7 @@ const webSocketStore = useWebSocketStore();
 const apiStore = useApiStore();
 const userStore = useUserStore();
 const privateDiscussionsStore = usePrivateDiscussionsStore();
+const deviceStore = useDeviceStore();
 const route = useRoute();
 
 const id = route.params.id;
@@ -165,6 +210,67 @@ watch(page, async (newPage, oldPage) => {
     isFetchingNextPage.value = false;
 });
 
+// Swipe
+const handleTouchStart = (event) => {
+    if (deviceStore.isDesktop) return;
+    touchStartX.value = event.touches[0].clientX;
+    touchEndX.value = 0;
+}
+
+const handleTouchMove = (event) => {
+    if (deviceStore.isDesktop) return;
+    touchEndX.value = event.touches[0].clientX;
+}
+
+const handleTouchEnd = () => {
+    if (deviceStore.isDesktop || !touchEndX.value) return;
+
+    const diff = touchStartX.value - touchEndX.value;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(diff) > minSwipeDistance) {
+        if (diff > 0) {
+            isUserBarVisible.value = true;
+        } else {
+            isUserBarVisible.value = false;
+        }
+    }
+    
+    touchStartX.value = 0;
+    touchEndX.value = 0;
+}
+
+const isMouseDown = ref(false);
+
+const handleMouseDown = (event) => {
+    if (deviceStore.isDesktop) return;
+    isMouseDown.value = true;
+    touchStartX.value = event.clientX;
+    touchEndX.value = 0;
+}
+
+const handleMouseMove = (event) => {
+    if (deviceStore.isDesktop || !isMouseDown.value) return;
+    touchEndX.value = event.clientX;
+}
+
+const handleMouseUp = () => {
+    if (deviceStore.isDesktop || !isMouseDown.value) return;
+    isMouseDown.value = false;
+    handleTouchEnd();
+}
+
+const handleMouseLeave = () => {
+    if (isMouseDown.value) {
+        handleMouseUp();
+    }
+}
+
+watch(() => route.params.id, () => {
+    if (!deviceStore.isDesktop) {
+        isUserBarVisible.value = false;
+    }
+});
 
 onMounted(async () => {
     isLoading.value = true;

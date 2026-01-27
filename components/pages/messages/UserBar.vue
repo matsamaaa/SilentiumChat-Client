@@ -1,5 +1,11 @@
 <template>
-    <div class="shadow-xl/30 w-[13vw] h-[100vh] bg-gray-900 flex flex-col border-r border-l border-gray-800 rounded-br-lg flex-shrink-0">
+    <div 
+        class="shadow-xl/30 w-[13vw] h-[100vh] bg-gray-900 flex flex-col border-r border-l border-gray-800 rounded-br-lg flex-shrink-0"
+        :class="{
+            'w-[85vw]': deviceStore.isMobile,
+            'w-[20vw]': deviceStore.isTablet
+        }"
+        >
         <div class="w-full h-[13vh] bg-indigo-600">
             <FriendsButton
                 class="mt-1 mr-1"
@@ -21,6 +27,9 @@
 <script setup>
 import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
 import AvatarIcon from '~/components/users/AvatarIcon.vue'
+import { useDeviceStore } from '#imports';
+
+const deviceStore = useDeviceStore();
 
 const props = defineProps({
     id: {

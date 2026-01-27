@@ -9,6 +9,7 @@ export default defineNuxtConfig({
   ],
   css: [
     '@/assets/tailwind.css',
+    '@/assets/css/transitions.css',
   ],
   postcss: {
     plugins: {
