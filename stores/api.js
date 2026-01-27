@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 // api imports
-import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword } from './api/meApi'
+import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword } from './api/meApi'
 import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate } from './api/userApi'
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
@@ -77,6 +77,9 @@ export const useApiStore = defineStore('api', {
             return isValidPassword(this.urls, password);
         },
 
+        async updateFakePassword(fakePassword, passwordConfirmation, currentPassword) {
+            return updateFakePassword(this.urls, fakePassword, passwordConfirmation, currentPassword);
+        },
 
         /**
          * Api functions for the root /message

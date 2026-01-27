@@ -73,15 +73,13 @@ const updatePassword = async () => {
     const response = await apiStore.updatePassword(newPassword.value, confirmPassword.value, currentPassword.value);
     if (!response.success) {
         errorMessage.value = response.message;
-        currentPassword.value = null;
-        newPassword.value = null;
-        confirmPassword.value = null;
     } else {
         errorMessage.value = null;
-        currentPassword.value = null;
-        newPassword.value = null;
-        confirmPassword.value = null;
     }
+
+    currentPassword.value = null;
+    newPassword.value = null;
+    confirmPassword.value = null;
 };
 
 </script>

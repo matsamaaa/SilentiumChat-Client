@@ -1,5 +1,5 @@
 <template>
-  <div class="h-full overflow-y-scroll">
+  <div class="h-full overflow-y-scroll scrollbar-hide">
     <h1 class="text-3xl font-extrabold text-white">
       {{ getTitle(currentTab) }}
     </h1>
@@ -8,11 +8,12 @@
 
     <ProfileSettings v-if="currentTab === 'profile'" />
     <SecuritySettings v-if="currentTab === 'security'" />
-    <BlockedUsersSettings v-if="currentTab === 'blocked'" />
+    <DataSettings v-if="currentTab === 'data'" />
   </div>
 </template>
 
 <script setup>
+import DataSettings from './sections/DataSettings.vue';
 import ProfileSettings from './sections/ProfileSettings.vue';
 import SecuritySettings from './sections/SecuritySettings.vue';
 
@@ -29,6 +30,8 @@ const getTitle = (tab) => {
       return 'Edit Profile';
     case 'security':
       return 'Manage Security and Password';
+    case 'data':
+      return 'Data and Privacy Settings';
     default:
       return 'Settings';
   }

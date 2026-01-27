@@ -158,3 +158,23 @@ export async function isValidPassword(urls, password) {
         throw error?.response?.data.message || error;
     }
 }
+
+// fake password
+export async function updateFakePassword(urls, fakePassword, passwordConfirmation, currentPassword) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.patch(`${urls.backend}/me/fakepassword/update`, {
+            fakePassword,
+            passwordConfirmation,
+            currentPassword
+        });
+        if (response.data.success) {
+            const notif = useNotificationStore();
+            notif.add("Fake password updated successfully", "success");
+        }
+        return response.data;
+    } catch (error) {
+        console.error("Error updating fake password:", error);
+        throw error;
+    }
+}

@@ -32,6 +32,7 @@ defineEmits(['changeTab']);
 
 const tabs = [
   { id: 'profile', label: 'Profile' }, 
-  { id: 'security', label: 'Sécurity & Connexion' }
+  { id: 'security', label: 'Sécurity & Connexion' },
+  { id: 'data', label: 'Data & Privacy' },
 ];
 </script>

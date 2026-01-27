@@ -27,8 +27,8 @@
 </template>
 
 <script setup>
-import ChangePasswordForm from '@/components/pages/settings/others/ChangePassword.vue';
-import CopyPrivateKey from '@/components/pages/settings/others/CopyPrivateKey.vue';
-import ImportPrivateKey from '@/components/pages/settings/others/ImportPrivateKey.vue';
-import ChangeEmail from '@/components/pages/settings/others/ChangeEmail.vue';
+import ChangePasswordForm from '@/components/pages/settings/others/security/ChangePassword.vue';
+import CopyPrivateKey from '@/components/pages/settings/others/security/CopyPrivateKey.vue';
+import ImportPrivateKey from '@/components/pages/settings/others/security/ImportPrivateKey.vue';
+import ChangeEmail from '@/components/pages/settings/others/security/ChangeEmail.vue';
 </script>
