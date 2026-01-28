@@ -233,5 +233,40 @@ export const useUserStore = defineStore('user', {
             
             return null;
         },
+
+        resetFriends() {
+            this.friends = {
+                accepted: [],
+                pending: [],
+                blocked: []
+            };
+        },
+
+        async clearAllDatas() {
+
+            const apiStore = useApiStore();
+            const notificationStore = useNotificationStore();
+
+            /**
+             * - supprimer les amis local et distant
+             * - supprimer la clef publique
+             * - supprimer les discussions privées local et distant
+             * - supprimer les notifications
+             * - supprimer websocket
+             * - supprimer la clef privée
+             * - supprimer la photo de profil
+             * - supprimer le user
+             * - supprimer le token
+             */
+
+            // clear friends
+            this.resetFriends();
+            await apiStore.deleteFriends();
+
+
+
+            //this.clearUser();
+            notificationStore.add("All user data has been cleared", "success");
+        }
     }
 });

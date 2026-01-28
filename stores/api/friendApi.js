@@ -72,6 +72,17 @@ export async function cancelFriendRequest(urls, userId) {
     }
 }
 
+export async function deleteFriends(urls) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.delete(`${urls.backend}/friends/delete`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting friends:", error);
+        throw error;
+    }
+}
+
 // manage status
 export async function acceptFriendRequest(urls, userId) {
     const axiosInstance = createAxiosInstance();

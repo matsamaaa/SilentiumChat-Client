@@ -29,9 +29,7 @@
                 
                     <div class="flex flex-col space-y-2">
                         <AvatarUpload @avatar-selected="handleAvatar" />
-                        <button @click="deleteAvatar" class="px-4 py-2 bg-gray-800 text-red-500 border border-red-500 rounded-lg hover:bg-gray-700 transition duration-200">
-                            Delete
-                        </button>
+                        <RedButton text="Remove Avatar" @execute="deleteAvatar" />
                     </div>
                 </div>
             </div>
@@ -83,6 +81,7 @@ import { useUserStore } from '@/stores/user';
 import { useApiStore } from '@/stores/api';
 import AvatarUpload from '@/components/pages/settings/others/profile/ChangeAvatarButton.vue';
 import SaveButton from '@/components/pages/settings/others/saveButton.vue';
+import RedButton from '~/components/buttons/RedButton.vue';
 
 const apiStore = useApiStore();
 const userStore = useUserStore();
