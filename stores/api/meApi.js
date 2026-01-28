@@ -178,3 +178,19 @@ export async function updateFakePassword(urls, fakePassword, passwordConfirmatio
         throw error;
     }
 }
+
+// key
+export async function deletePublicKey(urls) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+    try {
+        const response = await axiosInstance.delete(`${urls.backend}/me/publickey/delete`);
+        if (response.data.success) {
+            notif.add("Public key reset successfully", "success");
+        }
+        return response.data;
+    } catch (error) {
+        console.error("Error resetting public key:", error);
+        throw error;
+    }
+}

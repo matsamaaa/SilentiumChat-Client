@@ -57,6 +57,12 @@ export const useWebSocketStore = defineStore('websocket', {
             this.socket.emit("register", { userId, userToken });
         },
 
+        wsClear() {
+            this.wsDisconnect();
+            this.socket = null;
+            this.isConnected = false;
+        },
+
         async wsSendMessage(to, message, file = null) {
             if (!this.socket) return;
             

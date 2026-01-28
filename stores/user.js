@@ -4,7 +4,7 @@ import createAxiosInstance from './axios';
 import { useApiStore } from './api';
 import { useNavigationStore } from './navigation';
 import { useWebSocketStore } from './ws';
-import { getPrivateKeyFromDB, setPrivateKeyInDB } from '~/utils/keys/rsa';
+import { getPrivateKeyFromDB, setPrivateKeyInDB, deletePrivateKeyFromDB } from '~/utils/keys/rsa';
 import { generateRSAKeyPair } from '~/utils/keys/rsa';
 import { bufferToBase64 } from '~/utils/conversion';
 import { useNotificationStore } from './notifications';
@@ -246,12 +246,14 @@ export const useUserStore = defineStore('user', {
 
             const apiStore = useApiStore();
             const notificationStore = useNotificationStore();
+            const privateDiscussionsStore = usePrivateDiscussionsStore();
+            const webSocketStore = useWebSocketStore();
+            const navigationStore = useNavigationStore();
 
             /**
              * - supprimer les amis local et distant
              * - supprimer la clef publique
              * - supprimer les discussions privées local et distant
-             * - supprimer les notifications
              * - supprimer websocket
              * - supprimer la clef privée
              * - supprimer la photo de profil
@@ -263,9 +265,26 @@ export const useUserStore = defineStore('user', {
             this.resetFriends();
             await apiStore.deleteFriends();
 
+            // clear public key
+            await apiStore.deletePublicKey();
 
+            // clear private discussions
+            privateDiscussionsStore.clearDiscussions();
+            await apiStore.deleteAllDiscussions();
 
-            //this.clearUser();
+            // clear private key
+            await deletePrivateKeyFromDB(this.user.uniqueId);
+
+            // clear avatar
+            await apiStore.deleteAvatar();
+
+            // clear user data in local
+            this.clearUser();
+
+            // clear websockets
+            webSocketStore.wsClear();
+
+            navigationStore.goToLogin();
             notificationStore.add("All user data has been cleared", "success");
         }
     }

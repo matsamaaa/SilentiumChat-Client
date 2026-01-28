@@ -71,4 +71,31 @@ const getPrivateKeyFromDB = async (userId) => {
     });
 }
 
-export { generateRSAKeyPair, setPrivateKeyInDB, getPrivateKeyFromDB };
+const deletePrivateKeyFromDB = async (userId) => {
+    if (typeof window === 'undefined') return null;
+
+    return new Promise((resolve, reject) => {
+        const request = indexedDB.open("SilentiumDB", 1);
+
+        request.onupgradeneeded = (event) => {
+            const db = event.target.result;
+            if (!db.objectStoreNames.contains("keys")) {
+                db.createObjectStore("keys");
+            }
+        };
+
+        request.onsuccess = () => {
+            const db = request.result;
+            const tx = db.transaction("keys", "readwrite");
+            const store = tx.objectStore("keys");
+            const deleteRequest = store.delete(`privateKey_${userId}`);
+
+            deleteRequest.onsuccess = () => resolve();
+            deleteRequest.onerror = () => reject(deleteRequest.error);
+        };
+
+        request.onerror = () => reject(request.error);
+    });
+}
+
+export { generateRSAKeyPair, setPrivateKeyInDB, getPrivateKeyFromDB, deletePrivateKeyFromDB };

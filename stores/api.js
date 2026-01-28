@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia'
 
 // api imports
-import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword } from './api/meApi'
+import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword, deletePublicKey } from './api/meApi'
 import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate } from './api/userApi'
-import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages } from './api/messageApi'
+import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages, deleteAllDiscussions } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList, deleteFriends } from './api/friendApi';
 import { sendResetPasswordMail, sendChangePasswordMail, sendChangeEmailMail } from './api/mailApi';
@@ -81,6 +81,10 @@ export const useApiStore = defineStore('api', {
             return updateFakePassword(this.urls, fakePassword, passwordConfirmation, currentPassword);
         },
 
+        async deletePublicKey() {
+            return deletePublicKey(this.urls);
+        },
+
         /**
          * Api functions for the root /message
          */
@@ -97,7 +101,11 @@ export const useApiStore = defineStore('api', {
             return getLastMessages(this.urls);
         },
 
+        async deleteAllDiscussions() {
+            return deleteAllDiscussions(this.urls);
+        },
 
+        
         /**
          * Api functions for the root /file
          */

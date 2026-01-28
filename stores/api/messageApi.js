@@ -23,6 +23,17 @@ export async function updateDiscussionStatus(urls, to, status) {
     }
 }
 
+export async function deleteAllDiscussions(urls) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.delete(`${urls.backend}/message/discussions/delete`);
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting all discussions:", error);
+        throw error;
+    }
+}
+
 // message
 export async function getLastMessages(urls) {
     const axiosInstance = createAxiosInstance();

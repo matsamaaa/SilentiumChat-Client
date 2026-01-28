@@ -2,9 +2,7 @@ import { decryptMessage } from "~/utils/messages";
 
 export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
     state: () => ({
-        discussions: [
-
-        ]
+        discussions: []
     }),
     actions: {
         async initialize() {
@@ -142,6 +140,10 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             } catch (err) {
                 console.error("Error adding message to discussion:", err);
             }
+        },
+
+        clearDiscussions() {
+            this.discussions = [];
         }
     }
 });
