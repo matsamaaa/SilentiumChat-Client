@@ -19,6 +19,10 @@
 
       <hr class="border-gray-700">
 
+      <ResetKeysButton />
+
+      <hr class="border-gray-700">
+
       <ImportPrivateKeyForm />
 
     </section>
@@ -31,4 +35,5 @@ import ChangePasswordForm from '@/components/forms/settings/ChangePasswordForm.v
 import ChangeEmailForm from '~/components/forms/settings/ChangeEmailForm.vue';
 import ImportPrivateKeyForm from '~/components/forms/settings/ImportPrivateKeyForm.vue';
 import PrivateKeyRevealWidget from '~/components/widgets/PrivateKeyRevealWidget.vue';
+import ResetKeysButton from '~/components/buttons/settings/ResetKeysButton.vue';
 </script>
