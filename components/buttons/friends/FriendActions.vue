@@ -38,13 +38,13 @@
 import { useUserStore } from '#imports';
 
 // components
-import CancelFriendButton from '~/components/friends/CancelFriendButton.vue';
-import AcceptFriendButton from '~/components/friends/AcceptFriendButton.vue';
-import RefuseFriendButton from '~/components/friends/RefuseFriendButton.vue';
-import AskFriendButton from '~/components/friends/AskFriendButton.vue';
-import RemoveFriendButton from '~/components/friends/RemoveFriendButton.vue';
-import BlockFriendButton from '~/components/friends/BlockFriendButton.vue';
-import UnblockFriendButton from '~/components/friends/UnblockFriendButton.vue';
+import CancelFriendButton from '~/components/buttons/friends/CancelFriendButton.vue';
+import AcceptFriendButton from '~/components/buttons/friends/AcceptFriendButton.vue';
+import RefuseFriendButton from '~/components/buttons/friends/RefuseFriendButton.vue';
+import AskFriendButton from '~/components/buttons/friends/AskFriendButton.vue';
+import RemoveFriendButton from '~/components/buttons/friends/RemoveFriendButton.vue';
+import BlockFriendButton from '~/components/buttons/friends/BlockFriendButton.vue';
+import UnblockFriendButton from '~/components/buttons/friends/UnblockFriendButton.vue';
 
 const props = defineProps({
     username: {

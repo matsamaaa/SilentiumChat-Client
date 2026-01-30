@@ -9,7 +9,7 @@
         @mouseup="handleMouseUp"
         @mouseleave="handleMouseLeave"
     >
-        <MessagesBar v-if="!deviceStore.isDisabledMessagesBar" />
+        <MessagingSideBar v-if="!deviceStore.isDisabledMessagesBar" />
 
         <div v-if="isLoading" class="flex-1 flex justify-center items-center">
             <Loading />
@@ -22,7 +22,7 @@
                 @scroll="handleScroll"
             >
                 <p v-if="filteredDiscussions && filteredDiscussions.length > 0 && filteredDiscussions[0].isFirstMessage" class="flex flex-row justify-center items-center py-2 text-gray-500">Start of chat</p>
-                <MessageOutput
+                <MessageCard
                     v-for="(msg, index) in filteredDiscussions"
                     :key="index"
                     :msg="msg"
@@ -46,12 +46,12 @@
                 "
                 class="flex flex-row justify-center gap-3 h-full items-end p-3"
             >
-                <StatusDiscussion
+                <DiscussionStatusButton
                     :user="id"
                     status="refused"
                     @updated="refreshDiscussion"
                 />
-                <StatusDiscussion
+                <DiscussionStatusButton
                     :user="id"
                     status="accepted"
                     @updated="refreshDiscussion"
@@ -86,7 +86,7 @@
 
                 }"
             >
-                <UserBar
+                <UserCard
                     :id="id"
                     :username="recipientUsername"
                     :tag="recipientTag"
@@ -99,18 +99,18 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch, nextTick } from 'vue'
-import MessageInput from '@/components/pages/messages/MessageInput.vue'
-import MessageOutput from '@/components/pages/messages/MessageOutput.vue'
-import StatusDiscussion from '@/components/pages/messages/StatusDiscussion.vue'
+import MessageInput from '@/components/inputs/MessageInput.vue'
+import DiscussionStatusButton from '@/components/buttons/discussion/DiscussionStatusButton.vue'
 import { useWebSocketStore } from '@/stores/ws'
 import { useApiStore } from '@/stores/api'
 import { useUserStore } from '@/stores/user'
 import { usePrivateDiscussionsStore } from '~/stores/privateDiscussions'
 import { useDeviceStore } from '#imports'
 import { useRoute } from 'vue-router'
-import UserBar from '~/components/pages/messages/UserBar.vue'
+import UserCard from '~/components/cards/user/UserCard.vue'
 import Loading from '~/components/Loading.vue'
-import MessagesBar from '~/components/pages/layouts/MessagesBar.vue'
+import MessagingSideBar from '~/components/sidebars/MessagingSideBar.vue'
+import MessageCard from '~/components/cards/message/MessageCard.vue'
 
 const isUserBarVisible = ref(false);
 const touchStartX = ref(0);

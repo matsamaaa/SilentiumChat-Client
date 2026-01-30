@@ -75,8 +75,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
-import DownloadIcon from '~/components/pages/messages/DownloadIcon.vue'
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import DownloadIcon from '~/components/icons/DownloadIcon.vue'
 import QuitButton from '~/components/buttons/QuitButton.vue'
 
 const props = defineProps({

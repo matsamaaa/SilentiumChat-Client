@@ -7,7 +7,7 @@
         <p class="text-sm text-gray-500">Manage your account's security and privacy settings.</p>
       </div>
 
-      <ChangeEmail />
+      <ChangeEmailForm />
 
       <hr class="border-gray-700">
 
@@ -15,11 +15,11 @@
 
       <hr class="border-gray-700">
 
-      <CopyPrivateKey />
+      <PrivateKeyRevealWidget />
 
       <hr class="border-gray-700">
 
-      <ImportPrivateKey />
+      <ImportPrivateKeyForm />
 
     </section>
     <br><br>
@@ -27,8 +27,8 @@
 </template>
 
 <script setup>
-import ChangePasswordForm from '@/components/pages/settings/others/security/ChangePassword.vue';
-import CopyPrivateKey from '@/components/pages/settings/others/security/CopyPrivateKey.vue';
-import ImportPrivateKey from '@/components/pages/settings/others/security/ImportPrivateKey.vue';
-import ChangeEmail from '@/components/pages/settings/others/security/ChangeEmail.vue';
+import ChangePasswordForm from '@/components/forms/settings/ChangePasswordForm.vue';
+import ChangeEmailForm from '~/components/forms/settings/ChangeEmailForm.vue';
+import ImportPrivateKeyForm from '~/components/forms/settings/ImportPrivateKeyForm.vue';
+import PrivateKeyRevealWidget from '~/components/widgets/PrivateKeyRevealWidget.vue';
 </script>

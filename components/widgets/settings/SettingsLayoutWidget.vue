@@ -18,19 +18,19 @@
       />
     </div>
     <div class="flex flex-col p-5 w-full h-[100vh] gap-4"> 
-      <SettingsContent :currentTab="activeTab" />
+      <SettingsContentWidget :currentTab="activeTab" />
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref, watch, onUnmounted, onMounted } from 'vue';
-import SettingsSidebar from './SettingsSidebar.vue';
-import SettingsContent from './SettingsContent.vue';
+import SettingsSidebar from '~/components/sidebars/SettingsSidebar.vue';
 
 import { useDeviceStore } from '#imports';
 import { useNavigationStore } from '#imports';
 import QuitButton from '~/components/buttons/QuitButton.vue';
+import SettingsContentWidget from './SettingsContentWidget.vue';
 
 const activeTab = ref('profile');
 const deviceStore = useDeviceStore();

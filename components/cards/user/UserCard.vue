@@ -7,7 +7,7 @@
         }"
         >
         <div class="w-full h-[13vh] bg-indigo-600">
-            <FriendsButton
+            <FriendActions
                 class="mt-1 mr-1"
                 :username="username" />
         </div>
@@ -25,9 +25,9 @@
 </template>
 
 <script setup>
-import FriendsButton from '@/components/pages/messages/FriendsButton.vue'
-import AvatarIcon from '~/components/users/AvatarIcon.vue'
+import AvatarIcon from '~/components/icons/user/AvatarIcon.vue'
 import { useDeviceStore } from '#imports';
+import FriendActions from '~/components/buttons/friends/FriendActions.vue';
 
 const deviceStore = useDeviceStore();
 

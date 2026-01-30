@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import AvatarIcon from '@/components/users/AvatarIcon.vue';
+import AvatarIcon from '~/components/icons/user/AvatarIcon.vue';
 import { useDeviceStore } from '@/stores/device';
 import { formatDate } from '@/utils/date.js';
 

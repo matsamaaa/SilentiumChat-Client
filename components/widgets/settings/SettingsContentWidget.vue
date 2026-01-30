@@ -6,16 +6,16 @@
 
     <br />
 
-    <ProfileSettings v-if="currentTab === 'profile'" />
-    <SecuritySettings v-if="currentTab === 'security'" />
-    <DataSettings v-if="currentTab === 'data'" />
+    <ProfileWidget v-if="currentTab === 'profile'" />
+    <SecurityWidget v-if="currentTab === 'security'" />
+    <DataWidget v-if="currentTab === 'data'" />
   </div>
 </template>
 
 <script setup>
-import DataSettings from './sections/DataSettings.vue';
-import ProfileSettings from './sections/ProfileSettings.vue';
-import SecuritySettings from './sections/SecuritySettings.vue';
+import DataWidget from './DataWidget.vue';
+import ProfileWidget from './ProfileWidget.vue';
+import SecurityWidget from './SecurityWidget.vue';
 
 const props = defineProps({
   currentTab: {

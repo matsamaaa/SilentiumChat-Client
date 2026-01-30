@@ -5,7 +5,7 @@
         </div>
         <template v-else>
             <div class="flex flex-row overflow-y-auto overflow-x-hidden h-[100vh] w-[100vw]" >
-                <ServersBar v-if="connectedRoute && !deviceStore.isDisabledServersBar" />
+                <ServersSideBar v-if="connectedRoute && !deviceStore.isDisabledServersBar" />
                 <ProfilePlate v-if="connectedRoute && !deviceStore.isDisabledMessagesBar" />
 
                 <main class="flex-1 bg-gray-900">
@@ -25,8 +25,8 @@ import { useWebSocketStore } from '@/stores/ws'
 import { useDeviceStore } from '@/stores/device'
 import { useRoute } from 'vue-router'
 import Notification from '~/components/popups/Notifications.vue'
-import ServersBar from '~/components/pages/layouts/ServersBar.vue'
-import ProfilePlate from '~/components/pages/layouts/ProfilePlate.vue'
+import ServersSideBar from '~/components/sidebars/ServersSideBar.vue'
+import ProfilePlate from '~/components/cards/user/ProfileCard.vue'
 import Loading from '~/components/Loading.vue'
 
 const userStore = useUserStore()

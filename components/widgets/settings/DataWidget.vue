@@ -6,7 +6,7 @@
                 <p class="text-sm text-gray-500">Set up a fake password to delete your data when you use it.</p>
             </div>
 
-            <SetupFakePassword  />
+            <UpdateFakePasswordForm  />
 
             <hr class="border-gray-700">
 
@@ -21,7 +21,7 @@
 
 <script setup>
 import RedButton from '~/components/buttons/RedButton.vue';
-import SetupFakePassword from '../others/data/SetupFakePassword.vue';
+import UpdateFakePasswordForm from '~/components/forms/settings/UpdateFakePasswordForm.vue';
 import { useUserStore } from '#imports';
 
 const userStore = useUserStore();

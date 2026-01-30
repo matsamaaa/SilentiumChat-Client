@@ -25,15 +25,15 @@
         </div>
 
         <div>
-            <UserList 
+            <FriendsList 
                 v-if="activeTab === 'accepted'" 
                 listType="accepted"
             />
-            <UserList 
+            <FriendsList 
                 v-else-if="activeTab === 'pending'" 
                 listType="pending"
             />
-            <UserList 
+            <FriendsList 
                 v-else-if="activeTab === 'blocked'" 
                 listType="blocked"
             />
@@ -42,8 +42,7 @@
 </template>
 <script setup>
 import { ref } from 'vue';
-import UserList from '@/components/pages/friends/UserList.vue';
-
+import FriendsList from '@/components/lists/FriendsList.vue';
 const activeTab = ref('accepted'); // 'accepted', 'pending', 'blocked'
 
 const setActiveTab = (tab) => {

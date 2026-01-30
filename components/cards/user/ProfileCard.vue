@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import AvatarIcon from '~/components/users/AvatarIcon.vue';
+import AvatarIcon from '~/components/icons/user/AvatarIcon.vue';
 import { useUserStore } from '@/stores/user';
 import { useNavigationStore } from '@/stores/navigation';
 import { useDeviceStore } from '#imports';

@@ -49,18 +49,17 @@
 </template>
 
 <script setup>
-import UserCard from './UserCard.vue';
+import UserCard from '~/components/cards/friends/FriendCard.vue';
 import { useUserStore } from '#imports';
 import { useNavigationStore } from '#imports';
 
 
 // components
-import CancelFriendButton from '@/components/friends/CancelFriendButton.vue';
-import RemoveFriendButton from '@/components/friends/RemoveFriendButton.vue';
-import RefuseFriendButton from '@/components/friends/RefuseFriendButton.vue';
-import AcceptFriendButton from '~/components/friends/AcceptFriendButton.vue';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import MessageFriendButton from '~/components/friends/MessageFriendButton.vue';
+import CancelFriendButton from '@/components/buttons/friends/CancelFriendButton.vue';
+import RemoveFriendButton from '@/components/buttons/friends/RemoveFriendButton.vue';
+import RefuseFriendButton from '@/components/buttons/friends/RefuseFriendButton.vue';
+import AcceptFriendButton from '~/components/buttons/friends/AcceptFriendButton.vue';
+import MessageFriendButton from '~/components/buttons/friends/MessageFriendButton.vue';
 
 
 const props = defineProps({

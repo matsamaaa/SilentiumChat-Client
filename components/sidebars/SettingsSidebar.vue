@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import LogoutButton from './others/LogoutButton.vue';
+import LogoutButton from '~/components/buttons/LogoutButton.vue';
 
 const props = defineProps({
   activeTab: {

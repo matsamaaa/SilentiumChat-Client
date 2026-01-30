@@ -1,7 +1,7 @@
 <template>
-  <SettingsLayout />
+  <SettingsLayoutWidget />
 </template>
 
-<script setup>
-import SettingsLayout from '@/components/pages/settings/SettingsLayout.vue'; 
+<script setup> 
+import SettingsLayoutWidget from '~/components/widgets/settings/SettingsLayoutWidget.vue';
 </script>

@@ -6,7 +6,7 @@
             deviceStore.isDesktop ? 'w-[13vw]' : ''
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col border-r border-b border-gray-800 rounded-br-lg flex-shrink-0 pt-5">
-        <UserInput 
+        <UsernameInput 
                 @search="handleSearchUser($event.username, $event.code)"
                 @error="notificationStore.add($event, 'error')"
             />
@@ -20,7 +20,7 @@
         </div>
         <br v-if="deviceStore.isMobile" />
         <DiscussionWaitingButton :discussionsLength="waitingDiscussions.length" :isWaiting="isWaiting" />
-        <DiscussionPreview
+        <DiscussionCard
             v-for="discussion in validDiscussions" 
             :key="discussion._id" 
             :discussion="discussion"
@@ -29,9 +29,9 @@
 </template>
 
 <script setup>
-import DiscussionWaitingButton from '~/components/pages/discussion/DiscussionButton.vue';
-import DiscussionPreview from '@/components/pages/discussion/DiscussionPreview.vue';
-import UserInput from '~/components/users/usersInput.vue';
+import DiscussionWaitingButton from '~/components/buttons/discussion/DiscussionButton.vue';
+import DiscussionCard from '~/components/cards/discussion/DiscussionCard.vue';
+import UsernameInput from '~/components/inputs/UsernameInput.vue';
 
 import { usePrivateDiscussionsStore } from '#imports';
 import { useNotificationStore } from '#imports';

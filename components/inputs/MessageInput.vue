@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import FilesButton from './FilesButton.vue'
+import FilesButton from '~/components/buttons/FilesButton.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useUserStore } from '#imports';
 import { useRoute } from 'vue-router'
