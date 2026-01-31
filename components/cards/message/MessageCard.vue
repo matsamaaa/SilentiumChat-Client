@@ -59,7 +59,7 @@
                 <DownloadIcon :url="selectedImage.url" :filename="selectedImage.alt" />
 
                 <!-- Bouton close -->
-                <QuitButton @execute="selectedImage = null" />
+                <QuitIcon @execute="selectedImage = null" />
             </div>
 
             <!-- Image affichée -->
@@ -76,7 +76,7 @@
 import { ref, computed } from 'vue'
 import { useUserStore } from '@/stores/user'
 import DownloadIcon from '~/components/ui/icons/DownloadIcon.vue'
-import QuitButton from '~/components/buttons/QuitButton.vue'
+import QuitIcon from '~/components/ui/buttons/QuitIcon.vue'
 
 const props = defineProps({
     msg: {

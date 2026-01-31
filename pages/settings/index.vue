@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-row ">
-    <QuitButton 
+    <QuitIcon 
       v-if="deviceStore.isMobile"
       @execute="navigationStore.goToHome()"
       />
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import QuitButton from '~/components/buttons/QuitButton.vue';
+import QuitIcon from '~/components/ui/buttons/QuitIcon.vue';
 import SettingsWidget from '~/components/features/settings/SettingsWidget.vue';
 import SettingsSideBar from '~/components/features/settings/SettingsSideBar.vue';
 

@@ -14,7 +14,7 @@
         </div>
 
         <div class="flex items-center px-2 gap-3 h-[7vh]">
-            <FilesButton 
+            <UploadFileButton 
                 v-if="!isBlocked"
                 ref="uploaderRef" 
                 @file-selected="handleFile" 
@@ -50,7 +50,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import FilesButton from '~/components/buttons/FilesButton.vue'
+import UploadFileButton from '~/components/ui/buttons/UploadFileButton.vue'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { useUserStore } from '#imports';
 import { useRoute } from 'vue-router'

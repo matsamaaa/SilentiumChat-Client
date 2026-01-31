@@ -16,7 +16,7 @@
             </div>
 
             <div class="flex flex-col space-y-2">
-                <ChangeAvatarButton @avatar-selected="handleAvatar" />
+                <UpdateAvatarButton @avatar-selected="handleAvatar" />
                 <AlertButton text="Remove Avatar" @execute="deleteAvatar" />
             </div>
         </div>
@@ -28,7 +28,7 @@
 import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue';
 
 import { useUserStore, useApiStore } from '#imports';
-import ChangeAvatarButton from '~/components/buttons/ChangeAvatarButton.vue';
+import UpdateAvatarButton from '~/components/ui/buttons/UpdateAvatarButton.vue';
 import AlertButton from '~/components/ui/buttons/AlertButton.vue';
 
 const userStore = useUserStore();
