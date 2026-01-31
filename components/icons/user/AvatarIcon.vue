@@ -44,13 +44,20 @@ const props = defineProps({
     type: Boolean,
     default: false,
     required: false
+  },
+  src: {
+    type: String,
+    default: null
   }
 })
 
-const avatarUrl = ref(null)
+const avatarUrl = ref(props.src)
 
 watchEffect(async () => {
-  if (props.userId) {
+  if(props.src) {
+    avatarUrl.value = props.src
+    return
+  } else if (props.userId) {
     try {
       avatarUrl.value = await apiStore.getAvatar(props.userId)
     } catch (e) {

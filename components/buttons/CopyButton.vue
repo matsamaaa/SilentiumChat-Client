@@ -17,9 +17,11 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const emit = defineEmits(['execute']);
 
-const isCopied = ref(false);
-
 const props = defineProps({
+    isCopied: {
+        type: Boolean,
+        default: false
+    },
     color: {
         type: String,
         default: 'indigo'
