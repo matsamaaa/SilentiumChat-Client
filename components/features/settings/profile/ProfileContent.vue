@@ -23,12 +23,16 @@
 
         <div class="mt-8 pt-4 flex flex-row justify-end items-center space-x-4">
             <p v-if="hasChanges" class="text-red-500 font-medium italic">You have unsaved changes.</p>
-            <RedButton
+            <AlertButton
                 v-if="hasChanges"
                 text="Cancel"
                 @execute="CancelSave"
                 />
-            <SaveButton :updates="hasChanges" @saved="handleSave" />
+            <ConfirmButton 
+                v-if="hasChanges"
+                text="Save Changes"
+                @saved="handleSave" 
+                />
         </div>
     </div>
 </template>
@@ -36,10 +40,10 @@
 <script setup>
 import UpdateProfilePictureContent from '~/components/features/settings/profile/UpdateProfilePictureContent.vue';
 import UpdateUsernameContent from '~/components/features/settings/profile/UpdateUsernameContent.vue';
-import SaveButton from '~/components/buttons/SaveButton.vue';
+import ConfirmButton from '~/components/ui/buttons/ConfirmButton.vue';
 
 import { useUserStore, useApiStore } from '#imports';
-import RedButton from '~/components/buttons/RedButton.vue';
+import AlertButton from '~/components/ui/buttons/AlertButton.vue';
 
 const userStore = useUserStore();
 const apiStore = useApiStore();
