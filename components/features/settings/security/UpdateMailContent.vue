@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import NormalButton from '~/components/buttons/NormalButton.vue';
+import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 import NormalInput from '~/components/ui/inputs/NormalInput.vue';
 
 import { useUserStore, useApiStore, useNotificationStore } from '#imports';

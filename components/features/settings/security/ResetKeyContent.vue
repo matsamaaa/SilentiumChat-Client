@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import NormalButton from '~/components/buttons/NormalButton.vue';
+import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 
 const handleResetKeys = () => {
     // Logic to reset encryption keys goes here

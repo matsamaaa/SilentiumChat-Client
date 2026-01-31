@@ -21,8 +21,8 @@
 </template>
 
 <script setup>
-import CopyButton from '~/components/buttons/CopyButton.vue';
-import NormalButton from '~/components/buttons/NormalButton.vue';
+import CopyButton from '~/components/ui/buttons/CopyButton.vue';
+import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 
 import { useUserStore } from '#imports';
 
@@ -34,18 +34,16 @@ const privateKey = ref('');
 const hasRequest = ref(false);
 
 const revealPrivateKey = async () => {
-    privateKey.value = await userStore.getPrivateKey();
+    privateKey.value = await userStore.getPrivateKey() || '';
     isValidPassword.value = true;
     hasRequest.value = false;
 };
 
 const copyKey = async () => {
-    if (!privateKey.value) return;
-
     try {
         await navigator.clipboard.writeText(privateKey.value);
         isCopied.value = true;
-        
+        console.log("isCopied:", isCopied.value);
         setTimeout(() => {
             isCopied.value = false;
         }, 3000);
