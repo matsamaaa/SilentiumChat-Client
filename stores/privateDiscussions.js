@@ -13,7 +13,7 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 const sender = discussion.users[0];
                 const receiver = discussion.users[1];
                 const username = discussion.username;
-                console.log(username)
+
                 // clean discussions
                 this.removeDiscussion(receiver, sender);
                 this.addDiscussion(sender, receiver, username);
@@ -91,30 +91,16 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
 
                 // check what message we decrypt
                 let newMessage;
-                if (from === userStore.user.uniqueId) { // own message
-                    // decrypt message
-                    const decryptedBySender = await decryptMessage(message.encryptedMessageBySender);
+                const isItSender = from === userStore.user.uniqueId;
+                const decryptedMessage = await decryptMessage(isItSender ? message.encryptedMessageBySender : message.encryptedMessage);
+                const files = [];
 
-                    // decrypt files
-                    const files = [];
-                    for (const file of message.files) {
-                        const url = await getDecryptedFileUrl(file, true);
-                        files.push({ url: url.url, name: url.name, extension: url.extension });
-                    }
-
-                    newMessage = { ...message, encryptedMessageBySender: decryptedBySender, files: files };
-                } else { // received message
-                    const decryptedByReceiver = await decryptMessage(message.encryptedMessage);
-
-                    // decrypt files
-                    const files = [];
-                    for (const file of message.files) {
-                        const url = await getDecryptedFileUrl(file);
-                        files.push({ url: url.url, name: url.name, extension: url.extension });
-                    }
-
-                    newMessage = { ...message, encryptedMessage: decryptedByReceiver, files: files };
+                for (const file of message.files) {
+                    const url = await getDecryptedFileUrl(file, isItSender);
+                    files.push({ url: url.url, name: url.name, extension: url.extension });
                 }
+
+                newMessage = { ...message, [isItSender ? 'encryptedMessageBySender' : 'encryptedMessage']: decryptedMessage, files: files };
 
                 // check discussion and add message
                 let discussion = this.getDiscussion(from, to);
@@ -134,6 +120,7 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                     discussion.encryptedMessages.push(newMessage);
                 }
 
+                
                 // update message order with timestamp
                 discussion.encryptedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                 return newMessage;

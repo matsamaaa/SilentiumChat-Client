@@ -31,36 +31,41 @@ const encryptMessage = async (messageText, publicKeyString) => {
 const decryptMessage = async (message) => {
     const userStore = useUserStore();
     const privateKeyString = await userStore.getPrivateKey();
+
     if(!privateKeyString) {
-        return null;
+        return `This message could not be decrypted.`;
     }
 
-    // convert private key base64 to buffer
-    const privateKeyBuffer = base64ToBuffer(privateKeyString);
-    const privateKey = await crypto.subtle.importKey(
-        "pkcs8",
-        privateKeyBuffer,
-        {
-            name: "RSA-OAEP",
-            hash: "SHA-256"
-        },
-        false,
-        ["decrypt"]
-    );
+    try {
+        // convert private key base64 to buffer
+        const privateKeyBuffer = base64ToBuffer(privateKeyString);
+        const privateKey = await crypto.subtle.importKey(
+            "pkcs8",
+            privateKeyBuffer,
+            {
+                name: "RSA-OAEP",
+                hash: "SHA-256"
+            },
+            false,
+            ["decrypt"]
+        );
 
-    // convert message base64 to buffer
-    const messageBuffer = base64ToBuffer(message);
-    const decryptedMessage = await crypto.subtle.decrypt(
-        {
-            name: "RSA-OAEP"
-        },
-        privateKey,
-        messageBuffer
-    );
+        // convert message base64 to buffer
+        const messageBuffer = base64ToBuffer(message);
+        const decryptedMessage = await crypto.subtle.decrypt(
+            {
+                name: "RSA-OAEP"
+            },
+            privateKey,
+            messageBuffer
+        );
 
-    // convert message buffer to base64
-    const decoder = new TextDecoder();
-    return decoder.decode(decryptedMessage);
+        // convert message buffer to base64
+        const decoder = new TextDecoder();
+        return decoder.decode(decryptedMessage);
+    } catch (error) {
+        return `This message could not be decrypted.`;
+    }
 }
 
 export { encryptMessage, decryptMessage };
