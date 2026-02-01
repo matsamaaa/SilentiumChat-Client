@@ -33,6 +33,7 @@
 <script setup>
 import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue'
 import FriendButtonChoiceContent from '~/components/features/friends/FriendButtonChoiceContent.vue';
+import { formatDate } from '~/utils/date.js';
 
 import { useDeviceStore, useUserStore } from '#imports';
 

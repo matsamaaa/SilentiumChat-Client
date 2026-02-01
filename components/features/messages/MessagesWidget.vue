@@ -70,9 +70,9 @@
             >
                 <ProfileCardContent
                     :id="id"
-                    :username="discussion?.username || 'Unknown User'"
-                    :tag="discussion?.tag || '0000'"
-                    :creationDate="discussion?.creationDate || ''"
+                    :username="recipientUsername || 'Unknown User'"
+                    :tag="recipientTag || '0000'"
+                    :creationDate="recipientCreationDate || ''"
                 />
             </div>
         </transition>
@@ -86,9 +86,9 @@ import MessageContent from '~/components/features/messages/MessageContent.vue';
 import MessageInput from '~/components/features/messages/MessageInput.vue';
 import ProfileCardContent from '~/components/features/messages/ProfileCardContent.vue';
 import ToggleDiscussionStatusContent from '~/components/features/messages/ToggleDiscussionStatusContent.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useDeviceStore, usePrivateDiscussionsStore, useUserStore, useWebSocketStore, useApiStore } from '#imports';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const deviceStore = useDeviceStore();
 const privateDiscussionsStore = usePrivateDiscussionsStore();
@@ -267,8 +267,8 @@ onMounted(async () => {
     isLoading.value = true;
 
     recipientUsername.value = await apiStore.getUsername(id);
-    recipientTag.value = await apiStore.getUserTag(id);
-    recipientTag.value = recipientTag.value.toString().padStart(4, '0');
+    const tag = await apiStore.getUserTag(id);
+    recipientTag.value = String(tag ?? '').padStart(4, '0');
     recipientCreationDate.value = await apiStore.getUserCreationDate(id);
 
     await privateDiscussionsStore.loadMessagesPage(id, page.value);
