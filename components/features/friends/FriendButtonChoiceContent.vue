@@ -2,7 +2,7 @@
     <div class="flex space-x-2">
 
         <MessageFriendButton
-            v-if="['accepted', 'pending'].includes(tab)"
+            v-if="['accepted', 'pending'].includes(tab) && !isMessaging"
             :userId="userId"
             />
         <CancelFriendButton
@@ -58,6 +58,11 @@ const props = defineProps({
     tab: {
         type: String,
         required: true
+    },
+    isMessaging: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 });
 </script>

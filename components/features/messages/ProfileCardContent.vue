@@ -11,6 +11,7 @@
                 :userId="id"
                 :hasAsk="user.hasAsk"
                 :tab="user.status"
+                :isMessaging="true"
                 />
         </div>
         
