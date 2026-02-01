@@ -77,6 +77,8 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
             const discussion = this.getDiscussion(from, to);
             if (!discussion) return false;
 
+            if (messageId == null) return false;
+
             return discussion.encryptedMessages.some(msg => msg._id === messageId);
         },
 
