@@ -67,6 +67,13 @@ export const useUserStore = defineStore('user', {
             useCookie('user').value = JSON.stringify(user)
         },
 
+        updateUserPublicKey(newPublicKey) {
+            if (this.user) {
+                this.user.publicKey = newPublicKey;
+                useCookie('user').value = JSON.stringify(this.user);
+            }
+        },
+
         updateUsername(newUsername) {
             if (this.user) {
                 this.user.username = newUsername;
@@ -106,6 +113,25 @@ export const useUserStore = defineStore('user', {
             }
         },
 
+        async resetUserKeys() {
+            const notificationStore = useNotificationStore();
+
+            const { publicKey, privateKey } = await generateRSAKeyPair();
+            const publicKeyBase64 = bufferToBase64(publicKey);
+            const privateKeyBase64 = bufferToBase64(privateKey);
+
+            try {
+                const apiStore = useApiStore();
+                await apiStore.updatePublicKey(publicKeyBase64);
+                this.updateUserPublicKey(publicKeyBase64);
+            } catch (error) {
+                notificationStore.add("Failed to reset user keys", "error");
+            } finally {
+                await setPrivateKeyInDB(privateKeyBase64, this.user.uniqueId);
+                notificationStore.add("User keys have been reset successfully", "success");
+            }
+        },
+
         clearUser() {
             this.user = null
             this.token = null
@@ -123,6 +149,7 @@ export const useUserStore = defineStore('user', {
             const apiStore = useApiStore();
             const navigationStore = useNavigationStore();
             const webSocketStore = useWebSocketStore();
+
             const { publicKey, privateKey } = await generateRSAKeyPair(); // buffer
 
             const publicKeyBase64 = bufferToBase64(publicKey);
@@ -286,6 +313,6 @@ export const useUserStore = defineStore('user', {
 
             navigationStore.goToLogin();
             notificationStore.add("All user data has been cleared", "success");
-        }
+        },
     }
 });

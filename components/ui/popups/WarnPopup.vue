@@ -29,7 +29,6 @@
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import AlertButton from '../buttons/AlertButton.vue';
 import ConfirmButton from '../buttons/ConfirmButton.vue';
-import QuitIcon from '../icons/QuitIcon.vue';
 
 const emit = defineEmits(['close', 'confirm']);
 

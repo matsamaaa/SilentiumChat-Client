@@ -58,7 +58,6 @@ const copyKey = async () => {
     try {
         await navigator.clipboard.writeText(privateKey.value);
         isCopied.value = true;
-        console.log("isCopied:", isCopied.value);
         setTimeout(() => {
             isCopied.value = false;
         }, 3000);

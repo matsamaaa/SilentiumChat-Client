@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 
 // api imports
-import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword, deletePublicKey } from './api/meApi'
+import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword, deletePublicKey, updatePublicKey } from './api/meApi'
 import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate } from './api/userApi'
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages, deleteAllDiscussions } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
@@ -83,6 +83,10 @@ export const useApiStore = defineStore('api', {
 
         async deletePublicKey() {
             return deletePublicKey(this.urls);
+        },
+
+        async updatePublicKey(newPublicKey) {
+            return updatePublicKey(this.urls, newPublicKey);
         },
 
         /**

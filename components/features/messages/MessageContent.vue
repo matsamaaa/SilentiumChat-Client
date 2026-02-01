@@ -2,13 +2,18 @@
     <div 
         :class="[ 
             'flex flex-col p-2 my-2 max-w-md break-words max-w-[60vw]',
-            isOwnMessage ? 'self-end bg-indigo-600 rounded-l-lg rounded-br-lg' : 'self-start bg-gray-500 rounded-r-lg rounded-bl-lg'
+            isOwnMessage ? 'self-end bg-indigo-600 rounded-l-lg rounded-br-lg' : 'self-start bg-gray-500 rounded-r-lg rounded-bl-lg',
+            !isDecryptable ? '!opacity-75': ''
         ]"
     >
 
         <!-- Message text -->
-        <p class="whitespace-pre-wrap text-sm select-none text-white" :class="{'text-right': isOwnMessage}">
-            {{ isOwnMessage ? message.encryptedMessageBySender : message.encryptedMessage }}
+        <p 
+            class="whitespace-pre-wrap text-sm select-none text-white" 
+            :class="{
+                'text-right': isOwnMessage
+            }">
+                {{ displayedText }}
         </p>
 
         <!-- Files -->
@@ -73,6 +78,16 @@ const props = defineProps({
         type: Boolean,
         required: true
     }
+});
+
+const displayedText = computed(() => {
+    return props.isOwnMessage
+        ? (props.message.encryptedMessageBySender ?? '')
+        : (props.message.encryptedMessage ?? '');
+});
+
+const isDecryptable = computed(() => {
+    return displayedText.value !== "This message could not be decrypted.";
 });
 
 const selectedImage = ref(null);

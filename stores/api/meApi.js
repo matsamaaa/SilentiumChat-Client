@@ -194,3 +194,21 @@ export async function deletePublicKey(urls) {
         throw error;
     }
 }
+
+export async function updatePublicKey(urls, publicKey) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+
+    try {
+        const response = await axiosInstance.patch(`${urls.backend}/me/publickey/update`, {
+            publicKey
+        });
+        if (response.data.success) {
+            notif.add("Public key updated successfully", "success");
+        }
+        return response.data;
+    } catch (error) {
+        console.error("Error updating public key:", error);
+        throw error;
+    }
+}
