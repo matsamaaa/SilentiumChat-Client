@@ -5,29 +5,31 @@
         </div>
         <template v-else>
             <div class="flex flex-row overflow-y-auto overflow-x-hidden h-[100vh] w-[100vw]" >
-                <ServersSideBar v-if="connectedRoute && !deviceStore.isDisabledServersBar" />
-                <ProfilePlate v-if="connectedRoute && !deviceStore.isDisabledMessagesBar" />
+                <ServersWidget v-if="connectedRoute && !deviceStore.isDisabledServersBar" />
+                <ProfilePlate v-if="connectedRoute && !deviceStore.isDisabledProfilePlate" />
 
                 <main class="flex-1 bg-gray-900">
                     <slot />
                 </main>
 
-                <Notification />
+                <NotificationPopup />
             </div>
         </template>
     </div>
 </template>
 
 <script setup>
-import { useUserStore } from '@/stores/user'
-import { useNavigationStore } from '@/stores/navigation'
-import { useWebSocketStore } from '@/stores/ws'
-import { useDeviceStore } from '@/stores/device'
-import { useRoute } from 'vue-router'
-import Notification from '~/components/popups/Notifications.vue'
-import ServersSideBar from '~/components/sidebars/ServersSideBar.vue'
-import ProfilePlate from '~/components/cards/user/ProfileCard.vue'
-import Loading from '~/components/Loading.vue'
+import NotificationPopup from '~/components/ui/popups/NotificationPopup.vue'
+import ServersWidget from '~/components/features/ServersWidget.vue'
+import ProfilePlate from '~/components/ui/ProfilePlate.vue'
+import Loading from '~/components/features/Loading.vue'
+
+import { 
+    useUserStore, 
+    useNavigationStore, 
+    useWebSocketStore, 
+    useDeviceStore 
+} from '#imports';
 
 const userStore = useUserStore()
 const navigationStore = useNavigationStore()

@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import QuitIcon from '~/components/ui/buttons/QuitIcon.vue';
+import QuitIcon from '~/components/ui/icons/QuitIcon.vue';
 import SettingsWidget from '~/components/features/settings/SettingsWidget.vue';
 import SettingsSideBar from '~/components/features/settings/SettingsSideBar.vue';
 

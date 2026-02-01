@@ -13,7 +13,7 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 const sender = discussion.users[0];
                 const receiver = discussion.users[1];
                 const username = discussion.username;
-
+                console.log(username)
                 // clean discussions
                 this.removeDiscussion(receiver, sender);
                 this.addDiscussion(sender, receiver, username);

@@ -19,8 +19,11 @@
                 autocomplete="off"
                 :value="tagModel"
                 placeholder="0000"
+                maxlength="4"
                 class="w-16 px-2 py-2 text-center bg-gray-700 text-gray-300 font-mono focus:outline-none sm:text-sm rounded-l-none rounded-r-md"
                 @input="onTagInput"
+                @keydown="onTagKeydown"
+                @paste="onTagPaste"
             />
         </div>
     </div>
@@ -56,6 +59,12 @@ const formatTag = (value) => {
     return digitsOnly.length > 4 ? digitsOnly.slice(-4) : digitsOnly;
 };
 
+const rollTag = (currentTag, appendedDigits) => {
+    const digitsOnly = String(appendedDigits ?? '').replace(/\D/g, '');
+    if (!digitsOnly) return formatTag(currentTag);
+    return formatTag(`${formatTag(currentTag)}${digitsOnly}`);
+}
+
 const onUsernameInput = (event) => {
     emit('update:username', event.target.value);
 };
@@ -63,4 +72,33 @@ const onUsernameInput = (event) => {
 const onTagInput = (event) => {
     emit('update:tag', formatTag(event.target.value));
 };
+
+const onTagKeydown = (event) => {
+    if (event.ctrlKey || event.metaKey || event.altKey) return;
+
+    const key = event.key;
+    if (!/^\d$/.test(key)) return;
+
+    const input = event.target;
+    const selectionStart = input?.selectionStart;
+    const selectionEnd = input?.selectionEnd;
+
+    // If user is replacing a selection, let the browser handle it.
+    if (selectionStart != null && selectionEnd != null && selectionStart !== selectionEnd) return;
+
+    // When already 4 chars and no selection: implement rolling (drop first, append new digit)
+    if ((tagModel.value?.length ?? 0) >= 4) {
+        event.preventDefault();
+        emit('update:tag', rollTag(tagModel.value, key));
+    }
+}
+
+const onTagPaste = (event) => {
+    const pasted = event.clipboardData?.getData('text') ?? '';
+    const digitsOnly = String(pasted).replace(/\D/g, '');
+    if (!digitsOnly) return;
+
+    event.preventDefault();
+    emit('update:tag', rollTag(tagModel.value, digitsOnly));
+}
 </script>

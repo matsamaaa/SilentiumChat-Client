@@ -23,7 +23,7 @@
 
         </form>
 
-        <Warn
+        <WarnPopup
             v-if="hasRequest && !hasConfirmed" 
             @close="hasRequest = false" 
             @confirm="handleConfirmation" 
@@ -35,9 +35,9 @@
 <script setup>
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 import NormalInput from '~/components/ui/inputs/NormalInput.vue';
+import WarnPopup from '~/components/ui/popups/WarnPopup.vue';
 
 import { useUserStore } from '#imports';
-import Warn from '~/components/popups/Warn.vue';
 
 const userStore = useUserStore();
 

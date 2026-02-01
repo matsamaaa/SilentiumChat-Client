@@ -1,14 +1,15 @@
 <template>
     <div class="flex flex-row">
-        <MessagingSideBar />
-        <FriendTab v-if="!deviceStore.isMobile" />
+        <DiscussionsWidget />
+        <FriendsTabContent v-if="!deviceStore.isMobile" />
     </div>
 </template>
 
 <script setup>
+import FriendsTabContent from '~/components/features/friends/FriendsTabWidget.vue';
+import DiscussionsWidget from '~/components/features/DiscussionsWidget.vue';
+
 import { useDeviceStore } from '@/stores/device';
-import FriendTab from '~/components/tabs/FriendTab.vue';
-import MessagingSideBar from '~/components/sidebars/MessagingSideBar.vue';
 
 const deviceStore = useDeviceStore();
 </script>

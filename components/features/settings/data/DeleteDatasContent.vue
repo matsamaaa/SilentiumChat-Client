@@ -7,7 +7,7 @@
         <AlertButton text="Delete All My Data" @execute="request = true" />
 
 
-        <Warn 
+        <WarnPopup 
             v-if="request"
             message="Are you sure you want to delete everything?"
             @confirm="userStore.clearAllDatas()"
@@ -18,7 +18,7 @@
 
 <script setup>
 import AlertButton from '~/components/ui/buttons/AlertButton.vue';
-import Warn from '~/components/popups/Warn.vue';
+import WarnPopup from '~/components/ui/popups/WarnPopup.vue';
 
 import { useUserStore } from '#imports';
 

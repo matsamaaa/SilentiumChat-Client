@@ -16,13 +16,20 @@
             </div>
         </div>
 
-        <NormalButton label="Reveal Private Key" icon="fa-key" @execute="revealPrivateKey" />
+        <NormalButton label="Reveal Private Key" icon="fa-key" @execute="requestPassword" />
+
+        <PasswordValidation 
+            v-if="hasRequest && !isValidPassword" 
+            @close="hasRequest = false" 
+            @submit="revealPrivateKey"
+        />
     </div>
 </template>
 
 <script setup>
 import CopyButton from '~/components/ui/buttons/CopyButton.vue';
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
+import PasswordValidation from '~/components/ui/popups/PasswordValidationPopup.vue';
 
 import { useUserStore } from '#imports';
 
@@ -32,6 +39,10 @@ const isValidPassword = ref(false);
 const isCopied = ref(false);
 const privateKey = ref('');
 const hasRequest = ref(false);
+
+const requestPassword = () => {
+    hasRequest.value = true;
+};
 
 const revealPrivateKey = async () => {
     privateKey.value = await userStore.getPrivateKey() || '';

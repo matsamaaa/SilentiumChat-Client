@@ -7,7 +7,8 @@ export const useDeviceStore = defineStore('device', {
     isDesktop: true,
 
     isDisabledServersBar: false,
-    isDisabledMessagesBar: false
+    isDisabledMessagesBar: false,
+    isDisabledProfilePlate: false,
   }),
 
   actions: {
