@@ -6,6 +6,7 @@
                 @execute="updateTab('accepted')"
                 label="Friends"
                 :bgSelect="['accepted'].includes(tab)"
+                icon="user"
                 />
 
             <NormalButton
@@ -13,6 +14,7 @@
                 @execute="updateTab('pending')"
                 label="Pending"
                 :bgSelect="['pending'].includes(tab)"
+                icon="user-clock"
                 />
 
             <NormalButton
@@ -20,6 +22,7 @@
                 @execute="updateTab('blocked')"
                 label="Blocked"
                 :bgSelect="['blocked'].includes(tab)"
+                icon="user-lock"
                 />
         </div>
 

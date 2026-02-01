@@ -35,7 +35,7 @@
             <NormalButton
                 type="submit"
                 label="Update Password"
-                class="mt-2 w-full px-4 py-2 text-sm font-medium rounded-lg transition duration-150 sm:w-auto"
+                icon="wrench"
                 />
 
         </form>

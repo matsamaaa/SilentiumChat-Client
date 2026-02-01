@@ -7,7 +7,7 @@
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col gap-2 border-r border-b border-gray-800 rounded-br-lg flex-shrink-0 pt-5 px-3 pb-3">
         
-        <SearchInput 
+        <SearchInput
             v-model="query"
             @search="searchUser"
             placeholder="username#0001"
@@ -27,6 +27,7 @@
             @execute="!isWaiting ? navigationStore.goToWaitingMessages() : navigationStore.goToHome()"
             :label="isWaiting ? 'Back To All Messages' :  `Messages Requests (${waitingDiscussions.length})`"
             textSize="sm"
+            icon="fa-paper-plane"
             />
 
         <DiscussionCardContent

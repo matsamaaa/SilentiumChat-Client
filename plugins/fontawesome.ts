@@ -6,10 +6,10 @@ import '@fortawesome/fontawesome-svg-core/styles.css'
 config.autoAddCss = false
 
 // Import of icons
-import { faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation, faCircleCheck, faCircleXmark, faCircleInfo, faCopy, faUserXmark, faUserCheck, faUserClock, faUserLock, faMessage, faGear, faComment, faArrowRightFromBracket, faKey, faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation, faCircleCheck, faCircleXmark, faCircleInfo, faCopy, faUserXmark, faUserCheck, faUserClock, faUserLock, faMessage, faGear, faComment, faArrowRightFromBracket, faKey, faChevronLeft, faUser, faWrench } from '@fortawesome/free-solid-svg-icons'
 
 // add icons
-library.add(faPlus, faKey, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation, faCircleCheck, faCircleXmark, faCircleInfo, faCopy, faUserXmark, faUserCheck, faUserClock, faUserLock, faMessage, faGear, faComment, faArrowRightFromBracket, faChevronLeft)
+library.add(faPlus, faKey, faXmark, faFile, faDownload, faUserPlus, faClock, faCheck, faBan, faPaperPlane, faLock, faCircleExclamation, faCircleCheck, faCircleXmark, faCircleInfo, faCopy, faUserXmark, faUserCheck, faUserClock, faUserLock, faMessage, faGear, faComment, faArrowRightFromBracket, faChevronLeft, faUser, faWrench)
 
 export default defineNuxtPlugin((nuxtApp) => {
     nuxtApp.vueApp.component('FontAwesomeIcon', FontAwesomeIcon)

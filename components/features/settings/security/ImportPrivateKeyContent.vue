@@ -17,8 +17,8 @@
             <NormalButton
                 type="submit"
                 label="Import Private Key"
-                class="mt-2 w-full px-4 py-2 text-sm font-medium rounded-lg transition duration-150 sm:w-auto"
                 :disabled="!privateKey"
+                icon="fa-key"
                 />
 
         </form>

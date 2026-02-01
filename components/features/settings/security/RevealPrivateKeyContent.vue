@@ -16,7 +16,11 @@
             </div>
         </div>
 
-        <NormalButton label="Reveal Private Key" icon="fa-key" @execute="requestPassword" />
+        <NormalButton 
+            label="Reveal Private Key" 
+            icon="fa-key" 
+            @execute="requestPassword" 
+            />
 
         <PasswordValidation 
             v-if="hasRequest && !isValidPassword" 

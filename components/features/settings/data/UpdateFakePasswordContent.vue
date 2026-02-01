@@ -36,6 +36,7 @@
             <NormalButton
                 type="submit"
                 label="Update Password"
+                icon="wrench"
                 />
         </form>
     </div>
