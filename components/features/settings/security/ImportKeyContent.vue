@@ -15,7 +15,7 @@
                 type="text"
                 v-model="keyValue"
                 :placeholder="selectedKeyType === 'private' ? 'Enter your private key here' : 'Enter your public key here'"
-                required=true
+                required
                 />
 
             <div class="pt-2">
@@ -24,9 +24,22 @@
                     ref="fileInput"
                     type="file"
                     accept=".pem,.key,.txt"
-                    class="block w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    class="sr-only"
                     @change="handleFileSelected"
                 >
+
+                <button
+                    type="button"
+                    class="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-md text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 sm:text-sm flex items-center justify-center"
+                    @click="triggerFilePicker"
+                >
+                    <FontAwesomeIcon icon="fa-file" class="mr-2" />
+                    Choose a key file
+                </button>
+
+                <p v-if="selectedFileName" class="text-xs text-gray-300 mt-1 truncate">
+                    Selected: {{ selectedFileName }}
+                </p>
 
                 <p class="text-xs text-gray-500 mt-1">Accepted: .pem (recommended), .key, .txt</p>
             </div>
@@ -66,6 +79,7 @@ const hasRequest = ref(false);
 const hasConfirmed = ref(false);
 
 const fileInput = ref(null);
+const selectedFileName = ref('');
 
 const keyTypeOptions = [
     { value: 'private', label: 'Private key' },
@@ -102,6 +116,7 @@ const normalizeKeyInput = (input) => {
 const handleFileSelected = async (event) => {
     const file = event?.target?.files?.[0];
     if (!file) return;
+    selectedFileName.value = file.name;
 
     try {
         const text = await file.text();
@@ -112,6 +127,11 @@ const handleFileSelected = async (event) => {
         // allow re-selecting the same file
         if (fileInput.value) fileInput.value.value = '';
     }
+};
+
+const triggerFilePicker = () => {
+    if (!fileInput.value) return;
+    fileInput.value.click();
 };
 
 const handleImport = () => {
@@ -145,5 +165,6 @@ watch(selectedKeyType, () => {
     hasRequest.value = false;
     hasConfirmed.value = false;
     keyValue.value = '';
+    selectedFileName.value = '';
 });
 </script>

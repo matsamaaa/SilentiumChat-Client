@@ -23,7 +23,7 @@
 
             <hr class="border-gray-700">
 
-            <ImportPrivateKeyContent />
+            <ImportKeyContent />
 
         </section>
 
@@ -36,5 +36,5 @@ import ResetKeyContent from '~/components/features/settings/security/ResetKeyCon
 import RevealPrivateKeyContent from '~/components/features/settings/security/RevealPrivateKeyContent.vue';
 import UpdateMailContent from '~/components/features/settings/security/UpdateMailContent.vue';
 import UpdatePasswordContent from '~/components/features/settings/security/UpdatePasswordContent.vue';
-import ImportPrivateKeyContent from '~/components/features/settings/security/ImportPrivateKeyContent.vue';
+import ImportKeyContent from '~/components/features/settings/security/ImportKeyContent.vue';
 </script>
