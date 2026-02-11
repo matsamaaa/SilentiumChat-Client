@@ -14,6 +14,23 @@
 
                 <CopyButton :isCopied="isCopied" color="green" @execute="copyKey" />
             </div>
+
+            <div class="mt-4 flex flex-wrap gap-2">
+                <NormalButton
+                    label="Export Private Key (.pem)"
+                    icon="fa-download"
+                    color="green"
+                    @execute="exportPrivateKey"
+                />
+
+                <NormalButton
+                    v-if="publicKey"
+                    label="Export Public Key (.pem)"
+                    icon="fa-download"
+                    color="indigo"
+                    @execute="exportPublicKey"
+                />
+            </div>
         </div>
 
         <NormalButton 
@@ -44,6 +61,27 @@ const isCopied = ref(false);
 const privateKey = ref('');
 const hasRequest = ref(false);
 
+const publicKey = computed(() => userStore.user?.publicKey || '');
+
+const base64ToPem = (base64, label) => {
+    const clean = (base64 || '').replace(/\s+/g, '');
+    const lines = clean.match(/.{1,64}/g);
+    const body = lines ? lines.join('\n') : clean;
+    return `-----BEGIN ${label}-----\n${body}\n-----END ${label}-----\n`;
+};
+
+const downloadTextFile = (filename, content, mimeType = 'application/x-pem-file;charset=utf-8') => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+};
+
 const requestPassword = () => {
     hasRequest.value = true;
 };
@@ -52,6 +90,20 @@ const revealPrivateKey = async () => {
     privateKey.value = await userStore.getPrivateKey() || '';
     isValidPassword.value = true;
     hasRequest.value = false;
+};
+
+const exportPrivateKey = () => {
+    if (!privateKey.value) return;
+    const filename = `silentium_private_key_${userStore.user?.uniqueId || 'user'}.pem`;
+    const pem = base64ToPem(privateKey.value, 'PRIVATE KEY');
+    downloadTextFile(filename, pem);
+};
+
+const exportPublicKey = () => {
+    if (!publicKey.value) return;
+    const filename = `silentium_public_key_${userStore.user?.uniqueId || 'user'}.pem`;
+    const pem = base64ToPem(publicKey.value, 'PUBLIC KEY');
+    downloadTextFile(filename, pem);
 };
 
 const copyKey = async () => {

@@ -12,7 +12,6 @@
 </template>
 
 <script setup>
-import { defineEmits } from 'vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const emit = defineEmits(['execute']);
