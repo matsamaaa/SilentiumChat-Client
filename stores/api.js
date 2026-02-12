@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
 
 // api imports
-import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword, deletePublicKey, updatePublicKey } from './api/meApi'
-import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate } from './api/userApi'
+import { updateUsername, updateTag, uploadAvatar, getAvatar, deleteAvatar, updatePassword, isValidPassword, updateFakePassword, deletePublicKey, updatePublicKey, getStatus } from './api/meApi'
+import { getUserPublicKey, getUsername, getUserIdByFullName, getUserTag, getUserCreationDate, getUserStatus } from './api/userApi'
 import { getPrivateDiscussion, updateDiscussionStatus, getLastMessages, deleteAllDiscussions } from './api/messageApi'
 import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList, deleteFriends } from './api/friendApi';
@@ -32,6 +32,10 @@ export const useApiStore = defineStore('api', {
             return getUsername(this.urls, userId);
         },
 
+        async getUserStatus(userId) {
+            return getUserStatus(this.urls, userId);
+        },
+
         async getUserTag(userId) {
             return getUserTag(this.urls, userId);
         },
@@ -55,6 +59,10 @@ export const useApiStore = defineStore('api', {
 
         async updateTag(newTag) {
             return updateTag(this.urls, newTag);
+        },
+
+        async getStatus() {
+            return getStatus(this.urls);
         },
 
         async getAvatar(userId) {

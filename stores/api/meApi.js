@@ -22,6 +22,17 @@ export async function updateUsername(urls, newUsername) {
     }
 }
 
+export async function getStatus(urls) {
+    const axiosInstance = createAxiosInstance();
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/me/status`);
+        return response.data.datas.status;
+    } catch (error) {
+        console.error("Error fetching user status:", error);
+        throw error;
+    }
+}
+
 // tag
 export async function updateTag(urls, newTag) {
     const axiosInstance = createAxiosInstance();

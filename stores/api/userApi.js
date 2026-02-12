@@ -56,3 +56,15 @@ export async function getUserIdByFullName(urls, username, code) {
         throw error;
     }
 }
+
+export async function getUserStatus(urls, userId) {
+    const axiosInstance = createAxiosInstance();
+
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/user/${userId}/status`);
+        return response.data.datas.status;
+    } catch (error) {
+        console.error("Error fetching user status:", error);
+        throw error;
+    }
+}

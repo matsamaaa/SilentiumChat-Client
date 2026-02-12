@@ -3,6 +3,8 @@ import { useApiStore } from './api'
 import { io } from 'socket.io-client';
 import { encryptMessage } from '~/utils/messages';
 import { usePrivateDiscussionsStore } from './privateDiscussions';
+import { useStatusStore } from './status';
+import { useUserStore } from './user';
 import { encryptFile } from '~/utils/files';
 import MessageManager from '~/utils/managers/messageManager';
 import FileManager from '~/utils/managers/fileManager';
@@ -44,6 +46,15 @@ export const useWebSocketStore = defineStore('websocket', {
 
                 await privateDiscussionsStore.addMessageToDiscussion(msg);
             });
+
+            this.socket.on("userStatus", async (data) => {
+                const statusStore = useStatusStore();
+                const { status, from } = data;
+                console.log(`Received status update for user ${from}:`, status);
+                if (statusStore.getStatusByUserId(from)) {
+                    statusStore.updateStatus(from, status);
+                }
+            })
 
         },
 

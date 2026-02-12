@@ -13,6 +13,7 @@
                 <p class="pl-4 text-gray-500 text-sm">#{{ tag }}</p>
             </div>
         </div>
+        <StatusIcon :me="true" />
         <div class="flex flex-row">
             <FontAwesomeIcon
                 @click="navigationStore.goToSettings"
@@ -28,6 +29,7 @@
 
 <script setup>
 import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue';
+import StatusIcon from './icons/StatusIcon.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import { useUserStore, useNavigationStore, useDeviceStore } from '#imports';
