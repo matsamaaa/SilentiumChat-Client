@@ -6,13 +6,17 @@
             'w-[20vw]': deviceStore.isTablet
         }"
         >
-        <div class="w-full h-[13vh] bg-indigo-600 flex justify-end items-start pt-1">
-            <FriendButtonChoiceContent
-                :userId="id"
-                :hasAsk="user.hasAsk"
-                :tab="user.status"
-                :isMessaging="true"
-                />
+        <div class="w-full h-[13vh] flex flex-col bg-indigo-600 justify-end items-end pt-1 relative">
+            <div class="w-full h-full bg-indigo-600 flex justify-end items-start pt-1">
+                <FriendButtonChoiceContent
+                    :userId="id"
+                    :hasAsk="user.hasAsk"
+                    :tab="user.status"
+                    :isMessaging="true"
+                    />
+            </div>
+
+            <StatusIcon :userId="id" class="absolute right-2 bottom-2" />
         </div>
         
         <AvatarIcon 
@@ -32,6 +36,7 @@
 
 <script setup>
 import AvatarIcon from '~/components/ui/icons/AvatarIcon.vue'
+import StatusIcon from '~/components/ui/icons/StatusIcon.vue'
 import FriendButtonChoiceContent from '~/components/features/friends/FriendButtonChoiceContent.vue';
 import { formatDate } from '~/utils/date.js';
 

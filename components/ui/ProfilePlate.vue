@@ -13,7 +13,7 @@
                 <p class="pl-4 text-gray-500 text-sm">#{{ tag }}</p>
             </div>
         </div>
-        <StatusIcon :me="true" />
+        <StatusIcon :me="true" :isEditable="true" />
         <div class="flex flex-row">
             <FontAwesomeIcon
                 @click="navigationStore.goToSettings"

@@ -49,13 +49,17 @@ export const useWebSocketStore = defineStore('websocket', {
 
             this.socket.on("userStatus", async (data) => {
                 const statusStore = useStatusStore();
-                const { status, from } = data;
-                console.log(`Received status update for user ${from}:`, status);
-                if (statusStore.getStatusByUserId(from)) {
-                    statusStore.updateStatus(from, status);
-                }
+                const userId = data?.userId || data?.from;
+                const status = data?.status;
+                if (!userId) return;
+                statusStore.updateStatus(userId, status);
             })
 
+        },
+
+        wsUpdateUserStatus(status) {
+            if (!this.socket) return;
+            this.socket.emit('updateUserStatus', { status });
         },
 
         wsDisconnect() {
