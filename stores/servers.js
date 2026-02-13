@@ -8,9 +8,34 @@ export const useServersStore = defineStore('servers', {
         }
     },
     actions: {
+        async initialize() {
+            const apiStore = useApiStore();
+            const userStore = useUserStore();
+
+            try {
+                const serversData = await apiStore.getUserServers(userStore.user.uniqueId);
+                console.log("Fetched user servers:", serversData);
+                serversData.forEach(server => {
+                    this.addServer(server.code, server.banner, server.icon, server.name);
+                });
+            } catch (error) {
+                console.error("Error initializing servers store:", error);
+            }
+        },
+
         async addServer(code, banner, icon, name) {
-            const server = { code, banner, icon, name };
-            this.servers[code] = server;
+            const existing = this.getServerByCode(code);
+            const iconUrl = icon ? await useApiStore().getServerIcon(code) : null;
+            if (existing) {
+                const updated = { ...existing };
+                if (banner !== undefined) updated.banner = banner;
+                if (icon !== undefined) updated.icon = iconUrl;
+                if (name !== undefined) updated.name = name;
+                this.servers[code] = updated;
+                return;
+            }
+
+            this.servers[code] = { code, banner, icon: iconUrl, name };
         },
 
         async updateServerBanner(code, banner) {

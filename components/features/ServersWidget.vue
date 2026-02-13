@@ -9,27 +9,31 @@
         class="bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
 
         <div class="flex flex-col gap-2">
-            <button
-                @click="navigationStore.goToHome"
-                class="bg-gray-800 flex flex-col justify-center items-start p-4 rounded-lg hover:bg-gray-700 duration-200">
-                <FontAwesomeIcon icon="fa-solid fa-message" class="text-indigo-600 hover:text-indigo-500 text-2xl duration-200"/>
-            </button>
+            <SquareIconButton icon="fa-solid fa-message" @click="navigationStore.goToHome" />
             
-            <button
-                @click="navigationStore.goToServerCreation"
-                class="bg-gray-800 flex flex-col justify-center items-start p-4 rounded-lg hover:bg-gray-700 duration-200">
-                <FontAwesomeIcon icon="fa-solid fa-server" class="text-indigo-600 hover:text-indigo-500 text-2xl duration-200"/>
-            </button>
+            <SquareIconButton icon="fa-solid fa-server" @click="navigationStore.goToServerCreation" />
+            
+            <hr class="border-gray-700">
+
+            <SquareIconButton
+                v-for="(server, code) in serversStore.servers"
+                :key="code"
+                :img-src="server.icon"
+                img-alt="Server Icon"
+                icon="fa-solid fa-server"
+            >
+            </SquareIconButton>
         </div>
     </div>
 </template>
 
 <script setup>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { useNavigationStore } from '#imports';
+import SquareIconButton from '~/components/ui/buttons/SquareIconButton.vue';
+import { useNavigationStore, useServersStore } from '#imports';
 
 import { useDeviceStore } from '#imports';
 
 const navigationStore = useNavigationStore();
+const serversStore = useServersStore();
 const deviceStore = useDeviceStore();
 </script>

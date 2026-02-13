@@ -23,7 +23,6 @@ export async function createServer(urls, name, owner) {
 export async function uploadServerBanner(urls, code, file) {
     const axiosInstance = createAxiosInstance();
     const notif = useNotificationStore();
-    const serversStore = useServersStore();
     const formData = new FormData();
 
     formData.append('banner', file);
@@ -44,7 +43,6 @@ export async function uploadServerBanner(urls, code, file) {
         );
         if (response.data.success) {
             console.log("Banner uploaded successfully:", response.data);
-            serversStore.updateServerBanner(code, response.data.datas.banner);
             notif.add("Banner uploaded successfully", "success");
         }
         return response.data;
@@ -57,7 +55,6 @@ export async function uploadServerBanner(urls, code, file) {
 export async function uploadServerIcon(urls, code, file) {
     const axiosInstance = createAxiosInstance();
     const notif = useNotificationStore();
-    const serversStore = useServersStore();
     const formData = new FormData();
 
     formData.append('icon', file);
@@ -78,12 +75,51 @@ export async function uploadServerIcon(urls, code, file) {
         );
         if (response.data.success) {
             console.log("Icon uploaded successfully:", response.data);
-            serversStore.updateServerIcon(code, response.data.datas.icon);
             notif.add("Icon uploaded successfully", "success");
         }
         return response.data;
     } catch (error) {
         console.error("Error uploading icon:", error);
+        throw error;
+    }
+}
+
+export async function getUserServers(urls, userId) {
+    const axiosInstance = createAxiosInstance();
+
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/server/${userId}/servers`);
+        if (response.data.success) {
+            return response.data.datas.servers;
+        } else {
+            return [];
+        }
+    } catch (error) {
+        console.error("Error fetching user servers:", error);
+        throw error;
+    }
+}
+
+export async function getServerIcon(urls, code) {
+    const axiosInstance = createAxiosInstance();
+
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/server/${code}/icon`, {
+            responseType: 'arraybuffer',
+        });
+
+        if (response.data.success && response.status === 404) return null;
+
+        const contentType = response.headers['content-type'] || 'image/jpeg';
+        const blob = new Blob([response.data], { type: contentType });
+        const imageUrl = URL.createObjectURL(blob);
+        
+        return imageUrl;
+    } catch (error) {
+        if (error.response) {
+            return null; 
+        } 
+        
         throw error;
     }
 }
