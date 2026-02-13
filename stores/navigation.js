@@ -51,6 +51,11 @@ export const useNavigationStore = defineStore('navigation', {
             router.push({ name: 'settings' });
         },
 
+        goToServerCreation() {
+            const router = useRouter();
+            router.push(`/server/create`);
+        },
+
         goToFriends() {
             const router = useRouter();
             router.push({ name: 'friends' });
