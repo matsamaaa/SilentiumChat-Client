@@ -13,7 +13,7 @@
             type="file"
             accept="image/*"
             class="hidden"
-            @change="handleServerIcon"
+            @change="handleServerBanner"
         />
     </div>
 </template>
@@ -24,7 +24,7 @@ import { ref } from 'vue';
 const fileInput = ref(null);
 const preview = ref(null);
 
-const emit = defineEmits(['update:icon']);
+const emit = defineEmits(['update:banner']);
 
 function openFileDialog() {
     if (fileInput.value) {
@@ -32,7 +32,7 @@ function openFileDialog() {
     }
 }
 
-function handleServerIcon(event) {
+function handleServerBanner(event) {
     const file = event?.target?.files?.[0];
     if (!file) return;
 
@@ -44,7 +44,7 @@ function handleServerIcon(event) {
     const reader = new FileReader();
     reader.onload = (e) => {
         preview.value = e.target.result;
-        emit('update:icon', { file, preview: e.target.result });
+        emit('update:banner', { file, preview: e.target.result });
     };
     reader.readAsDataURL(file);
 }
