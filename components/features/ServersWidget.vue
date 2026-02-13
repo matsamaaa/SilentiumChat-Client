@@ -21,6 +21,7 @@
                 :img-src="server.icon"
                 img-alt="Server Icon"
                 icon="fa-solid fa-server"
+                @click="navigationStore.goToServer(code)"
             >
             </SquareIconButton>
         </div>

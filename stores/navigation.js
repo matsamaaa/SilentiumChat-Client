@@ -18,7 +18,7 @@ export const useNavigationStore = defineStore('navigation', {
         },
         goToError(error = 404, message = 'Page not found') {
             const router = useRouter();
-            router.push({ name: 'error', params: { error, message } });
+            router.push({ path: `/error/${error}`, query: { message } });
         },
 
         goToRegister() {
@@ -54,6 +54,11 @@ export const useNavigationStore = defineStore('navigation', {
         goToServerCreation() {
             const router = useRouter();
             router.push(`/server/create`);
+        },
+
+        goToServer(code) {
+            const router = useRouter();
+            router.push(`/server/${code}`);
         },
 
         goToFriends() {

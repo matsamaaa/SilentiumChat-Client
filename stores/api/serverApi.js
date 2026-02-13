@@ -123,3 +123,27 @@ export async function getServerIcon(urls, code) {
         throw error;
     }
 }
+
+export async function getServerBanner(urls, code) {
+    const axiosInstance = createAxiosInstance();
+
+    try {
+        const response = await axiosInstance.get(`${urls.backend}/server/${code}/banner`, {
+            responseType: 'arraybuffer',
+        });
+
+        if (response.data.success && response.status === 404) return null;
+
+        const contentType = response.headers['content-type'] || 'image/jpeg';
+        const blob = new Blob([response.data], { type: contentType });
+        const imageUrl = URL.createObjectURL(blob);
+        
+        return imageUrl;
+    } catch (error) {
+        if (error.response) {
+            return null; 
+        } 
+        
+        throw error;
+    }
+}
