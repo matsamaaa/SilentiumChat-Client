@@ -16,14 +16,14 @@ export const useServersStore = defineStore('servers', {
                 const serversData = await apiStore.getUserServers(userStore.user.uniqueId);
                 console.log("Fetched user servers:", serversData);
                 serversData.forEach(server => {
-                    this.addServer(server.code, server.banner, server.icon, server.name);
+                    this.addServer(server.code, server.banner, server.icon, server.name, server.channels);
                 });
             } catch (error) {
                 console.error("Error initializing servers store:", error);
             }
         },
 
-        async addServer(code, banner, icon, name) {
+        async addServer(code, banner, icon, name, channels) {
             const existing = this.getServerByCode(code);
             const iconUrl = icon ? await useApiStore().getServerIcon(code) : null;
             const bannerUrl = banner ? await useApiStore().getServerBanner(code) : null;
@@ -37,21 +37,26 @@ export const useServersStore = defineStore('servers', {
                 return;
             }
 
-            this.servers[code] = { code, banner: bannerUrl, icon: iconUrl, name };
+            this.servers[code] = { code, banner: bannerUrl, icon: iconUrl, name, channels};
         },
 
         async updateServerBanner(code, banner) {
-            console.log(`Updating banner for server ${code}:`, banner);
             if (this.servers[code]) {
                 this.servers[code].banner = banner;
             }
         },
 
         async updateServerIcon(code, icon) {
-            console.log(`Updating icon for server ${code}:`, icon);
             if (this.servers[code]) {
                 this.servers[code].icon = icon;
             }
         },
+
+        async addChannelToServer(code, channel) {
+            const server = this.getServerByCode(code);
+            if (server) {
+                server.channels.push(channel);
+            }
+        }
     }
 });

@@ -147,3 +147,21 @@ export async function getServerBanner(urls, code) {
         throw error;
     }
 }
+
+export async function createServerChannel(urls, code, name, description) {
+    const axiosInstance = createAxiosInstance();
+    const serversStore = useServersStore();
+    
+    try {
+        const response = await axiosInstance.post(`${urls.backend}/server/${code}/channel/create`, {
+            name,
+            description
+        });
+
+        const channel = response.data.datas.channel;
+        serversStore.addChannelToServer(code, channel);
+        return;
+    } catch (error) {
+        throw error;
+    }
+}

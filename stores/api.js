@@ -8,7 +8,7 @@ import { getFile, postFile, getFileMetadata } from './api/fileApi'
 import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUser, cancelFriendRequest, acceptFriendRequest, refuseFriendRequest, getFriendsList, deleteFriends } from './api/friendApi';
 import { sendResetPasswordMail, sendChangePasswordMail, sendChangeEmailMail } from './api/mailApi';
 import { postVerificationChangeMail } from './api/verificationApi';
-import { createServer, uploadServerBanner, uploadServerIcon, getUserServers, getServerIcon, getServerBanner } from './api/serverApi';
+import { createServer, uploadServerBanner, uploadServerIcon, getUserServers, getServerIcon, getServerBanner, createServerChannel } from './api/serverApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -231,6 +231,10 @@ export const useApiStore = defineStore('api', {
         async getServerBanner(code) {
             return getServerBanner(this.urls, code);
         },
+
+        async createServerChannel(code, name, description) {
+            return createServerChannel(this.urls, code, name, description);
+        }
 
     }
 })
