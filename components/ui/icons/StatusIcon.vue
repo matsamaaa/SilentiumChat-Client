@@ -101,6 +101,8 @@ const onDocumentClick = (event) => {
 };
 
 onMounted(() => {
+    console.log('StatusIcon mounted, adding document click listener');
+    console.log(props.userId)
     document.addEventListener('click', onDocumentClick);
 });
 
