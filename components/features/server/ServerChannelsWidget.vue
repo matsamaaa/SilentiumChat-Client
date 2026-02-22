@@ -10,7 +10,7 @@
         <ChannelButton label="Create Channel" @execute="navigationStore.goToChannelCreation(code)" />
     
         <br>
-        
+        <p class="ml-2 text-sm text-gray-400">channels</p>
         <ChannelButton
             v-for="channel in server.channels"
             :key="channel.id"
