@@ -6,29 +6,18 @@
             deviceStore.isDesktop ? 'w-[13vw]' : ''
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col gap-2 border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
-        <ServerBannerContent :name="server?.name" :banner="server?.banner" />
-        <ChannelButton label="Create Channel" @execute="navigationStore.goToChannelCreation(code)" />
-    
-        <br>
-        
-        <ChannelButton
-            v-for="channel in server.channels"
-            :key="channel.id"
-            :label="channel.name"
-            @execute="navigationStore.goToChannel(code, channel.id)"
-            />
+            <p v-for="member in server.members" :key="member">{{ member }} {{ statusStore.getStatusByUserId(member) }}</p>
     </div>
 </template>
 
 <script setup>
-import { useDeviceStore, useServersStore, useNavigationStore, useNotificationStore } from '#imports';
-import ServerBannerContent from '~/components/features/server/ServerBannerContent.vue';
-import ChannelButton from '~/components/ui/buttons/ChannelButton.vue';
+import { useDeviceStore, useServersStore, useNavigationStore, useNotificationStore, useStatusStore } from '#imports';
 
 const deviceStore = useDeviceStore();
 const serversStore = useServersStore();
 const navigationStore = useNavigationStore();
 const notificationStore = useNotificationStore();
+const statusStore = useStatusStore();
 
 const route = useRoute();
 const code = route.params.code;
@@ -40,7 +29,12 @@ const server = computed(() => {
 onMounted(() => {
     if (!server.value) {
         notificationStore.add('error', 'Server not found');
-        navigationStore.goToHome();
+        return navigationStore.goToHome();
     }
+
+    const statusStore = useStatusStore();
+    server.members.map(async m => {
+        await statusStore.initializeStatus(m);
+    })
 });
 </script>

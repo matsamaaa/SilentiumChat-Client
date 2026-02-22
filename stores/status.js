@@ -12,13 +12,10 @@ export const useStatusStore = defineStore('status', {
             const apiStore = useApiStore();
             const status = await apiStore.getUserStatus(userId);
             this.status[userId] = status || 'offline';
-            console.log(`Initialized status for user ${userId}:`, status);
-            console.log('Current status store:', this.status);
         },
 
         async updateStatus(userId, status) {
             this.status[userId] = status || 'offline';
-            console.log(`Updated status for user ${userId}:`, status);
         }
     }
 });

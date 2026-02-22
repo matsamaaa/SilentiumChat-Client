@@ -58,7 +58,12 @@ export const useNavigationStore = defineStore('navigation', {
 
         goToChannelCreation(code) {
             const router = useRouter();
-            router.push(`/server/${code}/channel/create`)
+            router.push(`/server/${code}/channel/create`);
+        },
+
+        goToChannel(code, channelId) {
+            const router = useRouter();
+            router.push(`/server/${code}/channel/${channelId}`);
         },
 
         goToServer(code) {
