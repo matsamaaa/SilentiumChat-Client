@@ -10,8 +10,8 @@
             <div class="w-full h-full bg-indigo-600 flex justify-end items-start pt-1">
                 <FriendButtonChoiceContent
                     :userId="id"
-                    :hasAsk="user.hasAsk"
-                    :tab="user.status"
+                    :hasAsk="user?.hasAsk ?? false"
+                    :tab="user?.status"
                     :isMessaging="true"
                     />
             </div>
@@ -64,5 +64,5 @@ const props = defineProps({
     }
 });
 
-const user = computed(() => userStore.getFriendStatus(props.id));
+const user = computed(() => userStore.getFriendStatus(props.id) ?? {});
 </script>
