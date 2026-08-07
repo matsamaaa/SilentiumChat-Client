@@ -1,5 +1,5 @@
-import { generateRSAKeyPair } from './rsa.js';
-import { generateAESKey, generateIVKey, encryptDataWithAES, encryptAesKeyWithRSA } from './aes.js';
+import { generateRSAKeyPair } from '~/utils/keys/rsa.js';
+import { generateAESKey, generateIVKey, encryptDataWithAES, encryptAesKeyWithRSA } from '~/utils/keys/aes.js';
 import { bufferToBase64 } from '~/utils/conversion.js';
 
 /**

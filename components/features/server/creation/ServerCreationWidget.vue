@@ -17,18 +17,15 @@ import NormalInput from '~/components/ui/inputs/NormalInput.vue';
 import UploadIconContent from './UploadIconContent.vue';
 import UploadBannerContent from './UploadBannerContent.vue';
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
-import { bufferToBase64 } from '~/utils/conversion.js';
 
-import { generateRSAKeyPair } from '~/utils/keys/rsa.js';
-import { generateAESKey, generateIVKey, encryptDataWithAES, encryptAesKeyWithRSA } from '~/utils/keys/aes';
-import { encryptMessage } from '~/utils/messages.js';
-import { useApiStore, useUserStore, useNavigationStore, useServersStore } from '#imports';
-
+import { generateEncryptedKeyPair } from '~/utils/crypto/keyPairFactory.js';
 import { uploadServerAssets } from '~/utils/servers/assets.js';
+import { useApiStore, useUserStore, useNavigationStore, useServersStore } from '#imports';
 
 const icon = ref(null);
 const name = ref('');
 const banner = ref(null);
+
 const navigationStore = useNavigationStore();
 const serverStore = useServersStore();
 
@@ -37,44 +34,21 @@ const createServer = async () => {
     const userStore = useUserStore();
 
     try {
-        const userPublicKey = userStore.user?.publicKey || '';
-
-        // generate RSA key pair for the server
-        const { publicKey, privateKey } = await generateRSAKeyPair();
-        const publicKeyBase64 = bufferToBase64(publicKey);
-        const privateKeyBase64 = bufferToBase64(privateKey);
-
-        // generate AES key and IV for encrypting the server's private key
-        const aesKey = await generateAESKey();
-        const iv = generateIVKey();
-
-        // encrypt the server's private key with AES
-        const encryptedPrivateKey = await encryptDataWithAES(privateKeyBase64, aesKey, iv);
-
-        // encrypt the AES key with the user's public key
-        const encryptedAesKey = await encryptAesKeyWithRSA(aesKey, userPublicKey);
-
-        // payload to send to the server
-        const encryptedPayload = {
-            encryptedData: encryptedPrivateKey,
-            encryptedAesKey: encryptedAesKey,
-            iv: bufferToBase64(iv)
-        };
+        const { publicKeyBase64, privateKeyBase64, encryptedPayload } = await generateEncryptedKeyPair(userStore.user?.publicKey || '');
 
         const server = await apiStore.createServer(
-            name.value, 
-            userStore.user.uniqueId, 
-            publicKeyBase64, 
+            name.value,
+            userStore.user.uniqueId,
+            publicKeyBase64,
             encryptedPayload
         );
 
         serverStore.updateServerPrivateKey(server.code, privateKeyBase64);
-        
         await uploadServerAssets(apiStore, server.code, { banner: banner.value, icon: icon.value });
 
         navigationStore.goToServer(server.code);
     } catch (error) {
         console.error('Error creating server:', error);
     }
-}
+};
 </script>
