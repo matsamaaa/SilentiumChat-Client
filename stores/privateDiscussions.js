@@ -1,4 +1,5 @@
 import { decryptMessage } from "~/utils/messages";
+import { getDecryptedFileUrl } from "~/utils/files";
 
 export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
     state: () => ({
@@ -7,29 +8,29 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
     actions: {
         async initialize() {
             const apiStore = useApiStore();
-            
             const discussions = await apiStore.getLastMessages();
-            discussions.reverse().map(async discussion => {
+
+            for (const discussion of discussions.reverse()) {
                 const sender = discussion.users[0];
                 const receiver = discussion.users[1];
                 const username = discussion.username;
 
-                // clean discussions
                 this.removeDiscussion(receiver, sender);
                 this.addDiscussion(sender, receiver, username);
 
-                // add messages
-                this.addMessageToDiscussion(discussion.encryptedMessages[0])
-            });
+                await this.addMessageToDiscussion(discussion.encryptedMessages[0]);
+            }
         },
+
         async loadMessagesPage(to, page) {
             const apiStore = useApiStore();
             const messages = await apiStore.getPrivateDiscussion(to, page);
 
-            messages.encryptedMessages.map(async message => {
+            for (const message of messages.encryptedMessages) {
                 await this.addMessageToDiscussion(message, true);
-            });
+            }
         },
+
         getDiscussion(from, to) {
             const discussion = this.discussions.find(d =>
                 d.users.includes(from) && d.users.includes(to)
@@ -54,13 +55,12 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 const discussion = this.getDiscussion(from, to);
                 if (discussion) {
                     if (status) {
-                        discussion.isWaitingForResponse = status === 'accepted' ? true : false;
+                        discussion.isWaitingForResponse = status === 'accepted';
                     } else {
                         const onlineDiscussion = await apiStore.getPrivateDiscussion(to);
                         discussion.isWaitingForResponse = onlineDiscussion.isWaitingForResponse;
                     }
                 }
-
                 return discussion;
             } catch (err) {
                 console.error("Error updating discussion status:", err);
@@ -76,10 +76,24 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
         isAlreadyExistMessage(messageId, from, to) {
             const discussion = this.getDiscussion(from, to);
             if (!discussion) return false;
-
             if (messageId == null) return false;
 
             return discussion.encryptedMessages.some(msg => msg._id === messageId);
+        },
+
+        async ensureDiscussionReady(from, to) {
+            let discussion = this.getDiscussion(from, to);
+
+            if (!discussion) {
+                discussion = this.addDiscussion(from, to);
+                await this.updateStatusDiscussion(from, to);
+                discussion = this.getDiscussion(from, to);
+            } else if (discussion.isWaitingForResponse !== true) {
+                await this.updateStatusDiscussion(from, to);
+                discussion = this.getDiscussion(from, to); // refresh discussion after status update
+            }
+
+            return discussion;
         },
 
         async addMessageToDiscussion(message, isFront = false) {
@@ -87,43 +101,36 @@ export const usePrivateDiscussionsStore = defineStore("privateDiscussions", {
                 const { from, to } = message;
                 const userStore = useUserStore();
 
-                if(this.isAlreadyExistMessage(message._id, from, to)) {
+                if (this.isAlreadyExistMessage(message._id, from, to)) {
                     return null;
                 }
 
-                // check what message we decrypt
-                let newMessage;
                 const isItSender = from === userStore.user.uniqueId;
-                const decryptedMessage = await decryptMessage(isItSender ? message.encryptedMessageBySender : message.encryptedMessage);
-                const files = [];
+                const decryptedMessage = await decryptMessage(
+                    isItSender ? message.encryptedMessageBySender : message.encryptedMessage
+                );
 
-                for (const file of message.files) {
-                    const url = await getDecryptedFileUrl(file, isItSender);
-                    files.push({ url: url.url, name: url.name, extension: url.extension });
-                }
+                const files = await Promise.all(
+                    (message.files || []).map(async (file) => {
+                        const { url, name, extension } = await getDecryptedFileUrl(file, isItSender);
+                        return { url, name, extension };
+                    })
+                );
 
-                newMessage = { ...message, [isItSender ? 'encryptedMessageBySender' : 'encryptedMessage']: decryptedMessage, files: files };
+                const newMessage = {
+                    ...message,
+                    [isItSender ? 'encryptedMessageBySender' : 'encryptedMessage']: decryptedMessage,
+                    files
+                };
 
-                // check discussion and add message
-                let discussion = this.getDiscussion(from, to);
-                if (!discussion) {
-                    discussion = this.addDiscussion(from, to);
-                    await this.updateStatusDiscussion(from, to);
-                    discussion = this.getDiscussion(from, to); // re-fetch discussion
-                } else if (discussion.isWaitingForResponse != true) {
-                    await this.updateStatusDiscussion(from, to);
-                    discussion = this.getDiscussion(from, to); // re-fetch discussion
-                }
+                const discussion = await this.ensureDiscussionReady(from, to);
 
-                // add message
                 if (isFront) {
                     discussion.encryptedMessages.unshift(newMessage);
                 } else {
                     discussion.encryptedMessages.push(newMessage);
                 }
 
-                
-                // update message order with timestamp
                 discussion.encryptedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
                 return newMessage;
             } catch (err) {
