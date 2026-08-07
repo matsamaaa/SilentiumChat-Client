@@ -8,17 +8,19 @@
         ]"
         class="bg-gray-900 flex flex-col items-center py-4 border-r border-gray-800">
 
-        <div class="flex flex-col gap-2 w-full items-center">
+        <div class="flex flex-col gap-2 w-full items-center shrink-0">
             <SquareIconButton icon="fa-solid fa-message" @click="navigationStore.goToHome" />
             
             <SquareIconButton icon="fa-solid fa-server" @click="navigationStore.goToServerCreation" />
             
             <hr class="border-gray-700 w-2/4" />
+        </div>
 
+        <div class="scrollbar-hide flex flex-col pt-2 gap-2 w-full items-center overflow-y-auto flex-1 min-h-0">
             <div
                 v-for="(server, code) in serversStore.servers"
                 :key="code"
-                class="relative w-full flex justify-center"
+                class="relative w-full flex justify-center shrink-0"
             >
                 <span
                     v-if="isActiveServer(code)"
@@ -53,3 +55,13 @@ const isActiveServer = (code) => {
     return !!serversStore.getServerByCode(current);
 };
 </script>
+
+<style scoped>
+.scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;     /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;             /* Chrome, Safari, Opera */
+}
+</style>
