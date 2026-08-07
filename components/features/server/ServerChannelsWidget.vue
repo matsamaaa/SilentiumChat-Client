@@ -6,7 +6,7 @@
             deviceStore.isDesktop ? 'w-[13vw]' : ''
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col gap-2 border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
-        <ServerBannerContent :name="server?.name" :banner="server?.banner" @settings-click="onSettingsClick" />
+        <ServerBannerContent :name="server?.name" :banner="server?.banner" @settings-click="handleServerSettings" />
         <ChannelButton label="Create Channel" @execute="navigationStore.goToChannelCreation(code)" />
     
         <br>
@@ -18,12 +18,14 @@
             @execute="navigationStore.goToChannel(code, channel.id)"
             />
     </div>
+    <ServerUpdateWidget v-if="settingsClicked" @close="handleServerSettings" />
 </template>
 
 <script setup>
 import { useDeviceStore, useServersStore, useNavigationStore, useNotificationStore } from '#imports';
 import ServerBannerContent from '~/components/features/server/ServerBannerContent.vue';
 import ChannelButton from '~/components/ui/buttons/ChannelButton.vue';
+import ServerUpdateWidget from '~/components/features/server/ServerUpdateWidget.vue';
 
 const deviceStore = useDeviceStore();
 const serversStore = useServersStore();
@@ -46,7 +48,9 @@ onMounted(() => {
     }
 });
 
-const onSettingsClick = () => {
-    emit('settings-click');
+const settingsClicked = ref(false);
+
+const handleServerSettings = () => {
+    settingsClicked.value = !settingsClicked.value;
 }
 </script>
