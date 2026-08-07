@@ -24,6 +24,8 @@ import { generateAESKey, generateIVKey, encryptDataWithAES, encryptAesKeyWithRSA
 import { encryptMessage } from '~/utils/messages.js';
 import { useApiStore, useUserStore, useNavigationStore, useServersStore } from '#imports';
 
+import { uploadServerAssets } from '~/utils/servers/assets.js';
+
 const icon = ref(null);
 const name = ref('');
 const banner = ref(null);
@@ -68,12 +70,7 @@ const createServer = async () => {
 
         serverStore.updateServerPrivateKey(server.code, privateKeyBase64);
         
-        if (banner.value) {
-            await apiStore.uploadServerBanner(server.code, banner.value.file);
-        }
-        if (icon.value) {
-            await apiStore.uploadServerIcon(server.code, icon.value.file);
-        }
+        await uploadServerAssets(apiStore, server.code, { banner: banner.value, icon: icon.value });
 
         navigationStore.goToServer(server.code);
     } catch (error) {

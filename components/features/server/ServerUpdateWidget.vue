@@ -102,6 +102,8 @@ import AlertButton from '~/components/ui/buttons/AlertButton.vue';
 import { useApiStore, useServersStore } from '#imports';
 import WarnPopup from '~/components/ui/popups/WarnPopup.vue';
 
+import { uploadServerAssets } from '~/utils/servers/assets.js';
+
 const route = useRoute();
 const code = route.params.code;
 
@@ -142,13 +144,10 @@ const saveServer = async () => {
         if (name.value && name.value !== server.value?.name) {
             await apiStore.updateServerName(code, name.value);
         }
-        if (banner.value) {
-            await apiStore.uploadServerBanner(code, banner.value.file);
-        }
-        if (icon.value) {
-            await apiStore.uploadServerIcon(code, icon.value.file);
-        }
-    } catch {} finally {
+        await uploadServerAssets(apiStore, code, { banner: banner.value, icon: icon.value });
+    } catch {
+
+    } finally {
         emit('updated');
         close();
     }
