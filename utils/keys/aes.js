@@ -2,14 +2,10 @@ import { bufferToBase64, base64ToBuffer } from "../conversion";
 
 const generateAESKey = async (bits = 256) => {
     const key = await window.crypto.subtle.generateKey(
-        {
-            name: "AES-GCM",
-            length: bits
-        },
-        true, // key is exportable
+        { name: "AES-GCM", length: bits },
+        true,
         ["encrypt", "decrypt"]
     );
-
     return key;
 }
 
@@ -17,28 +13,45 @@ const generateIVKey = () => {
     return window.crypto.getRandomValues(new Uint8Array(12));
 }
 
-const encryptAesKeyWithRSA = async (aesKey, publicKeyBase64) => {
-    // aes key to array
-    const rawAesKey = await crypto.subtle.exportKey("raw", aesKey);
+// AJOUT : chiffre un texte (ex: clé privée base64) avec AES
+const encryptDataWithAES = async (dataText, aesKey, iv) => {
+    const encoder = new TextEncoder();
+    const encryptedData = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        aesKey,
+        encoder.encode(dataText)
+    );
+    return bufferToBase64(encryptedData);
+}
 
-    // Recipient public key
+// AJOUT : déchiffre un texte chiffré avec AES
+const decryptDataWithAES = async (encryptedDataBase64, aesKey, ivBase64) => {
+    const encryptedDataBuffer = base64ToBuffer(encryptedDataBase64);
+    const ivBuffer = base64ToBuffer(ivBase64);
+
+    const decryptedData = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: ivBuffer },
+        aesKey,
+        encryptedDataBuffer
+    );
+
+    const decoder = new TextDecoder();
+    return decoder.decode(decryptedData);
+}
+
+const encryptAesKeyWithRSA = async (aesKey, publicKeyBase64) => {
+    const rawAesKey = await crypto.subtle.exportKey("raw", aesKey);
     const publicKeyBuffer = base64ToBuffer(publicKeyBase64);
     const publicKey = await crypto.subtle.importKey(
         "spki",
         publicKeyBuffer,
-        {
-            name: "RSA-OAEP",
-            hash: "SHA-256"
-        },
+        { name: "RSA-OAEP", hash: "SHA-256" },
         false,
         ["encrypt"]
     );
 
-    // Encrypt the aes key
     const encryptedAesKey = await crypto.subtle.encrypt(
-        {
-            name: "RSA-OAEP"
-        },
+        { name: "RSA-OAEP" },
         publicKey,
         rawAesKey
     );
@@ -54,32 +67,22 @@ const decryptAesKeyWithRSA = async (encryptedAesKeyBase64) => {
             throw new Error("Private key not found");
         }
 
-        // convert privateKeyString to ArrayBuffer
         const privateKeyBuffer = base64ToBuffer(privateKeyString);
         const privateKey = await crypto.subtle.importKey(
             "pkcs8",
             privateKeyBuffer,
-            {
-                name: "RSA-OAEP",
-                hash: "SHA-256"
-            },
+            { name: "RSA-OAEP", hash: "SHA-256" },
             false,
             ["decrypt"]
         );
 
-        // convert encryptedAesKeyBase64 to ArrayBuffer
         const encryptedAesKeyBuffer = base64ToBuffer(encryptedAesKeyBase64);
-        
-        // decrypt AES key
         const rawAesKey = await crypto.subtle.decrypt(
-            {
-                name: "RSA-OAEP"
-            },
+            { name: "RSA-OAEP" },
             privateKey,
             encryptedAesKeyBuffer
         );
 
-        // get valid AES key
         const aesKey = await crypto.subtle.importKey(
             "raw",
             rawAesKey,
@@ -94,4 +97,11 @@ const decryptAesKeyWithRSA = async (encryptedAesKeyBase64) => {
     }
 };
 
-export { generateAESKey, generateIVKey, decryptAesKeyWithRSA, encryptAesKeyWithRSA };
+export { 
+    generateAESKey, 
+    generateIVKey, 
+    encryptDataWithAES,
+    decryptDataWithAES,
+    decryptAesKeyWithRSA, 
+    encryptAesKeyWithRSA 
+};

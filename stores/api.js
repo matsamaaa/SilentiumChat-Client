@@ -208,8 +208,8 @@ export const useApiStore = defineStore('api', {
          * End of Api functions for the root /server
          */
 
-        async createServer(name, owner) {
-            return createServer(this.urls, name, owner);
+        async createServer(name, owner, serverPublicKey, encryptedPayload) {
+            return createServer(this.urls, name, owner, serverPublicKey, encryptedPayload);
         },
 
         async deleteServer(code) {

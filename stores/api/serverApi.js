@@ -3,12 +3,12 @@ import { useNotificationStore } from "../notifications";
 import { useServersStore } from "../servers";
 import { useNavigationStore } from "../navigation";
 
-export async function createServer(urls, name, owner) {
+export async function createServer(urls, name, owner, serverPublicKey, encryptedPayload) {
     const axiosInstance = createAxiosInstance();
     const notif = useNotificationStore();
 
     try {
-        const response = await axiosInstance.post(`${urls.backend}/server/create`, { name, owner });
+        const response = await axiosInstance.post(`${urls.backend}/server/create`, { name, owner, serverPublicKey, encryptedPayload });
         notif.add("Server created successfully", "success");
 
         const server = response.data.datas;
