@@ -18,11 +18,12 @@ import UploadIconContent from './UploadIconContent.vue';
 import UploadBannerContent from './UploadBannerContent.vue';
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 
-import { useApiStore, useUserStore } from '#imports';
+import { useApiStore, useUserStore, useNavigationStore } from '#imports';
 
 const icon = ref(null);
 const name = ref('');
 const banner = ref(null);
+const navigationStore = useNavigationStore();
 
 const createServer = async () => {
     const apiStore = useApiStore();
@@ -38,6 +39,8 @@ const createServer = async () => {
         if (icon.value) {
             await apiStore.uploadServerIcon(server.code, icon.value.file);
         }
+
+        navigationStore.goToServer(server.code);
     } catch (error) {
         console.error('Error creating server:', error);
     }

@@ -26,7 +26,7 @@ export const useServersStore = defineStore('servers', {
             const existing = this.getServerByCode(code);
             const iconUrl = icon ? await useApiStore().getServerIcon(code) : null;
             const bannerUrl = banner ? await useApiStore().getServerBanner(code) : null;
-
+            
             if (existing) {
                 const updated = { ...existing };
                 if (banner !== undefined) updated.banner = bannerUrl;
@@ -47,13 +47,21 @@ export const useServersStore = defineStore('servers', {
 
         async updateServerBanner(code, banner) {
             if (this.servers[code]) {
-                this.servers[code].banner = banner;
+                if (banner) this.servers[code].banner = banner;
+                else {
+                    const bannerUrl = await useApiStore().getServerBanner(code);
+                    this.servers[code].banner = bannerUrl;
+                }
             }
         },
 
         async updateServerIcon(code, icon) {
             if (this.servers[code]) {
-                this.servers[code].icon = icon;
+                if (icon) this.servers[code].icon = icon;
+                else {
+                    const iconUrl = await useApiStore().getServerIcon(code);
+                    this.servers[code].icon = iconUrl;
+                }
             }
         },
 
