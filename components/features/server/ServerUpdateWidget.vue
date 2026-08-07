@@ -49,7 +49,7 @@
 
                 <section v-if="server">
                     <h4 class="text-sm font-semibold text-gray-300 uppercase tracking-wide mb-3">
-                        InformationsA
+                        Informations
                     </h4>
                     <div class="bg-gray-900/40 rounded-lg p-4 border border-gray-700 grid grid-cols-2 gap-4 text-sm">
                         <div>
@@ -62,6 +62,13 @@
                         </div>
                     </div>
                 </section>
+                <AlertButton text="Delete Server" @execute="showDeleteServerWarnPopup = true" />
+                <WarnPopup
+                    v-if="showDeleteServerWarnPopup"
+                    :message="'Are you sure you want to delete this server? This action cannot be undone.'"
+                    @close="showDeleteServerWarnPopup = false"
+                    @confirm="deleteServer"
+                />
             </div>
 
             <div v-if="!loading" class="flex items-center justify-end gap-3 border-t border-gray-700 px-6 py-4">
@@ -90,8 +97,10 @@ import NormalInput from '~/components/ui/inputs/NormalInput.vue';
 import UploadIconContent from '~/components/features/server/creation/UploadIconContent.vue';
 import UploadBannerContent from '~/components/features/server/creation/UploadBannerContent.vue';
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
+import AlertButton from '~/components/ui/buttons/AlertButton.vue';
 
 import { useApiStore, useServersStore } from '#imports';
+import WarnPopup from '~/components/ui/popups/WarnPopup.vue';
 
 const route = useRoute();
 const code = route.params.code;
@@ -108,6 +117,8 @@ const banner = ref(null);
 
 const loading = ref(true);
 const saving = ref(false);
+
+const showDeleteServerWarnPopup = ref(false);
 
 onMounted(async () => {
     try {
@@ -140,6 +151,17 @@ const saveServer = async () => {
     } catch {} finally {
         emit('updated');
         close();
+    }
+};
+
+const deleteServer = async () => {
+    try {
+        await apiStore.deleteServer(code);
+        serversStore.removeServer(code);
+        emit('updated');
+        close();
+    } catch (error) {
+        console.error('Error deleting server:', error);
     }
 };
 </script>

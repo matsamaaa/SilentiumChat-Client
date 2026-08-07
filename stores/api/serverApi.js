@@ -1,6 +1,7 @@
 import createAxiosInstance from "../axios";
 import { useNotificationStore } from "../notifications";
 import { useServersStore } from "../servers";
+import { useNavigationStore } from "../navigation";
 
 export async function createServer(urls, name, owner) {
     const axiosInstance = createAxiosInstance();
@@ -16,6 +17,24 @@ export async function createServer(urls, name, owner) {
         return server;
     } catch (error) {
         console.error("Error creating server:", error);
+        throw error;
+    }
+}
+
+export async function deleteServer(urls, code) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+    const serversStore = useServersStore();
+    const navigationStore = useNavigationStore();
+
+    try {
+        const response = await axiosInstance.delete(`${urls.backend}/server/${code}`);
+        notif.add("Server deleted successfully", "success");
+        serversStore.removeServer(code);
+        navigationStore.goToHome(); // Navigate to home after deletion
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting server:", error);
         throw error;
     }
 }

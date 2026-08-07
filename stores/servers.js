@@ -39,6 +39,12 @@ export const useServersStore = defineStore('servers', {
             this.servers[code] = { code, banner: bannerUrl, icon: iconUrl, name, channels, members, createdAt };
         },
 
+        async removeServer(code) {
+            if (this.servers[code]) {
+                delete this.servers[code];
+            }
+        },
+
         async updateServerBanner(code, banner) {
             if (this.servers[code]) {
                 this.servers[code].banner = banner;
