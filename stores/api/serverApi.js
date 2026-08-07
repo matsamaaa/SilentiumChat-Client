@@ -20,6 +20,29 @@ export async function createServer(urls, name, owner) {
     }
 }
 
+export async function updateServerName(urls, code, name) {
+    const axiosInstance = createAxiosInstance();
+    const notif = useNotificationStore();
+
+    try {
+        const response = await axiosInstance.put(`${urls.backend}/server/${code}/name`, { name });
+        const serversStore = useServersStore();
+        const server = serversStore.getServerByCode(code);
+        if (server) {
+            server.name = name;
+        }
+
+        if (response.data.success) {
+            console.log("Server name updated successfully:", response.data);
+            notif.add("Server name updated successfully", "success");
+        }
+        return response.data;
+    } catch (error) {
+        console.error("Error updating server name:", error);
+        throw error;
+    }
+}
+
 export async function uploadServerBanner(urls, code, file) {
     const axiosInstance = createAxiosInstance();
     const notif = useNotificationStore();
@@ -90,6 +113,7 @@ export async function getUserServers(urls, userId) {
     try {
         const response = await axiosInstance.get(`${urls.backend}/server/${userId}/servers`);
         if (response.data.success) {
+            console.log("User servers fetched successfully:", response.data.datas.servers);
             return response.data.datas.servers;
         } else {
             return [];

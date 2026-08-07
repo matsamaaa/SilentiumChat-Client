@@ -20,10 +20,21 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
+
+const props = defineProps({
+    initialPreview: {
+        type: String,
+        default: null
+    }
+});
 
 const fileInput = ref(null);
-const preview = ref(null);
+const preview = ref(props.initialPreview);
+
+watch(() => props.initialPreview, (newVal) => {
+    preview.value = newVal;
+});
 
 const emit = defineEmits(['update:icon']);
 
@@ -38,7 +49,6 @@ function handleServerIcon(event) {
     if (!file) return;
 
     if (!file.type.startsWith('image/')) {
-        alert('Veuillez sélectionner une image valide.');
         return;
     }
 

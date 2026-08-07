@@ -14,16 +14,15 @@ export const useServersStore = defineStore('servers', {
 
             try {
                 const serversData = await apiStore.getUserServers(userStore.user.uniqueId);
-                console.log("Fetched user servers:", serversData);
                 serversData.forEach(server => {
-                    this.addServer(server.code, server.banner, server.icon, server.name, server.channels, server.members);
+                    this.addServer(server.code, server.banner, server.icon, server.name, server.channels, server.members, server.createdAt);
                 });
             } catch (error) {
                 console.error("Error initializing servers store:", error);
             }
         },
 
-        async addServer(code, banner, icon, name, channels, members) {
+        async addServer(code, banner, icon, name, channels, members, createdAt) {
             const existing = this.getServerByCode(code);
             const iconUrl = icon ? await useApiStore().getServerIcon(code) : null;
             const bannerUrl = banner ? await useApiStore().getServerBanner(code) : null;
@@ -37,7 +36,7 @@ export const useServersStore = defineStore('servers', {
                 return;
             }
 
-            this.servers[code] = { code, banner: bannerUrl, icon: iconUrl, name, channels, members};
+            this.servers[code] = { code, banner: bannerUrl, icon: iconUrl, name, channels, members, createdAt };
         },
 
         async updateServerBanner(code, banner) {

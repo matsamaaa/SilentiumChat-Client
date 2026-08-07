@@ -6,7 +6,7 @@
             deviceStore.isDesktop ? 'w-[13vw]' : ''
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col gap-2 border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
-        <ServerBannerContent :name="server?.name" :banner="server?.banner" />
+        <ServerBannerContent :name="server?.name" :banner="server?.banner" @settings-click="onSettingsClick" />
         <ChannelButton label="Create Channel" @execute="navigationStore.goToChannelCreation(code)" />
     
         <br>
@@ -37,10 +37,16 @@ const server = computed(() => {
     return serversStore.getServerByCode(code);
 });
 
+const emit = defineEmits(['settings-click']);
+
 onMounted(() => {
     if (!server.value) {
         notificationStore.add('error', 'Server not found');
         navigationStore.goToHome();
     }
 });
+
+const onSettingsClick = () => {
+    emit('settings-click');
+}
 </script>
