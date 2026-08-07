@@ -2,10 +2,6 @@ import { generateRSAKeyPair } from '~/utils/keys/rsa.js';
 import { generateAESKey, generateIVKey, encryptDataWithAES, encryptAesKeyWithRSA } from '~/utils/keys/aes.js';
 import { bufferToBase64 } from '~/utils/conversion.js';
 
-/**
- * Génère une paire de clés RSA, chiffre la clé privée avec une clé AES
- * puis chiffre cette clé AES avec la clé publique du destinataire.
- */
 export const generateEncryptedKeyPair = async (recipientPublicKey) => {
     const { publicKey, privateKey } = await generateRSAKeyPair();
     const publicKeyBase64 = bufferToBase64(publicKey);

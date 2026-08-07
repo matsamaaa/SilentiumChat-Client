@@ -1,4 +1,4 @@
-const generateRSAKeyPair = async () => {
+export const generateRSAKeyPair = async () => {
     const keyPair = await window.crypto.subtle.generateKey(
         {
             name: "RSA-OAEP",
@@ -17,7 +17,7 @@ const generateRSAKeyPair = async () => {
     return { publicKey, privateKey };
 }
 
-const setPrivateKeyInDB = async (privateKey, userId) => {
+export const setPrivateKeyInDB = async (privateKey, userId) => {
     if (typeof window === 'undefined') return null;
     
     return new Promise((resolve, reject) => {
@@ -44,7 +44,7 @@ const setPrivateKeyInDB = async (privateKey, userId) => {
     });
 }
 
-const getPrivateKeyFromDB = async (userId) => {
+export const getPrivateKeyFromDB = async (userId) => {
     if (typeof window === 'undefined') return null;
 
     return new Promise((resolve, reject) => {
@@ -71,7 +71,7 @@ const getPrivateKeyFromDB = async (userId) => {
     });
 }
 
-const deletePrivateKeyFromDB = async (userId) => {
+export const deletePrivateKeyFromDB = async (userId) => {
     if (typeof window === 'undefined') return null;
 
     return new Promise((resolve, reject) => {
@@ -97,5 +97,3 @@ const deletePrivateKeyFromDB = async (userId) => {
         request.onerror = () => reject(request.error);
     });
 }
-
-export { generateRSAKeyPair, setPrivateKeyInDB, getPrivateKeyFromDB, deletePrivateKeyFromDB };

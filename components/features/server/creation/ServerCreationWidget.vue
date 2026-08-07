@@ -18,7 +18,7 @@ import UploadIconContent from './UploadIconContent.vue';
 import UploadBannerContent from './UploadBannerContent.vue';
 import NormalButton from '~/components/ui/buttons/NormalButton.vue';
 
-import { generateEncryptedKeyPair } from '~/utils/crypto/keyPairFactory.js';
+import { generateEncryptedKeyPair } from '~/utils/keys/keyPairFactory.js';
 import { uploadServerAssets } from '~/utils/servers/assets.js';
 import { useApiStore, useUserStore, useNavigationStore, useServersStore } from '#imports';
 

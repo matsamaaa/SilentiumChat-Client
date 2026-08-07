@@ -1,4 +1,4 @@
-const formatDate = (dateValue) => {
+export const formatDate = (dateValue) => {
     if (!dateValue) return '';
     const date = new Date(dateValue);
     if (isNaN(date)) return dateValue;
@@ -10,7 +10,7 @@ const formatDate = (dateValue) => {
     });
 };
 
-const formatDateChrono = (seconds) => {
+export const formatDateChrono = (seconds) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
     
@@ -20,5 +20,3 @@ const formatDateChrono = (seconds) => {
     
     return `${formattedMinutes}:${formattedSeconds}`;
 };
-
-export { formatDate, formatDateChrono };

@@ -1,6 +1,6 @@
 import { bufferToBase64, base64ToBuffer } from "./conversion"
 
-const encryptMessage = async (messageText, publicKeyString) => {
+export const encryptMessage = async (messageText, publicKeyString) => {
     // Recipient public key
     const publicKeyBuffer = base64ToBuffer(publicKeyString);
     const publicKey = await crypto.subtle.importKey(
@@ -28,7 +28,7 @@ const encryptMessage = async (messageText, publicKeyString) => {
     return encryptedMessageBase64;
 }
 
-const decryptMessage = async (message) => {
+export const decryptMessage = async (message) => {
     const userStore = useUserStore();
     const privateKeyString = await userStore.getPrivateKey();
 
@@ -68,12 +68,10 @@ const decryptMessage = async (message) => {
     }
 }
 
-const encryptMessageForBoth = async (message, recipientPublicKey, senderPublicKey) => {
+export const encryptMessageForBoth = async (message, recipientPublicKey, senderPublicKey) => {
     const [forRecipient, forSender] = await Promise.all([
         encryptMessage(message, recipientPublicKey),
         encryptMessage(message, senderPublicKey)
     ]);
     return { forRecipient, forSender };
 };
-
-export { encryptMessage, decryptMessage, encryptMessageForBoth };

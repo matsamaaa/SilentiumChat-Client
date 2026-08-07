@@ -1,4 +1,4 @@
-const bufferToBase64 = (buffer) => {
+export const bufferToBase64 = (buffer) => {
     const bytes = new Uint8Array(buffer);
     let binary = '';
     const chunkSize = 0x8000;
@@ -9,7 +9,7 @@ const bufferToBase64 = (buffer) => {
     return btoa(binary);
 };
 
-const base64ToBuffer = (base64) => {
+export const base64ToBuffer = (base64) => {
     const binary = atob(base64);
     const len = binary.length;
     const bytes = new Uint8Array(len);
@@ -19,13 +19,11 @@ const base64ToBuffer = (base64) => {
     return bytes.buffer;
 };
 
-const stringToUint8Array = (str) => {
+export const stringToUint8Array = (str) => {
     return new Uint8Array(str.split(',').map(Number));
 }
 
-const getFileExtension = (file) => {
+export const getFileExtension = (file) => {
     const parts = file.name.split('.');
     return parts.length > 1 ? parts.pop() : '';
 };
-
-export { bufferToBase64, base64ToBuffer, stringToUint8Array, getFileExtension };

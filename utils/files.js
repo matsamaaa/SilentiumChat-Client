@@ -1,7 +1,10 @@
 import { useApiStore } from "~/stores/api";
 import { decryptAesKeyWithRSA } from "./keys/aes";
+import { generateAESKey, generateIVKey, encryptAesKeyWithRSA } from '~/utils/keys/aes.js';
+import { getFileExtension } from '~/utils/conversion.js';
+import FileManager from '~/utils/managers/fileManager.js';
 
-const encryptFile = async (file, aesKey, iv) => {
+export const encryptFile = async (file, aesKey, iv) => {
     try {
         const fileArrayBuffer = await file.arrayBuffer();
         const encryptedBuffer = await window.crypto.subtle.encrypt(
@@ -22,7 +25,7 @@ const encryptFile = async (file, aesKey, iv) => {
 };
 
 
-const decryptFile = async ({ encryptedData, authTag }, aesKey, iv) => {
+export const decryptFile = async ({ encryptedData, authTag }, aesKey, iv) => {
     try {
         const fullBuffer = new Uint8Array(encryptedData.length + authTag.length);
         fullBuffer.set(encryptedData, 0);
@@ -40,7 +43,7 @@ const decryptFile = async ({ encryptedData, authTag }, aesKey, iv) => {
     }
 };
 
-const getDecryptedFileUrl = async (file, own = false) => {
+export const getDecryptedFileUrl = async (file, own = false) => {
     const apiStore = useApiStore();
 
     try {
@@ -72,4 +75,26 @@ const getDecryptedFileUrl = async (file, own = false) => {
     }
 }
 
-export { encryptFile, decryptFile, getDecryptedFileUrl };
+export const uploadEncryptedFile = async (apiStore, file, recipientPublicKey, senderPublicKey) => {
+    const aesKey = await generateAESKey();
+    const iv = generateIVKey();
+
+    const [encryptedAesKey, encryptedKeySender] = await Promise.all([
+        encryptAesKeyWithRSA(aesKey, recipientPublicKey),
+        encryptAesKeyWithRSA(aesKey, senderPublicKey)
+    ]);
+
+    const { encryptedData, authTag } = await encryptFile(file, aesKey, iv);
+
+    const fileData = new FileManager().createFile(
+        iv,
+        authTag,
+        getFileExtension(file),
+        encryptedData,
+        encryptedAesKey,
+        encryptedKeySender
+    );
+
+    const response = await apiStore.postFile(fileData);
+    return response.fileId;
+};
