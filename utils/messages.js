@@ -68,4 +68,12 @@ const decryptMessage = async (message) => {
     }
 }
 
-export { encryptMessage, decryptMessage };
+const encryptMessageForBoth = async (message, recipientPublicKey, senderPublicKey) => {
+    const [forRecipient, forSender] = await Promise.all([
+        encryptMessage(message, recipientPublicKey),
+        encryptMessage(message, senderPublicKey)
+    ]);
+    return { forRecipient, forSender };
+};
+
+export { encryptMessage, decryptMessage, encryptMessageForBoth };

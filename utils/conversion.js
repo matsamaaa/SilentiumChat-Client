@@ -23,4 +23,9 @@ const stringToUint8Array = (str) => {
     return new Uint8Array(str.split(',').map(Number));
 }
 
-export { bufferToBase64, base64ToBuffer, stringToUint8Array };
+const getFileExtension = (file) => {
+    const parts = file.name.split('.');
+    return parts.length > 1 ? parts.pop() : '';
+};
+
+export { bufferToBase64, base64ToBuffer, stringToUint8Array, getFileExtension };
