@@ -1,18 +1,17 @@
 <template>
   <div
     :class="[
-      'flex items-center justify-center rounded-full bg-indigo-200 overflow-hidden',
-      isBanner ? (props.userId ? 'w-16 h-16 -translate-y-8' : 'w-10 h-10 -translate-y-8') : (props.userId ? 'w-16 h-16' : 'w-10 h-10'),
+      'flex items-center justify-center rounded-full bg-indigo-200 overflow-hidden shrink-0',
+      isBanner
+        ? (props.userId ? 'w-16 h-16 -translate-y-8' : 'w-10 h-10 -translate-y-8')
+        : (props.userId ? 'w-16 h-16' : 'w-10 h-10'),
     ]"
   >
     <img
       v-if="avatarUrl"
       :src="avatarUrl"
       alt="Avatar"
-      :class="[
-        'object-cover rounded-full h-full w-full p-[0.125rem]',
-        props.userId ? 'w-[3.75rem] h-[3.75rem]' : 'w-19 h-19'
-      ]"
+      class="object-cover rounded-full h-full w-full p-[0.125rem]"
     >
     <span v-else-if="userId" class="text-lg font-semibold text-indigo-800">
       {{ username ? props.username.trim().charAt(0).toUpperCase() : '?' }}
@@ -54,7 +53,7 @@ const props = defineProps({
 const avatarUrl = ref(props.src)
 
 watchEffect(async () => {
-  if(props.src) {
+  if (props.src) {
     avatarUrl.value = props.src
     return
   } else if (props.userId) {

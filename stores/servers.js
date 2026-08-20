@@ -1,4 +1,4 @@
-import { setPrivateKeyInDB } from '~/utils/keys/rsa.js';
+import { setPrivateKeyInDB, getPrivateKeyFromDB } from '~/utils/keys/rsa.js';
 
 export const useServersStore = defineStore('servers', {
     state: () => ({
@@ -45,6 +45,10 @@ export const useServersStore = defineStore('servers', {
             await setPrivateKeyInDB(privateKey, `srv_${code}`);
         },
 
+        async getServerPrivateKey(code) {
+            return await getPrivateKeyFromDB(`srv_${code}`);
+        },
+        
         async removeServer(code) {
             if (this.servers[code]) {
                 delete this.servers[code];

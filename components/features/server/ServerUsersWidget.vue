@@ -78,7 +78,7 @@ onMounted(async () => {
     }
 
     await Promise.all(members.value.map(async (memberId) => {
-        await statusStore.initializeStatus(memberId);
+        await statusStore.initializeStatus(memberId.userId);
     }));
     load.value = true;
 });

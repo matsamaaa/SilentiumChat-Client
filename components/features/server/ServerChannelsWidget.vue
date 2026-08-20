@@ -6,7 +6,7 @@
             deviceStore.isDesktop ? 'w-[13vw]' : ''
         ]"
         class="shadow-xl/30 h-[94vh] bg-gray-900 flex flex-col gap-2 border-r border-b border-gray-800 rounded-br-lg flex-shrink-0">
-        <ServerBannerContent :name="server?.name" :banner="server?.banner" @settings-click="handleServerSettings" />
+        <ServerBannerContent :name="server?.name" :banner="server?.banner" @settings-click="handleServerSettings" @invite-click="handleServerInvite" />
         <ChannelButton label="Create Channel" @execute="navigationStore.goToChannelCreation(code)" />
     
         <br>
@@ -19,6 +19,7 @@
             />
     </div>
     <ServerUpdateWidget v-if="settingsClicked" @close="handleServerSettings" />
+    <ServerInviteWidget v-if="inviteClicked" @close="handleServerInvite" />
 </template>
 
 <script setup>
@@ -26,6 +27,7 @@ import { useDeviceStore, useServersStore, useNavigationStore, useNotificationSto
 import ServerBannerContent from '~/components/features/server/ServerBannerContent.vue';
 import ChannelButton from '~/components/ui/buttons/ChannelButton.vue';
 import ServerUpdateWidget from '~/components/features/server/ServerUpdateWidget.vue';
+import ServerInviteWidget from '~/components/features/server/ServerInviteWidget.vue';
 
 const deviceStore = useDeviceStore();
 const serversStore = useServersStore();
@@ -49,8 +51,13 @@ onMounted(() => {
 });
 
 const settingsClicked = ref(false);
+const inviteClicked = ref(false);
 
 const handleServerSettings = () => {
     settingsClicked.value = !settingsClicked.value;
+}
+
+const handleServerInvite = () => {
+    inviteClicked.value = !inviteClicked.value;
 }
 </script>

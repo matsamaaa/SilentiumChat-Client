@@ -18,3 +18,17 @@ export const generateEncryptedKeyPair = async (recipientPublicKey) => {
         encryptedPayload: { encryptedData, encryptedAesKey, iv: bufferToBase64(iv) }
     };
 };
+
+export const encryptExistingKeyForRecipient = async (privateKeyBase64, recipientPublicKey) => {
+    const aesKey = await generateAESKey();
+    const iv = generateIVKey();
+
+    const encryptedData = await encryptDataWithAES(privateKeyBase64, aesKey, iv);
+    const encryptedAesKey = await encryptAesKeyWithRSA(aesKey, recipientPublicKey);
+
+    return {
+        encryptedData,
+        encryptedAesKey,
+        iv: bufferToBase64(iv)
+    };
+};

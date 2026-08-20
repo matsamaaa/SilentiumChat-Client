@@ -9,6 +9,7 @@ import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUse
 import { sendResetPasswordMail, sendChangePasswordMail, sendChangeEmailMail } from './api/mailApi';
 import { postVerificationChangeMail } from './api/verificationApi';
 import { createServer, deleteServer, updateServerName, uploadServerBanner, uploadServerIcon, getUserServers, getServerIcon, getServerBanner, createServerChannel } from './api/serverApi';
+import { createInvitation } from './api/invitationApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -242,6 +243,14 @@ export const useApiStore = defineStore('api', {
 
         async createServerChannel(code, name, description) {
             return createServerChannel(this.urls, code, name, description);
+        },
+
+        /**
+         * End of Api functions for the root /invitation
+         */
+
+        async createInvitation(serverCode, userId, encryptedPayload) {
+            return createInvitation(this.urls, serverCode, userId, encryptedPayload);
         }
 
     }

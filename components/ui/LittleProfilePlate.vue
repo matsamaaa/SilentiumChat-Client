@@ -47,6 +47,5 @@ const props = defineProps({
 
 onMounted(() => {
     console.log('LittleProfilePlate props:', props);
-    console.log('test')
 });
 </script>

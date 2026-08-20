@@ -14,6 +14,7 @@ export const useStatusStore = defineStore('status', {
     actions: {
         async initializeStatus(userId) {
             const apiStore = useApiStore();
+            console.log("Initializing status for user ID:", userId);
             const status = await apiStore.getUserStatus(userId);
             this.status[userId] = status || 'offline';
             await this.addUser(userId);
@@ -24,6 +25,7 @@ export const useStatusStore = defineStore('status', {
         },
 
         async addUser(id) {
+            console.log("Adding user with ID:", id);
             const user = this.getUserById(id);
             if (!user) {
                 const apiStore = useApiStore();
