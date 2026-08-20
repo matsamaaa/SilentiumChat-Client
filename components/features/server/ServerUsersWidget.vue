@@ -23,11 +23,11 @@
                 </p>
 
                 <LittleProfilePlate
-                    v-for="memberId in members"
-                    :key="memberId"
-                    :userId="String(memberId)"
-                    :username="getMemberUser(memberId)?.username || 'Unknown User'"
-                    :avatarIconSrc="getMemberUser(memberId)?.avatar || null"
+                    v-for="member in members"
+                    :key="member.userId"
+                    :userId="String(member.userId)"
+                    :username="getMemberUser(member.userId)?.username || 'Unknown User'"
+                    :avatarIconSrc="getMemberUser(member.userId)?.avatar || null"
                 />
             </template>
 
@@ -60,7 +60,7 @@ const server = computed(() => {
 
 const members = computed(() => {
     const list = server.value?.members;
-    return Array.isArray(list) ? list : [];
+    return Array.isArray(list) ? list.filter(member => member.status === 'active') : [];
 });
 
 const membersCount = computed(() => members.value.length);
