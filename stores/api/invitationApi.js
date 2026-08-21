@@ -12,3 +12,15 @@ export async function createInvitation(urls, serverCode, userId, encryptedPayloa
         throw error;
     }
 }
+
+export async function deleteInvitation(urls, serverCode, userId) {
+    const axiosInstance = createAxiosInstance();
+
+    try {
+        const response = await axiosInstance.delete(`${urls.backend}/invitation`, { data: { serverCode, userId } });
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting invitation:", error);
+        throw error;
+    }
+}

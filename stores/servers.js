@@ -48,7 +48,7 @@ export const useServersStore = defineStore('servers', {
         async getServerPrivateKey(code) {
             return await getPrivateKeyFromDB(`srv_${code}`);
         },
-        
+
         async removeServer(code) {
             if (this.servers[code]) {
                 delete this.servers[code];
@@ -80,6 +80,13 @@ export const useServersStore = defineStore('servers', {
             if (server) {
                 server.channels.push(channel);
             }
-        }
+        },
+
+        async removeMemberFromServer(code, userId) {
+            const server = this.getServerByCode(code);
+            if (server) {
+                server.members = server.members.filter(member => member.userId !== userId);
+            }
+        },
     }
 });

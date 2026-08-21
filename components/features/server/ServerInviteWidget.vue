@@ -17,17 +17,26 @@
                     class="flex items-center justify-between py-3 first:pt-0"
                 >
                     <LittleProfilePlate
+                        v-if="!user.isMember"
                         :userId="String(user.userId)"
                         :username="getMemberUser(user.userId)?.username || 'Unknown User'"
                         :avatarIconSrc="getMemberUser(user.userId)?.avatar || null"
                     />
 
                     <NormalButton
+                        v-if="!user.isInvited && !user.isMember"
                         label="Invite"
                         icon="fa-user-plus"
-                        color="green"
                         class="!py-1.5 !px-3 text-sm shrink-0"
                         @execute="inviteUser(user.userId)"
+                    />
+
+                    <NormalButton
+                        v-else-if="user.isInvited"
+                        label="Cancel Invite"
+                        icon="fa-user-xmark"
+                        class="!py-1.5 !px-3 text-sm shrink-0 !bg-red-500 hover:!bg-red-600 duration-200 transition-colors"
+                        @execute="cancelInvite(user.userId)"
                     />
                 </div>
 
@@ -61,7 +70,12 @@ const getMemberUser = (memberId) => {
 };
 
 const users = computed(() => {
-    return userStore.friends.accepted;
+    const server = serversStore.getServerByCode(code);
+    return userStore.friends.accepted.map(friend => {
+        const isInvited = server.members.find(member => member.userId === friend.userId && member.status === 'inactive');
+        const isMember = server.members.find(member => member.userId === friend.userId && member.status === 'active');
+        return { ...friend, isInvited, isMember };
+    });
 });
 
 const close = () => {
@@ -83,6 +97,21 @@ const inviteUser = async (userId) => {
         await useApiStore().createInvitation(code, userId, encryptedPayload);
     } catch (error) {
         console.error("Error inviting user:", error);
+        // Optionally, you can show an error notification here
+    }
+};
+
+const cancelInvite = async (userId) => {
+    try {
+        const response = await apiStore.deleteInvitation(code, userId);
+        console.log("Cancel Invite Response:", response);
+        if (!response.success) {
+            throw new Error('Failed to cancel invitation');
+        } else {
+            serversStore.removeMemberFromServer(code, userId);
+        }
+    } catch (error) {
+        console.error("Error cancelling invitation:", error);
         // Optionally, you can show an error notification here
     }
 };

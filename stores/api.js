@@ -9,7 +9,7 @@ import { getFriendStatus, sendFriendRequest, removeFriend, blockUser, unblockUse
 import { sendResetPasswordMail, sendChangePasswordMail, sendChangeEmailMail } from './api/mailApi';
 import { postVerificationChangeMail } from './api/verificationApi';
 import { createServer, deleteServer, updateServerName, uploadServerBanner, uploadServerIcon, getUserServers, getServerIcon, getServerBanner, createServerChannel } from './api/serverApi';
-import { createInvitation } from './api/invitationApi';
+import { createInvitation, deleteInvitation } from './api/invitationApi';
 
 export const useApiStore = defineStore('api', {
     state: () => ({
@@ -251,6 +251,10 @@ export const useApiStore = defineStore('api', {
 
         async createInvitation(serverCode, userId, encryptedPayload) {
             return createInvitation(this.urls, serverCode, userId, encryptedPayload);
+        },
+
+        async deleteInvitation(serverCode, userId) {
+            return deleteInvitation(this.urls, serverCode, userId);
         }
 
     }
